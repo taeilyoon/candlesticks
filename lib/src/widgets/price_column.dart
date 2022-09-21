@@ -94,6 +94,8 @@ class _PriceColumnState extends State<PriceColumn> {
                 }).toList(),
               ),
             ),
+
+            //최종가격 추적 코드
             AnimatedPositioned(
               duration: Duration(milliseconds: 300),
               right: 0,

@@ -1,6 +1,8 @@
 import 'dart:math';
+
 import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/constant/view_constants.dart';
+import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
 import 'package:candlesticks/src/utils/helper_functions.dart';
 import 'package:candlesticks/src/widgets/candle_stick_widget.dart';
@@ -10,6 +12,7 @@ import 'package:candlesticks/src/widgets/time_row.dart';
 import 'package:candlesticks/src/widgets/top_panel.dart';
 import 'package:candlesticks/src/widgets/volume_widget.dart';
 import 'package:flutter/material.dart';
+
 import 'dash_line.dart';
 
 /// This widget manages gestures
@@ -51,20 +54,30 @@ class MobileChart extends StatefulWidget {
 
   final Function() onReachEnd;
 
-  MobileChart({
-    required this.style,
-    required this.onScaleUpdate,
-    required this.onHorizontalDragUpdate,
-    required this.candleWidth,
-    required this.candles,
-    required this.index,
-    required this.chartAdjust,
-    required this.onPanDown,
-    required this.onPanEnd,
-    required this.onReachEnd,
-    required this.mainWindowDataContainer,
-    required this.onRemoveIndicator,
-  });
+  final OnChartPanStart? onChartPanStart;
+  final OnChartPanUpdate? onChartPanUpadte;
+  final OnChartPanEnd? onChartPanEnd;
+  bool isDrawing;
+  List<List<ChartDrawing>> drawing;
+
+  MobileChart(
+      {required this.style,
+      required this.onScaleUpdate,
+      required this.onHorizontalDragUpdate,
+      required this.candleWidth,
+      required this.candles,
+      required this.index,
+      required this.chartAdjust,
+      required this.onPanDown,
+      required this.onPanEnd,
+      required this.onReachEnd,
+      required this.mainWindowDataContainer,
+      required this.onRemoveIndicator,
+      this.onChartPanStart,
+      this.onChartPanUpadte,
+      this.onChartPanEnd,
+      this.isDrawing = false,
+      this.drawing = const [[], [], []]});
 
   @override
   State<MobileChart> createState() => _MobileChartState();
@@ -216,6 +229,7 @@ class _MobileChartState extends State<MobileChart> {
                                             child: Stack(
                                               children: [
                                                 MainWindowIndicatorWidget(
+                                                  candles: widget.candles,
                                                   indicatorDatas: widget
                                                       .mainWindowDataContainer
                                                       .indicatorComponentData,
@@ -224,6 +238,7 @@ class _MobileChartState extends State<MobileChart> {
                                                       widget.candleWidth,
                                                   low: low,
                                                   high: high,
+                                                  drawing: widget.drawing.first,
                                                 ),
                                                 CandleStickWidget(
                                                   candles: widget.candles,
@@ -236,6 +251,9 @@ class _MobileChartState extends State<MobileChart> {
                                                       widget.style.primaryBear,
                                                   bullColor:
                                                       widget.style.primaryBull,
+                                                  onChartPanStart:
+                                                      widget.onChartPanStart,
+                                                  drawing: widget.drawing.first,
                                                 ),
                                               ],
                                             ),
@@ -308,6 +326,74 @@ class _MobileChartState extends State<MobileChart> {
                               ],
                             ),
                           ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          right: BorderSide(
+                                            color: widget.style.borderColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: LineChartWidget(
+                                          candles: widget.candles,
+                                          barWidth: widget.candleWidth,
+                                          index: widget.index,
+                                          highs: [200],
+                                          lows: [-200],
+                                          bearColor: widget.style.secondaryBear,
+                                          bullColor: widget.style.secondaryBull,
+                                          bull: 0,
+                                          bear: 0,
+                                          indicators: [
+                                            CommodityChannelIndexIndicator(
+                                                color: Colors.black)
+                                          ],
+                                          unvisibleIndicators: [],
+                                          drawing: [],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: DATE_BAR_HEIGHT,
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                                                  style: TextStyle(
+                                                    color: widget
+                                                        .style.borderColor,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    width: PRICE_BAR_WIDTH,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: DATE_BAR_HEIGHT,
                           ),
@@ -376,12 +462,6 @@ class _MobileChartState extends State<MobileChart> {
                       Padding(
                         padding: const EdgeInsets.only(right: 50, bottom: 20),
                         child: GestureDetector(
-                          onLongPressEnd: (_) {
-                            setState(() {
-                              longPressX = null;
-                              longPressY = null;
-                            });
-                          },
                           onScaleEnd: (_) {
                             widget.onPanEnd();
                           },
@@ -407,6 +487,21 @@ class _MobileChartState extends State<MobileChart> {
                             widget.onPanDown(details.localFocalPoint.dx);
                           },
                           onLongPressStart: (LongPressStartDetails details) {
+                            if (widget.isDrawing) {
+                              int index =
+                                  (((maxWidth - details.localPosition.dx) /
+                                              widget.candleWidth) +
+                                          widget.index)
+                                      .floor();
+                              if (widget.onChartPanStart != null) {
+                                widget.onChartPanStart!(CandlePosition(
+                                    candle: widget.candles[index],
+                                    index: index,
+                                    x: details.localPosition.dx +
+                                        index * widget.candleWidth,
+                                    y: details.localPosition.dy));
+                              }
+                            }
                             setState(() {
                               longPressX = details.localPosition.dx;
                               longPressY = details.localPosition.dy;
@@ -415,9 +510,45 @@ class _MobileChartState extends State<MobileChart> {
                           behavior: HitTestBehavior.translucent,
                           onLongPressMoveUpdate:
                               (LongPressMoveUpdateDetails details) {
+                            if (widget.isDrawing) {
+                              int index =
+                                  (((maxWidth - details.localPosition.dx) /
+                                              widget.candleWidth) +
+                                          widget.index)
+                                      .floor();
+                              if (widget.onChartPanUpadte != null) {
+                                widget.onChartPanUpadte!(CandlePosition(
+                                    candle: widget.candles[index],
+                                    index: index,
+                                    x: details.localPosition.dx +
+                                        index * widget.candleWidth,
+                                    y: details.localPosition.dy));
+                              }
+                            }
                             setState(() {
                               longPressX = details.localPosition.dx;
                               longPressY = details.localPosition.dy;
+                            });
+                          },
+                          onLongPressEnd: (details) {
+                            if (widget.isDrawing) {
+                              int index =
+                                  (((maxWidth - details.localPosition.dx) /
+                                              widget.candleWidth) +
+                                          widget.index)
+                                      .floor();
+                              if (widget.onChartPanUpadte != null) {
+                                widget.onChartPanUpadte!(CandlePosition(
+                                    candle: widget.candles[index],
+                                    index: index,
+                                    x: details.localPosition.dx +
+                                        index * widget.candleWidth,
+                                    y: details.localPosition.dy));
+                              }
+                            }
+                            setState(() {
+                              longPressX = null;
+                              longPressY = null;
                             });
                           },
                         ),

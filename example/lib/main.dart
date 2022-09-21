@@ -1,9 +1,11 @@
 import 'dart:convert';
+
+import 'package:candlesticks/candlesticks.dart';
+import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 import './candle_ticker_model.dart';
 import './repository.dart';
-import 'package:flutter/material.dart';
-import 'package:candlesticks/candlesticks.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +18,24 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+enum DrawingState {
+  lineLow,
+  lineHigh,
+  lineFree,
+  lineFreeInfinite,
+  horizonLine,
+  circle,
+  square,
+  squareInfinite,
+}
+
 class _MyAppState extends State<MyApp> {
   BinanceRepository repository = BinanceRepository();
 
   List<Candle> candles = [];
   WebSocketChannel? _channel;
   bool themeIsDark = false;
-  String currentInterval = "1m";
+  String currentInterval = "1h";
   final intervals = [
     '1m',
     '3m',
@@ -42,18 +55,27 @@ class _MyAppState extends State<MyApp> {
   ];
   List<String> symbols = [];
   String currentSymbol = "";
+
+  bool isDrawing = false;
+
+  Set<CandlePosition> selectedDrawing = {};
+  CandlePosition? nowPosition;
+
   List<Indicator> indicators = [
     BollingerBandsIndicator(
-      length: 20,
-      stdDev: 2,
-      upperColor: const Color(0xFF2962FF),
-      basisColor: const Color(0xFFFF6D00),
-      lowerColor: const Color(0xFF2962FF),
-    ),
+        length: 20,
+        stdDev: 2,
+        upperColor: const Color(0xFF2962FF),
+        basisColor: const Color(0xFFFF6D00),
+        lowerColor: const Color(0xFF2962FF),
+        label: "Bollinger"),
     WeightedMovingAverageIndicator(
-      length: 100,
-      color: Colors.green.shade600,
-    ),
+        length: 100, color: Colors.green.shade600, label: "WMA"),
+  ];
+  List<Indicator> subIndicators = [
+    CommodityChannelIndexIndicator(
+      color: const Color(0xFF2962FF),
+    )
   ];
 
   @override
@@ -158,7 +180,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: themeIsDark ? ThemeData.dark() : ThemeData.light(),
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text("Binance Candles"),
@@ -174,94 +195,194 @@ class _MyAppState extends State<MyApp> {
                     ? Icons.wb_sunny_sharp
                     : Icons.nightlight_round_outlined,
               ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  this.isDrawing = !this.isDrawing;
+                  selectedDrawing.removeWhere((element) => true);
+                });
+              },
+              icon: Icon(Icons.draw_rounded),
+              color: this.isDrawing ? Colors.black : Colors.white,
             )
           ],
         ),
-        body: Center(
-          child: StreamBuilder(
-            stream: _channel == null ? null : _channel!.stream,
-            builder: (context, snapshot) {
-              updateCandlesFromSnapshot(snapshot);
-              return Candlesticks(
-                key: Key(currentSymbol + currentInterval),
-                indicators: indicators,
-                candles: candles,
-                onLoadMoreCandles: loadMoreCandles,
-                onRemoveIndicator: (String indicator) {
-                  setState(() {
-                    indicators = [...indicators];
-                    indicators
-                        .removeWhere((element) => element.name == indicator);
-                  });
-                },
-                actions: [
-                  ToolBarAction(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Center(
-                            child: Container(
-                              width: 200,
-                              color: Theme.of(context).backgroundColor,
-                              child: Wrap(
-                                children: intervals
-                                    .map((e) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            width: 50,
-                                            height: 30,
-                                            child: RawMaterialButton(
-                                              elevation: 0,
-                                              fillColor:
-                                                  const Color(0xFF494537),
-                                              onPressed: () {
-                                                fetchCandles(currentSymbol, e);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                e,
-                                                style: const TextStyle(
-                                                  color: Color(0xFFF0B90A),
+        body: Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: StreamBuilder(
+                  stream: _channel == null ? null : _channel!.stream,
+                  builder: (context, snapshot) {
+                    updateCandlesFromSnapshot(snapshot);
+                    return Candlesticks(
+                      // chartAdjust: ChartAdjust.fullRange,
+                      isDrawingMode: this.isDrawing,
+                      key: Key(currentSymbol + currentInterval),
+                      indicators: [
+                        ...indicators,
+                        SimpleDrawIndicator(
+                            dates: selectedDrawing
+                                .map((e) => e.candle.date)
+                                .toList()
+                              ..addNotNull(nowPosition?.candle.date),
+                            values: selectedDrawing
+                                .map((e) => e.candle.low)
+                                .toList()
+                              ..addNotNull(nowPosition?.candle.low),
+                            name: DateTime.now().toString())
+                      ],
+                      candles: candles,
+                      onLoadMoreCandles: loadMoreCandles,
+                      onRemoveIndicator: (String indicator) {
+                        setState(() {
+                          indicators = [
+                            ...indicators,
+                          ];
+                          indicators.removeWhere(
+                              (element) => element.name == indicator);
+                        });
+                      },
+                      drawing: [
+                        [
+                          // ChartDrawing(
+                          //     x: [candles.first.date],
+                          //     y: [candles.first.close],
+                          //     borderColor: [Colors.red],
+                          //     fillColor: [Colors.blueAccent.withOpacity(0.2)],
+                          //     type: DrawingType.circle,
+                          //     value: 90.0),
+                          // ChartDrawing(
+                          //     x: [candles.first.date],
+                          //     y: [candles.first.close],
+                          //     borderColor: [Colors.red],
+                          //     fillColor: [Colors.blueAccent.withOpacity(0.2)],
+                          //     type: DrawingType.line,
+                          //     value: 10.0),
+                          ChartDrawing(x: [
+                            candles.first.date,
+                            candles[15].date,
+                          ], y: [
+                            candles.first.close,
+                            candles[15].close
+                          ], borderColor: [
+                            Colors.red
+                          ], fillColor: [
+                            Colors.blueAccent.withOpacity(0.2)
+                          ], type: DrawingType.xline, value: 10.0),
+                        ],
+                        [],
+                        []
+                      ],
+                      onChartPanStart: (p) {
+                        print(p);
+                        setState(() {
+                          selectedDrawing.add(p);
+                        });
+                      },
+                      onChartPanUpadte: (p) {
+                        nowPosition = p;
+                      },
+                      actions: [
+                        ToolBarAction(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Center(
+                                  child: Container(
+                                    width: 200,
+                                    color: Theme.of(context).backgroundColor,
+                                    child: Wrap(
+                                      children: intervals
+                                          .map((e) => Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  height: 30,
+                                                  child: RawMaterialButton(
+                                                    elevation: 0,
+                                                    fillColor:
+                                                        const Color(0xFF494537),
+                                                    onPressed: () {
+                                                      fetchCandles(
+                                                          currentSymbol, e);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                      e,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            Color(0xFFF0B90A),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      currentInterval,
-                    ),
-                  ),
-                  ToolBarAction(
-                    width: 100,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SymbolsSearchModal(
-                            symbols: symbols,
-                            onSelect: (value) {
-                              fetchCandles(value, currentInterval);
-                            },
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      currentSymbol,
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            currentInterval,
+                          ),
+                        ),
+                        ToolBarAction(
+                          width: 100,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SymbolsSearchModal(
+                                  symbols: symbols,
+                                  onSelect: (value) {
+                                    fetchCandles(value, currentInterval);
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            currentSymbol,
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("음봉 잇기"),
+                ),
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("허공 잇기"),
+                ),
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("수평선 긋기"),
+                ),
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("수평 범위 지정"),
+                ),
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("상향 삼분할선"),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

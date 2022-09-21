@@ -1,6 +1,10 @@
+import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/models/candle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
 import '../models/candle.dart';
+import '../models/drawing.dart';
 
 class CandleStickWidget extends LeafRenderObjectWidget {
   final List<Candle> candles;
@@ -10,6 +14,10 @@ class CandleStickWidget extends LeafRenderObjectWidget {
   final double low;
   final Color bullColor;
   final Color bearColor;
+  final OnChartPanStart? onChartPanStart;
+  final OnChartPanUpdate? onChartPanUpadte;
+  final OnChartPanEnd? onChartPanEnd;
+  final List<ChartDrawing> drawing;
 
   CandleStickWidget({
     required this.candles,
@@ -19,6 +27,10 @@ class CandleStickWidget extends LeafRenderObjectWidget {
     required this.high,
     required this.bearColor,
     required this.bullColor,
+    this.onChartPanStart,
+    this.onChartPanUpadte,
+    this.onChartPanEnd,
+    this.drawing = const [],
   });
 
   @override
@@ -31,6 +43,9 @@ class CandleStickWidget extends LeafRenderObjectWidget {
       high,
       bullColor,
       bearColor,
+      this.onChartPanStart,
+      this.onChartPanUpadte,
+      this.onChartPanEnd,
     );
   }
 
@@ -75,7 +90,11 @@ class CandleStickRenderObject extends RenderBox {
   late double _close;
   late Color _bullColor;
   late Color _bearColor;
+  final OnChartPanStart? onChartPanStart;
+  final OnChartPanUpdate? onChartPanUpadte;
+  final OnChartPanEnd? onChartPanEnd;
 
+  Offset? tmpOffset;
   CandleStickRenderObject(
     List<Candle> candles,
     int index,
@@ -84,6 +103,9 @@ class CandleStickRenderObject extends RenderBox {
     double high,
     Color bullColor,
     Color bearColor,
+    this.onChartPanStart,
+    this.onChartPanUpadte,
+    this.onChartPanEnd,
   ) {
     _candles = candles;
     _index = index;
@@ -98,6 +120,11 @@ class CandleStickRenderObject extends RenderBox {
   @override
   void performLayout() {
     size = Size(constraints.maxWidth, constraints.maxHeight);
+  }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    return true;
   }
 
   /// draws a single candle
@@ -140,6 +167,7 @@ class CandleStickRenderObject extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    tmpOffset = offset;
     double range = (_high - _low) / size.height;
     for (int i = 0; (i + 1) * _candleWidth < size.width; i++) {
       if (i + _index >= _candles.length || i + _index < 0) continue;

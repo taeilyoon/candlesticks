@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Indicator {
   /// Indicator name. visible at top right side of chart
   final String name;
+  final String? label;
 
   /// Calculates indicator value for givien index.
   /// if your indicator has muliple lines (values) always return results in the same order.
@@ -14,12 +15,12 @@ class Indicator {
   /// the order of this should be same as calculator function results order.
   final List<IndicatorStyle> indicatorComponentsStyles;
 
-  Indicator({
-    required this.name,
-    required this.dependsOnNPrevCandles,
-    required this.calculator,
-    required this.indicatorComponentsStyles,
-  });
+  Indicator(
+      {required this.name,
+      required this.dependsOnNPrevCandles,
+      required this.calculator,
+      required this.indicatorComponentsStyles,
+      this.label});
 
   bool operator ==(other) {
     if (other is Indicator) {

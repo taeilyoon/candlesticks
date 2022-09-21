@@ -1,12 +1,14 @@
+import 'dart:io' show Platform;
 import 'dart:math';
+
 import 'package:candlesticks/candlesticks.dart';
+import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
-import 'package:candlesticks/src/widgets/mobile_chart.dart';
 import 'package:candlesticks/src/widgets/desktop_chart.dart';
+import 'package:candlesticks/src/widgets/mobile_chart.dart';
 import 'package:candlesticks/src/widgets/toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
 
 enum ChartAdjust {
   /// Will adjust chart size by max and min value from visible area
@@ -15,6 +17,23 @@ enum ChartAdjust {
   /// Will adjust chart size by max and min value from the whole data
   fullRange
 }
+
+class CandlePosition {
+  final Candle candle;
+  final int index;
+  final double x;
+  final double y;
+  CandlePosition({
+    required this.candle,
+    required this.index,
+    required this.x,
+    required this.y,
+  });
+}
+
+typedef OnChartPanStart(CandlePosition postion);
+typedef OnChartPanUpdate(CandlePosition postion);
+typedef OnChartPanEnd(CandlePosition postion);
 
 /// StatefulWidget that holds Chart's State (index of
 /// current position and candles width).
@@ -43,9 +62,16 @@ class Candlesticks extends StatefulWidget {
 
   /// Custom loading widget
   final Widget? loadingWidget;
-
   final CandleSticksStyle? style;
+  final bool isDrawingMode;
 
+  final List<Indicator> subIndicator;
+
+  final OnChartPanStart? onChartPanStart;
+  final OnChartPanUpdate? onChartPanUpadte;
+  final OnChartPanEnd? onChartPanEnd;
+  final List<List<ChartDrawing>> drawing;
+  // final List<TimeOfDay> skipDateTime = [s]
   const Candlesticks({
     Key? key,
     required this.candles,
@@ -56,7 +82,13 @@ class Candlesticks extends StatefulWidget {
     this.loadingWidget,
     this.indicators,
     this.onRemoveIndicator,
+    this.isDrawingMode = false,
+    this.onChartPanStart,
+    this.onChartPanUpadte,
+    this.onChartPanEnd,
+    this.subIndicator = const [],
     this.style,
+    this.drawing = const [[], [], []],
   })  : assert(candles.length == 0 || candles.length > 1,
             "Please provide at least 2 candles"),
         super(key: key);
@@ -202,16 +234,23 @@ class _CandlesticksState extends State<Candlesticks> {
                         candleWidth = max(candleWidth, 2);
                       });
                     },
+                    onChartPanStart: widget.onChartPanStart,
+                    onChartPanUpadte: widget.onChartPanUpadte,
+                    onChartPanEnd: widget.onChartPanEnd,
                     onPanEnd: () {
                       lastIndex = index;
                     },
+                    drawing: widget.drawing,
                     onHorizontalDragUpdate: (double x) {
-                      setState(() {
-                        x = x - lastX;
-                        index = lastIndex + x ~/ candleWidth;
-                        index = max(index, -10);
-                        index = min(index, widget.candles.length - 1);
-                      });
+                      if (widget.isDrawingMode) {
+                      } else {
+                        setState(() {
+                          x = x - lastX;
+                          index = lastIndex + x ~/ candleWidth;
+                          index = max(index, -10);
+                          index = min(index, widget.candles.length - 1);
+                        });
+                      }
                     },
                     onPanDown: (double value) {
                       lastX = value;
@@ -229,6 +268,7 @@ class _CandlesticksState extends State<Candlesticks> {
                     candleWidth: width,
                     candles: widget.candles,
                     index: index,
+                    isDrawing: widget.isDrawingMode,
                   );
                 } else {
                   return MobileChart(
@@ -236,6 +276,8 @@ class _CandlesticksState extends State<Candlesticks> {
                     onRemoveIndicator: widget.onRemoveIndicator,
                     mainWindowDataContainer: mainWindowDataContainer!,
                     chartAdjust: widget.chartAdjust,
+                    isDrawing: widget.isDrawingMode,
+                    drawing: widget.drawing,
                     onScaleUpdate: (double scale) {
                       scale = max(0.90, scale);
                       scale = min(1.1, scale);
@@ -272,6 +314,9 @@ class _CandlesticksState extends State<Candlesticks> {
                     candleWidth: width,
                     candles: widget.candles,
                     index: index,
+                    onChartPanStart: widget.onChartPanStart,
+                    onChartPanUpadte: widget.onChartPanUpadte,
+                    onChartPanEnd: widget.onChartPanEnd,
                   );
                 }
               },
