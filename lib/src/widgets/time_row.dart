@@ -1,8 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:candlesticks/src/constant/view_constants.dart';
 import 'package:candlesticks/src/models/candle.dart';
 import 'package:candlesticks/src/models/candle_sticks_style.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class TimeRow extends StatefulWidget {
   final List<Candle> candles;
@@ -46,12 +47,12 @@ class _TimeRowState extends State<TimeRow> {
     int candleNumber = (step + 1) ~/ 2 - 10 + index * step + -1;
     DateTime? _time;
     if (candleNumber < 0)
-      _time = widget.candles[0].date.add(Duration(
+      _time = widget.candles[0].endDate.add(Duration(
           milliseconds: dif.inMilliseconds ~/ -1 * step * candleNumber));
     else if (candleNumber < widget.candles.length)
-      _time = widget.candles[candleNumber].date;
+      _time = widget.candles[candleNumber].endDate;
     else {
-      _time = widget.candles[0].date.subtract(
+      _time = widget.candles[0].endDate.subtract(
           Duration(milliseconds: dif.inMilliseconds ~/ step * candleNumber));
     }
     return _time;
@@ -100,7 +101,7 @@ class _TimeRowState extends State<TimeRow> {
   Widget build(BuildContext context) {
     int step = _stepCalculator();
     final dif =
-        widget.candles[0].date.difference(widget.candles[1].date) * step;
+        widget.candles[0].endDate.difference(widget.candles[1].endDate) * step;
     return Padding(
       padding: const EdgeInsets.only(right: PRICE_BAR_WIDTH + 1.0),
       child: Stack(

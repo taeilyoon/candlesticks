@@ -15,8 +15,8 @@ class SimpleDrawIndicator extends Indicator {
             dependsOnNPrevCandles: 0,
             calculator: (index, candles) {
               var curr = candles[index];
-              var i = dates
-                  .indexWhere((element) => element.compareTo(curr.date) == 0);
+              var i = dates.indexWhere(
+                  (element) => element.compareTo(curr.endDate) == 0);
               if (i == -1) {
                 return [null];
               } else {

@@ -3,7 +3,8 @@
 /// It can be instantiated using its default constructor or fromJson named custructor.
 class Candle {
   /// DateTime for the candle
-  final DateTime date;
+  final DateTime endDate;
+  final DateTime startDate;
 
   /// The highest price during this candle lifetime
   /// It if always more than low, open and close
@@ -25,8 +26,17 @@ class Candle {
 
   bool get isBull => open <= close;
 
+  bool isContain(DateTime time) {
+    if (time.isBefore(endDate) && !time.isBefore(startDate)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Candle({
-    required this.date,
+    required this.endDate,
+    required this.startDate,
     required this.high,
     required this.low,
     required this.open,
@@ -35,7 +45,9 @@ class Candle {
   });
 
   Candle.fromJson(List<dynamic> json)
-      : date = DateTime.fromMillisecondsSinceEpoch(json[0]),
+      : endDate = DateTime.fromMillisecondsSinceEpoch(json[0]),
+        startDate = DateTime.fromMillisecondsSinceEpoch(json[0])
+            .subtract(Duration(hours: 1)),
         high = double.parse(json[2]),
         low = double.parse(json[3]),
         open = double.parse(json[1]),

@@ -142,7 +142,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..strokeWidth = 1
               ..style = PaintingStyle.stroke);
     });
-    var showCandleLength = (size.width / _candleWidth);
+    var showCandleLength = (size.width / _candleWidth).floor();
 
     for (ChartDrawing draw in drawing) {
       var targetCandles = draw.x
@@ -166,93 +166,96 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         var x2 = draw.x.last;
         var diff = targetCandles.last - targetCandles.first;
 
-        var a = (endY - startY) / (diff * _candleWidth);
-        var b = startY - a * (targetCandles.first);
-        var xlast = size.width +
-            offset.dx -
-            (targetCandles.last - _index + 1 + 0.5) * _candleWidth;
-        var xfirst = size.width +
-            offset.dx -
-            (targetCandles.first - _index + 1 + 0.5) * _candleWidth;
-
-        var ylast = offset.dy + (_high - draw.y.last) / range;
-        var yfirst = offset.dy + (_high - draw.y.first) / range;
-
-        var dx = xlast - xfirst;
-        var dy = ylast - yfirst;
-
-        var alpha = dy / dx;
-        var beta = yfirst - alpha * xfirst;
-
+        var a = ((size.width +
+                offset.dx -
+                (targetCandles.first - _index + 0.5) * _candleWidth -
+                size.width +
+                offset.dx -
+                (targetCandles.last - _index + 0.5) * _candleWidth)) /
+            diff;
+        var b = startY - a * targetCandles.first;
         context.canvas.drawLine(
             Offset(
-              offset.dx,
-              alpha * offset.dx + beta,
-            ),
+                offset.dx - (targetCandles.first - _index + 0.5) * _candleWidth,
+                a + b),
             Offset(
-              offset.dx + size.width,
-              alpha * (offset.dx + size.width) + beta,
-            ),
+                size.width +
+                    offset.dx -
+                    (targetCandles.last - _index + 0.5) * _candleWidth,
+                endY / range),
+            Paint()
+              ..color = Colors.black
+              ..strokeWidth = draw.value ?? 1.0
+              ..style = PaintingStyle.stroke);
+        context.canvas.drawLine(
+            Offset(
+                size.width +
+                    offset.dx -
+                    (targetCandles.first - _index + 0.5) * _candleWidth,
+                startY / range),
+            Offset(
+                size.width +
+                    offset.dx -
+                    (targetCandles.last - _index + 0.5) * _candleWidth,
+                endY / range),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
               ..strokeWidth = draw.value ?? 1.0
               ..style = PaintingStyle.stroke);
-        // context.canvas.drawLine(
-        //     Offset(
-        //       xfirst,
-        //       yfirst,
-        //     ),
-        //     Offset(
-        //       xlast,
-        //       ylast,
-        //     ),
-        //     Paint()
-        //       ..color = draw.fillColor.firstOrNull ?? Colors.black
-        //       ..strokeWidth = draw.value ?? 1.0
-        //       ..style = PaintingStyle.stroke);
-        // context.canvas.drawLine(
-        //     Offset(
-        //         size.width +
-        //             offset.dx -
-        //             (targetCandles.first - _index + 0.5) * _candleWidth,
-        //         startY / range),
-        //     Offset(size.width + offset.dx - (0.5) * _candleWidth,
-        //         (b + a * _index) / range),
-        //     Paint()
-        //       ..color = Colors.black
-        //       ..strokeWidth = draw.value ?? 1.0
-        //       ..style = PaintingStyle.stroke);
-        // context.canvas.drawLine(
-        //     Offset(
-        //         size.width +
-        //             offset.dx -
-        //             (targetCandles.first - _index + 0.5) * _candleWidth,
-        //         startY / range),
-        //     Offset(
-        //         offset.dx - (targetCandles.first - _index + 0.5) * _candleWidth,
-        //         a * size.width + b),
-        //     Paint()
-        //       ..color = Colors.black
-        //       ..strokeWidth = draw.value ?? 1.0
-        //       ..style = PaintingStyle.stroke);
-      }
-      if (draw.type == DrawingType.circle) {
-        var startX = size.width +
-            offset.dx -
-            (targetCandles.first - _index + 0.5) * _candleWidth;
-        var endY = offset.dy + (_high - draw.y.first) / range;
 
-        context.canvas.drawCircle(
-            Offset(startX, endY),
-            draw.value!,
+        context.canvas.drawLine(
+            Offset(
+                size.width +
+                    offset.dx -
+                    (targetCandles.first - _index + 0.5) * _candleWidth,
+                startY / range),
+            Offset(
+                offset.dx - (targetCandles.first - _index + 0.5) * _candleWidth,
+                a * size.width + b),
             Paint()
-              ..color = draw.borderColor.firstOrNull ?? Colors.transparent
-              ..strokeWidth = 1.0
+              ..color = Colors.black
+              ..strokeWidth = draw.value ?? 1.0
               ..style = PaintingStyle.stroke);
-        // canvas.drawCircle(Offset(startX, endY), this.value!,
-        //     Paint()..color = fillColor.firstOrNull ?? Colors.black);
       }
     }
+    // for (int i = 0; (i + 1) * _candleWidth < size.width; i++) {
+    //   if (i + _index > 0) {
+    //     for (ChartDrawing draw in drawing) {
+    //       var w = draw.x.firstWhereOrNull((element) =>
+    //           !element.isBefore(candles[i + _index].date) &&
+    //           (candles.getOrNull(i - 1 + _index)?.date?.isAfter(element) ??
+    //               true));
+    //
+    //       if (w != null) {
+    //         var startX = size.width + offset.dx - (i + 0.5) * _candleWidth;
+    //         var endY = offset.dy + (_high - draw.y.first) / range;
+    //
+    //         switch (draw.type) {
+    //           case DrawingType.circle:
+    //             context.canvas.drawCircle(
+    //                 Offset(startX, endY),
+    //                 draw.value!,
+    //                 Paint()
+    //                   ..color =
+    //                       draw.borderColor.firstOrNull ?? Colors.transparent
+    //                   ..strokeWidth = 1.0
+    //                   ..style = PaintingStyle.stroke);
+    //             context.canvas.drawCircle(
+    //                 Offset(startX, endY),
+    //                 draw.value!,
+    //                 Paint()
+    //                   ..color = draw.fillColor.firstOrNull ?? Colors.black);
+    //
+    //             break;
+    //           case DrawingType.simpleSquare:
+    //             context.canvas.drawRect(
+    //                 Offset(startX, endY) & const Size(200, 150), Paint());
+    //             break;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     context.canvas.save();
     context.canvas.restore();

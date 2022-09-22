@@ -28,7 +28,7 @@ class CandleInfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: dateFormatter(candle.date),
+        text: dateFormatter(candle.endDate),
         style: defaultStyle,
         children: <TextSpan>[
           TextSpan(text: " O:"),

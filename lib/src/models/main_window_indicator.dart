@@ -1,7 +1,9 @@
-import 'package:candlesticks/src/models/indicator.dart';
 import 'dart:math' as math;
-import 'candle.dart';
+
+import 'package:candlesticks/src/models/indicator.dart';
 import 'package:flutter/material.dart';
+
+import 'candle.dart';
 
 class IndicatorComponentData {
   final String name;
@@ -40,8 +42,8 @@ class MainWindowDataContainer {
   }
 
   MainWindowDataContainer(this.indicators, List<Candle> candles) {
-    endDate = candles[0].date;
-    beginDate = candles.last.date;
+    endDate = candles[0].endDate;
+    beginDate = candles.last.endDate;
     indicators.forEach((indicator) {
       indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
         indicatorComponentData.add(IndicatorComponentData(
@@ -83,7 +85,7 @@ class MainWindowDataContainer {
 
   void tickUpdate(List<Candle> candles) {
     // update last candles
-    for (int i = 0; candles[i].date.compareTo(endDate) > 0; i++) {
+    for (int i = 0; candles[i].endDate.compareTo(endDate) > 0; i++) {
       highs.insert(i, candles[i].high);
       lows.insert(i, candles[i].low);
       indicatorComponentData.forEach((element) {
@@ -96,7 +98,7 @@ class MainWindowDataContainer {
             .where((element) => element.parentIndicator == indicator)
             .toList();
 
-        for (int i = 0; candles[i].date.compareTo(endDate) >= 0; i++) {
+        for (int i = 0; candles[i].endDate.compareTo(endDate) >= 0; i++) {
           double low = lows[i];
           double high = highs[i];
 
@@ -119,12 +121,12 @@ class MainWindowDataContainer {
         }
       },
     );
-    endDate = candles[0].date;
+    endDate = candles[0].endDate;
 
     // update prev candles
     int firstCandleIndex = 0;
     for (int i = candles.length - 1; i >= 0; i--) {
-      if (candles[i].date == beginDate) {
+      if (candles[i].endDate == beginDate) {
         firstCandleIndex = i;
         break;
       }
@@ -168,6 +170,6 @@ class MainWindowDataContainer {
         }
       },
     );
-    beginDate = candles.last.date;
+    beginDate = candles.last.endDate;
   }
 }

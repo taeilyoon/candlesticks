@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     fetchSymbols().then((value) {
       symbols = value;
-      if (symbols.isNotEmpty) fetchCandles(symbols[0], currentInterval);
+      if (symbols.isNotEmpty) fetchCandles("BTCUSDT", currentInterval);
     });
     super.initState();
   }
@@ -143,15 +143,15 @@ class _MyAppState extends State<MyApp> {
         final candleTicker = CandleTickerModel.fromJson(map);
 
         // cehck if incoming candle is an update on current last candle, or a new one
-        if (candles[0].date == candleTicker.candle.date &&
+        if (candles[0].endDate == candleTicker.candle.endDate &&
             candles[0].open == candleTicker.candle.open) {
           // update last candle
           candles[0] = candleTicker.candle;
         }
         // check if incoming new candle is next candle so the difrence
         // between times must be the same as last existing 2 candles
-        else if (candleTicker.candle.date.difference(candles[0].date) ==
-            candles[0].date.difference(candles[1].date)) {
+        else if (candleTicker.candle.endDate.difference(candles[0].endDate) ==
+            candles[0].endDate.difference(candles[1].endDate)) {
           // add new candle to list
           candles.insert(0, candleTicker.candle);
         }
@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
       final data = await repository.fetchCandles(
           symbol: currentSymbol,
           interval: currentInterval,
-          endTime: candles.last.date.millisecondsSinceEpoch);
+          endTime: candles.last.endDate.millisecondsSinceEpoch);
       candles.removeLast();
       setState(() {
         candles.addAll(data);
@@ -224,9 +224,9 @@ class _MyAppState extends State<MyApp> {
                         ...indicators,
                         SimpleDrawIndicator(
                             dates: selectedDrawing
-                                .map((e) => e.candle.date)
+                                .map((e) => e.candle.endDate)
                                 .toList()
-                              ..addNotNull(nowPosition?.candle.date),
+                              ..addNotNull(nowPosition?.candle.endDate),
                             values: selectedDrawing
                                 .map((e) => e.candle.low)
                                 .toList()
@@ -246,13 +246,25 @@ class _MyAppState extends State<MyApp> {
                       },
                       drawing: [
                         [
-                          // ChartDrawing(
-                          //     x: [candles.first.date],
-                          //     y: [candles.first.close],
-                          //     borderColor: [Colors.red],
-                          //     fillColor: [Colors.blueAccent.withOpacity(0.2)],
-                          //     type: DrawingType.circle,
-                          //     value: 90.0),
+                          ChartDrawing(x: [
+                            candles[2].endDate,
+                          ], y: [
+                            candles[2].high
+                          ], borderColor: [
+                            Colors.red
+                          ], fillColor: [
+                            Colors.blueAccent.withOpacity(0.5)
+                          ], type: DrawingType.circle, value: 10.0),
+
+                          ChartDrawing(x: [
+                            candles[6].endDate,
+                          ], y: [
+                            candles[6].high
+                          ], borderColor: [
+                            Colors.red
+                          ], fillColor: [
+                            Colors.blueAccent.withOpacity(0.5)
+                          ], type: DrawingType.circle, value: 10.0),
                           // ChartDrawing(
                           //     x: [candles.first.date],
                           //     y: [candles.first.close],
@@ -261,16 +273,27 @@ class _MyAppState extends State<MyApp> {
                           //     type: DrawingType.line,
                           //     value: 10.0),
                           ChartDrawing(x: [
-                            candles.first.date,
-                            candles[15].date,
+                            candles[2].endDate,
+                            candles[6].endDate,
                           ], y: [
-                            candles.first.close,
-                            candles[15].close
+                            candles[2].high,
+                            candles[6].high
                           ], borderColor: [
                             Colors.red
                           ], fillColor: [
-                            Colors.blueAccent.withOpacity(0.2)
-                          ], type: DrawingType.xline, value: 10.0),
+                            Colors.blueAccent.withOpacity(1)
+                          ], type: DrawingType.xline, value: 1.0),
+                          ChartDrawing(x: [
+                            candles[2].endDate,
+                            candles[10].endDate,
+                          ], y: [
+                            19000,
+                            18000,
+                          ], borderColor: [
+                            Colors.red
+                          ], fillColor: [
+                            Colors.blueAccent.withOpacity(1)
+                          ], type: DrawingType.xline, value: 1.0),
                         ],
                         [],
                         []

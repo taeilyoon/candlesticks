@@ -35,8 +35,8 @@ class LineChartWidget extends LeafRenderObjectWidget {
       required this.indicators,
       required this.unvisibleIndicators,
       this.drawing = const []}) {
-    endDate = candles[0].date;
-    beginDate = candles.last.date;
+    endDate = candles[0].endDate;
+    beginDate = candles.last.endDate;
     indicators.forEach((indicator) {
       indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
         indicatorComponentData.add(IndicatorComponentData(

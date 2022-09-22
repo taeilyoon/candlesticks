@@ -13,11 +13,13 @@ class CandleTickerModel {
         eventTime: json['E'] as int,
         symbol: json['s'] as String,
         candle: Candle(
-            date: DateTime.fromMillisecondsSinceEpoch(json["k"]["t"]),
+            endDate: DateTime.fromMillisecondsSinceEpoch(json["k"]["t"]),
             high: double.parse(json["k"]["h"]),
             low: double.parse(json["k"]["l"]),
             open: double.parse(json["k"]["o"]),
             close: double.parse(json["k"]["c"]),
-            volume: double.parse(json["k"]["v"])));
+            volume: double.parse(json["k"]["v"]),
+            startDate: DateTime.fromMillisecondsSinceEpoch(json["k"]["t"])
+                .subtract(Duration(hours: 1))));
   }
 }

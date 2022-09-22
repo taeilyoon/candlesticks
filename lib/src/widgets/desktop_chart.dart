@@ -191,7 +191,7 @@ class _DesktopChartState extends State<DesktopChart> {
                         indicatorX: mouseHoverX,
                         candles: widget.candles,
                         candleWidth: widget.candleWidth,
-                        indicatorTime: currentCandle?.date,
+                        indicatorTime: currentCandle?.endDate,
                         index: widget.index,
                       ),
                       Column(
