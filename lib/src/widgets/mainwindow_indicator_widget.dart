@@ -249,8 +249,54 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..color = draw.borderColor.firstOrNull ?? Colors.transparent
               ..strokeWidth = 1.0
               ..style = PaintingStyle.stroke);
-        // canvas.drawCircle(Offset(startX, endY), this.value!,
-        //     Paint()..color = fillColor.firstOrNull ?? Colors.black);
+      }
+
+      if (draw.type == DrawingType.fibonacciRetracement) {
+        var startY = offset.dy + (_high - draw.y.first);
+        var endY = offset.dy + (_high - draw.y.last);
+        var x1 = draw.x.first;
+        var x2 = draw.x.last;
+        var xlast = size.width +
+            offset.dx -
+            (targetCandles.last - _index + 1 + 0.5) * _candleWidth;
+        var xfirst = size.width +
+            offset.dx -
+            (targetCandles.first - _index + 1 + 0.5) * _candleWidth;
+
+        var diffY = endY - startY;
+
+        //baseline
+        context.canvas.drawLine(
+            Offset(xfirst, startY),
+            Offset(xlast, startY),
+            Paint()
+              ..color = draw.borderColor.firstOrNull ?? Colors.transparent
+              ..strokeWidth = 1.0
+              ..style = PaintingStyle.stroke);
+        // fill 0 - 0.236
+        context.canvas.drawRect(
+            Rect.fromPoints(
+                Offset(xfirst, startY), Offset(xlast, startY + diffY * 0.236)),
+            Paint()..color = Colors.red.withOpacity(0.3));
+
+        //line1
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.236),
+            Offset(xlast, startY + diffY * 0.236),
+            Paint()..color = Colors.black);
+
+        // fill 0.236 - 0.382
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.236),
+                Offset(xlast, startY + diffY * 0.382)),
+            Paint()..color = Colors.red.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.382),
+            Offset(xlast, startY + diffY * 0.382),
+            Paint()..color = Colors.black);
       }
     }
 

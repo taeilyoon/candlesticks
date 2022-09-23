@@ -47,4 +47,4 @@ class ChartDrawing {
   }
 }
 
-enum DrawingType { circle, simpleSquare, line, xline }
+enum DrawingType { circle, simpleSquare, line, xline, fibonacciRetracement }
