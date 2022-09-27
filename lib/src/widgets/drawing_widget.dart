@@ -156,7 +156,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             Offset(offset.dx + size.width, yVal),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
       }
       if (draw.type == DrawingType.xline) {
@@ -185,7 +185,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                 endY / range),
             Paint()
               ..color = Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
         context.canvas.drawLine(
             Offset(
@@ -200,7 +200,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                 endY / range),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
 
         context.canvas.drawLine(
@@ -214,7 +214,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                 a * size.width + b),
             Paint()
               ..color = Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
       }
     }

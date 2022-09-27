@@ -156,7 +156,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             Offset(offset.dx + size.width, yVal),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
       }
       if (draw.type == DrawingType.xline) {
@@ -195,7 +195,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             ),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
-              ..strokeWidth = draw.value ?? 1.0
+              ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
         // context.canvas.drawLine(
         //     Offset(
@@ -244,7 +244,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
         context.canvas.drawCircle(
             Offset(startX, endY),
-            draw.value!,
+            draw.width!,
             Paint()
               ..color = draw.borderColor.firstOrNull ?? Colors.transparent
               ..strokeWidth = 1.0
@@ -278,7 +278,6 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             Rect.fromPoints(
                 Offset(xfirst, startY), Offset(xlast, startY + diffY * 0.236)),
             Paint()..color = Colors.red.withOpacity(0.3));
-
         //line1
         context.canvas.drawLine(
             Offset(xfirst, startY + diffY * 0.236),

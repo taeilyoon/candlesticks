@@ -19,6 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 enum DrawingState {
+  none,
   lineLow,
   lineHigh,
   lineFree,
@@ -254,7 +255,7 @@ class _MyAppState extends State<MyApp> {
                             Colors.red
                           ], fillColor: [
                             Colors.blueAccent.withOpacity(0.5)
-                          ], type: DrawingType.circle, value: 10.0),
+                          ], type: DrawingType.circle, width: 10.0),
 
                           ChartDrawing(x: [
                             candles[6].endDate,
@@ -264,7 +265,7 @@ class _MyAppState extends State<MyApp> {
                             Colors.red
                           ], fillColor: [
                             Colors.blueAccent.withOpacity(0.5)
-                          ], type: DrawingType.circle, value: 10.0),
+                          ], type: DrawingType.circle, width: 10.0),
                           // ChartDrawing(
                           //     x: [candles.first.date],
                           //     y: [candles.first.close],
@@ -282,7 +283,7 @@ class _MyAppState extends State<MyApp> {
                             Colors.red
                           ], fillColor: [
                             Colors.blueAccent.withOpacity(1)
-                          ], type: DrawingType.xline, value: 1.0),
+                          ], type: DrawingType.xline, width: 1.0),
                           ChartDrawing(x: [
                             candles[2].endDate,
                             candles[10].endDate,
@@ -293,7 +294,7 @@ class _MyAppState extends State<MyApp> {
                             Colors.red
                           ], fillColor: [
                             Colors.blueAccent.withOpacity(1)
-                          ], type: DrawingType.xline, value: 1.0),
+                          ], type: DrawingType.xline, width: 1.0),
                         ],
                         [],
                         []
