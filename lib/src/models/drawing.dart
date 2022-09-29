@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:candlesticks/src/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class ChartDrawing {
@@ -12,7 +11,6 @@ class ChartDrawing {
   late DrawingType type;
   late String name = "";
 
-
   ChartDrawing({
     required this.x,
     required this.y,
@@ -23,4 +21,11 @@ class ChartDrawing {
   });
 }
 
-enum DrawingType { circle, simpleSquare, line, xline, fibonacciRetracement }
+enum DrawingType {
+  none,
+  circle,
+  simpleSquare,
+  line,
+  xline,
+  fibonacciRetracement
+}
