@@ -165,7 +165,9 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         var x1 = draw.x.first;
         var x2 = draw.x.last;
         var diff = targetCandles.last - targetCandles.first;
-
+        if (diff == 0) {
+          continue;
+        }
         var a = (endY - startY) / (diff * _candleWidth);
         var b = startY - a * (targetCandles.first);
         var xlast = size.width +
@@ -289,7 +291,20 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         context.canvas.drawRect(
             Rect.fromPoints(Offset(xfirst, startY + diffY * 0.236),
                 Offset(xlast, startY + diffY * 0.382)),
-            Paint()..color = Colors.red.withOpacity(0.3));
+            Paint()..color = Colors.orange.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.382),
+            Offset(xlast, startY + diffY * 0.382),
+            Paint()..color = Colors.black);
+
+        // fill 0.236 - 0.382
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.382),
+                Offset(xlast, startY + diffY * 0.382)),
+            Paint()..color = Colors.yellow.withOpacity(0.3));
 
         //line2
         context.canvas.drawLine(
