@@ -23,12 +23,16 @@ class CandlePosition {
   final int index;
   final double x;
   final double y;
-  CandlePosition({
-    required this.candle,
-    required this.index,
-    required this.x,
-    required this.y,
-  });
+
+  final double price;
+  final DateTime? date;
+  CandlePosition(
+      {required this.candle,
+      required this.index,
+      required this.x,
+      required this.y,
+      required this.price,
+      required this.date});
 }
 
 typedef OnChartPanStart(CandlePosition postion);

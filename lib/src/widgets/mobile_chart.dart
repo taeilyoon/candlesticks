@@ -431,13 +431,20 @@ class _MobileChartState extends State<MobileChart> {
                                               widget.candleWidth) +
                                           widget.index)
                                       .floor();
+                              double price = double.parse(
+                                  HelperFunctions.priceToString(high -
+                                      (details.localPosition.dy! - 20) /
+                                          (maxHeight * 0.75 - 40) *
+                                          (high - low)));
                               if (widget.onChartPanStart != null) {
                                 widget.onChartPanStart!(CandlePosition(
                                     candle: widget.candles[index],
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,
-                                    y: details.localPosition.dy));
+                                    y: details.localPosition.dy,
+                                    date: widget.candles[index].startDate,
+                                    price: price));
                               }
                             }
                             setState(() {
@@ -454,13 +461,20 @@ class _MobileChartState extends State<MobileChart> {
                                               widget.candleWidth) +
                                           widget.index)
                                       .floor();
+                              double price = double.parse(
+                                  HelperFunctions.priceToString(high -
+                                      (details.localPosition.dy! - 20) /
+                                          (maxHeight * 0.75 - 40) *
+                                          (high - low)));
                               if (widget.onChartPanUpadte != null) {
                                 widget.onChartPanUpadte!(CandlePosition(
                                     candle: widget.candles[index],
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,
-                                    y: details.localPosition.dy));
+                                    y: details.localPosition.dy,
+                                    date: widget.candles[index].startDate,
+                                    price: price));
                               }
                             }
                             setState(() {
@@ -475,13 +489,20 @@ class _MobileChartState extends State<MobileChart> {
                                               widget.candleWidth) +
                                           widget.index)
                                       .floor();
+                              double price = double.parse(
+                                  HelperFunctions.priceToString(high -
+                                      (details.localPosition.dy! - 20) /
+                                          (maxHeight * 0.75 - 40) *
+                                          (high - low)));
                               if (widget.onChartPanUpadte != null) {
                                 widget.onChartPanUpadte!(CandlePosition(
                                     candle: widget.candles[index],
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,
-                                    y: details.localPosition.dy));
+                                    y: details.localPosition.dy,
+                                    date: widget.candles[index].startDate,
+                                    price: price));
                               }
                             }
                             setState(() {
