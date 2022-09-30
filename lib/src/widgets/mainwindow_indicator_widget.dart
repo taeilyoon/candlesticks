@@ -299,18 +299,40 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             Offset(xlast, startY + diffY * 0.382),
             Paint()..color = Colors.black);
 
-        // fill 0.236 - 0.382
+        // fill 0.382 - 0.5
 
         context.canvas.drawRect(
             Rect.fromPoints(Offset(xfirst, startY + diffY * 0.382),
-                Offset(xlast, startY + diffY * 0.382)),
+                Offset(xlast, startY + diffY * 0.5)),
+            Paint()..color = Colors.yellow.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(Offset(xfirst, startY + diffY * 0.5),
+            Offset(xlast, startY + diffY * 0.5), Paint()..color = Colors.black);
+
+        // fill 0.5 - 0.786
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.5),
+                Offset(xlast, startY + diffY * 0.786)),
             Paint()..color = Colors.yellow.withOpacity(0.3));
 
         //line2
         context.canvas.drawLine(
-            Offset(xfirst, startY + diffY * 0.382),
-            Offset(xlast, startY + diffY * 0.382),
+            Offset(xfirst, startY + diffY * 0.786),
+            Offset(xlast, startY + diffY * 0.786),
             Paint()..color = Colors.black);
+
+        // fill 0.786 - 1
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.786),
+                Offset(xlast, startY + diffY * 1)),
+            Paint()..color = Colors.yellow.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(Offset(xfirst, startY + diffY),
+            Offset(xlast, startY + diffY), Paint()..color = Colors.black);
       }
     }
 
