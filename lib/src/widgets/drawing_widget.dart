@@ -167,7 +167,6 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         // Start to draw from left size.
         // Of course, you can change it to match your requirement.
         double startX = 0;
-        double y = 10;
 
         // Repeat drawing until we reach the right edge.
         // In our example, size.with = 300 (from the SizedBox)

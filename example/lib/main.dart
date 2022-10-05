@@ -248,16 +248,6 @@ class _MyAppState extends State<MyApp> {
                       drawing: [
                         [
                           ChartDrawing(x: [
-                            candles[2].endDate,
-                          ], y: [
-                            candles[2].high
-                          ], borderColor: [
-                            Colors.red
-                          ], fillColor: [
-                            Colors.blueAccent.withOpacity(0.5)
-                          ], type: DrawingType.circle, width: 10.0),
-
-                          ChartDrawing(x: [
                             candles[6].endDate,
                           ], y: [
                             candles[6].high
@@ -265,36 +255,7 @@ class _MyAppState extends State<MyApp> {
                             Colors.red
                           ], fillColor: [
                             Colors.blueAccent.withOpacity(0.5)
-                          ], type: DrawingType.circle, width: 10.0),
-                          // ChartDrawing(
-                          //     x: [candles.first.date],
-                          //     y: [candles.first.close],
-                          //     borderColor: [Colors.red],
-                          //     fillColor: [Colors.blueAccent.withOpacity(0.2)],
-                          //     type: DrawingType.line,
-                          //     value: 10.0),
-                          ChartDrawing(x: [
-                            candles[2].endDate,
-                            candles[6].endDate,
-                          ], y: [
-                            candles[2].high,
-                            candles[6].high
-                          ], borderColor: [
-                            Colors.red
-                          ], fillColor: [
-                            Colors.blueAccent.withOpacity(1)
-                          ], type: DrawingType.xline, width: 1.0),
-                          ChartDrawing(x: [
-                            candles[2].endDate,
-                            candles[10].endDate,
-                          ], y: [
-                            19000,
-                            18000,
-                          ], borderColor: [
-                            Colors.red
-                          ], fillColor: [
-                            Colors.blueAccent.withOpacity(1)
-                          ], type: DrawingType.xline, width: 1.0),
+                          ], type: DrawingType.divideLine, width: 10.0),
                         ],
                         [],
                         []
