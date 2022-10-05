@@ -159,6 +159,34 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..strokeWidth = draw.width ?? 1.0
               ..style = PaintingStyle.stroke);
       }
+
+      if (draw.type == DrawingType.divideLine) {
+        const int dashWidth = 4;
+        const int dashSpace = 4;
+
+        // Start to draw from left size.
+        // Of course, you can change it to match your requirement.
+        double startX = 0;
+        double y = 10;
+
+        // Repeat drawing until we reach the right edge.
+        // In our example, size.with = 300 (from the SizedBox)
+        var yVal = offset.dy + (_high - draw.y.first) / range;
+
+        while (startX < size.width) {
+          // Draw a small line.
+          context.canvas.drawLine(
+              Offset(startX, yVal),
+              Offset(startX + dashWidth, yVal),
+              Paint()
+                ..color = draw.fillColor.firstOrNull ?? Colors.black
+                ..strokeWidth = draw.width ?? 3.0
+                ..style = PaintingStyle.stroke);
+          // Update the starting X
+          startX += dashWidth + dashSpace;
+        }
+      }
+
       if (draw.type == DrawingType.xline) {
         var startY = offset.dy + (_high - draw.y.first);
         var endY = offset.dy + (_high - draw.y.last);

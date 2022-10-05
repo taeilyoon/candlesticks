@@ -25,6 +25,7 @@ enum DrawingType {
   none,
   circle,
   simpleSquare,
+  divideLine,
   line,
   xline,
   fibonacciRetracement
