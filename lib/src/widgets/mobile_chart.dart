@@ -9,6 +9,7 @@ import 'package:candlesticks/src/widgets/candle_stick_widget.dart';
 import 'package:candlesticks/src/widgets/mainwindow_indicator_widget.dart';
 import 'package:candlesticks/src/widgets/price_column.dart';
 import 'package:candlesticks/src/widgets/time_row.dart';
+import 'package:candlesticks/src/widgets/top_panel.dart';
 import 'package:candlesticks/src/widgets/volume_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -516,24 +517,24 @@ class _MobileChartState extends State<MobileChart> {
                           },
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       vertical: 4, horizontal: 12),
-                      //   child: TopPanel(
-                      //     style: widget.style,
-                      //     onRemoveIndicator: widget.onRemoveIndicator,
-                      //     currentCandle: currentCandle,
-                      //     indicators: widget.mainWindowDataContainer.indicators,
-                      //     toggleIndicatorVisibility: (indicatorName) {
-                      //       setState(() {
-                      //         widget.mainWindowDataContainer
-                      //             .toggleIndicatorVisibility(indicatorName);
-                      //       });
-                      //     },
-                      //     unvisibleIndicators: widget
-                      //         .mainWindowDataContainer.unvisibleIndicators,
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 12),
+                        child: TopPanel(
+                          style: widget.style,
+                          onRemoveIndicator: widget.onRemoveIndicator,
+                          currentCandle: currentCandle,
+                          indicators: widget.mainWindowDataContainer.indicators,
+                          toggleIndicatorVisibility: (indicatorName) {
+                            setState(() {
+                              widget.mainWindowDataContainer
+                                  .toggleIndicatorVisibility(indicatorName);
+                            });
+                          },
+                          unvisibleIndicators: widget
+                              .mainWindowDataContainer.unvisibleIndicators,
+                        ),
+                      ),
                       Positioned(
                         right: 0,
                         bottom: 0,
