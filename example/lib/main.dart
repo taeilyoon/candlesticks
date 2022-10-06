@@ -215,13 +215,13 @@ class _MyAppState extends State<MyApp> {
                         ...indicators,
                         SimpleDrawIndicator(
                             dates: selectedDrawing
-                                .map((e) => e.candle.endDate)
+                                .map((e) => e.candle!.endDate)
                                 .toList()
-                              ..addNotNull(nowPosition?.candle.endDate),
+                              ..addNotNull(nowPosition?.candle!.endDate),
                             values: selectedDrawing
-                                .map((e) => e.candle.low)
+                                .map((e) => e.candle!.low)
                                 .toList()
-                              ..addNotNull(nowPosition?.candle.low),
+                              ..addNotNull(nowPosition?.candle!.low),
                             name: DateTime.now().toString())
                       ],
                       candles: candles,

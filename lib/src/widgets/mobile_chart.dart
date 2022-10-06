@@ -442,7 +442,7 @@ class _MobileChartState extends State<MobileChart> {
                                           (high - low)));
                               if (widget.onChartPanStart != null) {
                                 widget.onChartPanStart!(CandlePosition(
-                                    candle: widget.candles[index],
+                                    candle: widget.candles.getOrNull(index),
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,
@@ -472,7 +472,7 @@ class _MobileChartState extends State<MobileChart> {
                                           (high - low)));
                               if (widget.onChartPanUpadte != null) {
                                 widget.onChartPanUpadte!(CandlePosition(
-                                    candle: widget.candles[index],
+                                    candle: widget.candles.getOrNull(index),
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,
@@ -498,9 +498,9 @@ class _MobileChartState extends State<MobileChart> {
                                       (details.localPosition.dy! - 20) /
                                           (maxHeight * 0.75 - 40) *
                                           (high - low)));
-                              if (widget.onChartPanUpadte != null) {
-                                widget.onChartPanUpadte!(CandlePosition(
-                                    candle: widget.candles[index],
+                              if (widget.onChartPanEnd != null) {
+                                widget.onChartPanEnd!(CandlePosition(
+                                    candle: widget.candles.getOrNull(index),
                                     index: index,
                                     x: details.localPosition.dx +
                                         index * widget.candleWidth,

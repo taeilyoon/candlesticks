@@ -19,7 +19,7 @@ enum ChartAdjust {
 }
 
 class CandlePosition {
-  final Candle candle;
+  final Candle? candle;
   final int index;
   final double x;
   final double y;
@@ -27,7 +27,7 @@ class CandlePosition {
   final double price;
   final DateTime? date;
   CandlePosition(
-      {required this.candle,
+      {this.candle,
       required this.index,
       required this.x,
       required this.y,
