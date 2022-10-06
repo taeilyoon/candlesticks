@@ -18,6 +18,7 @@ class ChartDrawing {
     required this.fillColor,
     required this.type,
     this.width,
+    String this.name = "",
   });
 }
 

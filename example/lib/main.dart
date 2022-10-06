@@ -62,17 +62,7 @@ class _MyAppState extends State<MyApp> {
   Set<CandlePosition> selectedDrawing = {};
   CandlePosition? nowPosition;
 
-  List<Indicator> indicators = [
-    BollingerBandsIndicator(
-        length: 20,
-        stdDev: 2,
-        upperColor: const Color(0xFF2962FF),
-        basisColor: const Color(0xFFFF6D00),
-        lowerColor: const Color(0xFF2962FF),
-        label: "Bollinger"),
-    WeightedMovingAverageIndicator(
-        length: 100, color: Colors.green.shade600, label: "WMA"),
-  ];
+  List<Indicator> indicators = [];
   List<Indicator> subIndicators = [
     CommodityChannelIndexIndicator(
       color: const Color(0xFF2962FF),
@@ -247,15 +237,38 @@ class _MyAppState extends State<MyApp> {
                       },
                       drawing: [
                         [
-                          ChartDrawing(x: [
-                            candles[6].endDate,
-                          ], y: [
-                            candles[6].high
-                          ], borderColor: [
-                            Colors.red
-                          ], fillColor: [
-                            Colors.blueAccent.withOpacity(0.5)
-                          ], type: DrawingType.divideLine, width: 10.0),
+                          // ChartDrawing(x: [
+                          //   candles[6].endDate,
+                          // ], y: [
+                          //   candles[6].high
+                          // ], borderColor: [
+                          //   Colors.red
+                          // ], fillColor: [
+                          //   Colors.blueAccent.withOpacity(0.5)
+                          // ], type: DrawingType.line, width: 10.0),
+                          ChartDrawing(
+                              x: [candles[20].endDate, candles[10].endDate],
+                              y: [candles[20].high, candles[10].low],
+                              borderColor: [Colors.red],
+                              fillColor: [Colors.blueAccent],
+                              type: DrawingType.fibonacciRetracement,
+                              width: 1.0),
+                          ChartDrawing(
+                              x: [
+                                candles[20].endDate,
+                              ],
+                              y: [
+                                candles[20].high
+                              ],
+                              borderColor: [
+                                Colors.red
+                              ],
+                              fillColor: [
+                                Colors.blueAccent
+                              ],
+                              type: DrawingType.divideLine,
+                              width: 3.0,
+                              name: "1분할"),
                         ],
                         [],
                         []

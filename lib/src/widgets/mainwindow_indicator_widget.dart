@@ -238,6 +238,108 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         //       ..strokeWidth = draw.value ?? 1.0
         //       ..style = PaintingStyle.stroke);
       }
+
+      if (draw.type == DrawingType.divideLine) {
+        const int dashWidth = 10;
+        const int dashSpace = 2;
+
+        double startX = 0;
+        var yVal = offset.dy + (_high - draw.y.first) / range;
+        Paint()
+          ..color = draw.fillColor.firstOrNull ?? Colors.black
+          ..strokeWidth = draw.width ?? 1.0
+          ..style = PaintingStyle.stroke;
+
+        var textPainter = TextPainter(
+            text: TextSpan(
+          text: draw.name,
+          style: TextStyle(
+            color: draw.fillColor.firstOrNull ?? Colors.black,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Noto Sans",
+            letterSpacing: 0,
+          ),
+        ))
+          ..textDirection = TextDirection.ltr
+          ..textAlign = TextAlign.center
+          ..layout();
+        if (_index < 1) {
+          while (startX <
+              (size.width -
+                  (-2.5 - _index) * _candleWidth -
+                  textPainter.width)) {
+            // Draw a small line.
+            context.canvas.drawLine(
+                Offset(startX, yVal),
+                Offset(startX + dashWidth, yVal),
+                Paint()
+                  ..color = draw.fillColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = draw.width ?? 3.0
+                  ..style = PaintingStyle.stroke);
+            // Update the starting X
+            startX += dashWidth + dashSpace;
+          }
+        } else {
+          while (startX < size.width) {
+            // Draw a small line.
+            context.canvas.drawLine(
+                Offset(startX, yVal),
+                Offset(startX + dashWidth, yVal),
+                Paint()
+                  ..color = draw.fillColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = draw.width ?? 3.0
+                  ..style = PaintingStyle.stroke);
+
+            // Update the starting X
+            startX += dashWidth + dashSpace;
+          }
+        }
+
+        if (_index < 1) {
+          var background = Paint()
+            ..style = PaintingStyle.fill
+            ..color = Colors.black
+            ..strokeWidth = 1.0
+            ..style = PaintingStyle.stroke
+            ..isAntiAlias = true;
+          // context.canvas.drawRRect(
+          //     RRect.fromRectAndRadius(
+          //         Rect.fromLTWH(
+          //             (size.width -
+          //                 (10 - _index) * _candleWidth +
+          //                 textPainter.width * 2),
+          //             yVal - textPainter.height / 2 - 5,
+          //             textPainter.width + 30,
+          //             textPainter.height + 10),
+          //         Radius.circular(15.0)),
+          //     Paint()
+          //       ..style = PaintingStyle.fill
+          //       ..color = Colors.white.withOpacity(0.3)
+          //       ..strokeWidth = 1.0);
+          // context.canvas.drawRRect(
+          //     RRect.fromRectAndRadius(
+          //         Rect.fromLTWH(
+          //             (size.width -
+          //                 (10 - _index) * _candleWidth +
+          //                 textPainter.width * 2),
+          //             yVal - textPainter.height / 2 - 5,
+          //             textPainter.width + 30,
+          //             textPainter.height + 10),
+          //         Radius.circular(15.0)),
+          //     background);
+
+          textPainter.paint(
+            context.canvas,
+            Offset(
+                (size.width -
+                    (-2.5 - _index) * _candleWidth -
+                    textPainter.width),
+                yVal - textPainter.height / 2),
+          );
+        }
+      }
+
       if (draw.type == DrawingType.circle) {
         var startX = size.width +
             offset.dx -
@@ -254,8 +356,8 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       }
 
       if (draw.type == DrawingType.fibonacciRetracement) {
-        var startY = offset.dy + (_high - draw.y.first);
-        var endY = offset.dy + (_high - draw.y.last);
+        var startY = offset.dy + (_high - draw.y.first) / range;
+        var endY = offset.dy + (_high - draw.y.last) / range;
         var x1 = draw.x.first;
         var x2 = draw.x.last;
         var xlast = size.width +
@@ -315,7 +417,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         context.canvas.drawRect(
             Rect.fromPoints(Offset(xfirst, startY + diffY * 0.5),
                 Offset(xlast, startY + diffY * 0.786)),
-            Paint()..color = Colors.yellow.withOpacity(0.3));
+            Paint()..color = Colors.green.withOpacity(0.3));
 
         //line2
         context.canvas.drawLine(
@@ -328,7 +430,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         context.canvas.drawRect(
             Rect.fromPoints(Offset(xfirst, startY + diffY * 0.786),
                 Offset(xlast, startY + diffY * 1)),
-            Paint()..color = Colors.yellow.withOpacity(0.3));
+            Paint()..color = Colors.blue.withOpacity(0.3));
 
         //line2
         context.canvas.drawLine(Offset(xfirst, startY + diffY),
