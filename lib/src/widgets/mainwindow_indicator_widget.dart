@@ -268,7 +268,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
           while (startX <
               (size.width -
                   (-2.5 - _index) * _candleWidth -
-                  textPainter.width)) {
+                  textPainter.width / 3)) {
             // Draw a small line.
             context.canvas.drawLine(
                 Offset(startX, yVal),
@@ -331,10 +331,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
           textPainter.paint(
             context.canvas,
-            Offset(
-                (size.width -
-                    (-2.5 - _index) * _candleWidth -
-                    textPainter.width),
+            Offset((size.width - (-2.5 - _index) * _candleWidth),
                 yVal - textPainter.height / 2),
           );
         }
