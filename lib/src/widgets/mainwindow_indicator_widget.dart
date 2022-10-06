@@ -303,20 +303,55 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             ..strokeWidth = 1.0
             ..style = PaintingStyle.stroke
             ..isAntiAlias = true;
-          // context.canvas.drawRRect(
-          //     RRect.fromRectAndRadius(
-          //         Rect.fromLTWH(
-          //             (size.width -
-          //                 (10 - _index) * _candleWidth +
-          //                 textPainter.width * 2),
-          //             yVal - textPainter.height / 2 - 5,
-          //             textPainter.width + 30,
-          //             textPainter.height + 10),
-          //         Radius.circular(15.0)),
-          //     Paint()
-          //       ..style = PaintingStyle.fill
-          //       ..color = Colors.white.withOpacity(0.3)
-          //       ..strokeWidth = 1.0);
+
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                      center: Offset(
+                          (size.width -
+                              (-2.5 - _index) * _candleWidth +
+                              textPainter.width / 2),
+                          yVal),
+                      width: textPainter.width + 30,
+                      height: textPainter.height + 10)
+                  // Rect.fromLTWH(
+                  //     (size.width -
+                  //         (10 - _index) * _candleWidth +
+                  //         textPainter.width * 2),
+                  //     yVal - textPainter.height / 2 - 5,
+                  //     textPainter.width + 30,
+                  //     textPainter.height + 10)
+                  ,
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color = Colors.white
+                ..strokeWidth = 1.0);
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                      center: Offset(
+                          (size.width -
+                              (-2.5 - _index) * _candleWidth +
+                              textPainter.width / 2),
+                          yVal),
+                      width: textPainter.width + 30,
+                      height: textPainter.height + 10)
+                  // Rect.fromLTWH(
+                  //     (size.width -
+                  //         (10 - _index) * _candleWidth +
+                  //         textPainter.width * 2),
+                  //     yVal - textPainter.height / 2 - 5,
+                  //     textPainter.width + 30,
+                  //     textPainter.height + 10)
+                  ,
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color =
+                    draw.textColor ?? draw.fillColor.firstOrNull ?? Colors.black
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = draw.width ?? 1.0);
           // context.canvas.drawRRect(
           //     RRect.fromRectAndRadius(
           //         Rect.fromLTWH(

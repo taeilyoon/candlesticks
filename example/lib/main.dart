@@ -255,6 +255,38 @@ class _MyAppState extends State<MyApp> {
                               width: 1.0),
                           ChartDrawing(
                               x: [
+                                candles[22].endDate,
+                              ],
+                              y: [
+                                candles[22].high
+                              ],
+                              borderColor: [
+                                Colors.red
+                              ],
+                              fillColor: [
+                                Colors.blueAccent
+                              ],
+                              type: DrawingType.divideLine,
+                              width: 3.0,
+                              name: "2분할"),
+                          ChartDrawing(
+                              x: [
+                                candles[29].endDate,
+                              ],
+                              y: [
+                                candles[29].high
+                              ],
+                              borderColor: [
+                                Colors.red
+                              ],
+                              fillColor: [
+                                Colors.blueAccent
+                              ],
+                              type: DrawingType.divideLine,
+                              width: 3.0,
+                              name: "3분할"),
+                          ChartDrawing(
+                              x: [
                                 candles[20].endDate,
                               ],
                               y: [

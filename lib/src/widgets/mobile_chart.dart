@@ -59,6 +59,8 @@ class MobileChart extends StatefulWidget {
   bool isDrawing;
   List<List<ChartDrawing>> drawing;
 
+  final clip;
+
   MobileChart(
       {required this.style,
       required this.onScaleUpdate,
@@ -72,11 +74,13 @@ class MobileChart extends StatefulWidget {
       required this.onReachEnd,
       required this.mainWindowDataContainer,
       required this.onRemoveIndicator,
+      this.clip = Clip.hardEdge,
       this.onChartPanStart,
       this.onChartPanUpadte,
       this.onChartPanEnd,
       this.isDrawing = false,
-      this.drawing = const [[], [], []]});
+      this.drawing = const [[], [], []],
+      required priceIndicatorOption});
 
   @override
   State<MobileChart> createState() => _MobileChartState();
@@ -213,6 +217,7 @@ class _MobileChartState extends State<MobileChart> {
                                     children: [
                                       Expanded(
                                         child: Container(
+                                          clipBehavior: widget.clip,
                                           decoration: BoxDecoration(
                                             border: Border(
                                               right: BorderSide(
@@ -230,6 +235,19 @@ class _MobileChartState extends State<MobileChart> {
                                             child: RepaintBoundary(
                                               child: Stack(
                                                 children: [
+                                                  MainWindowIndicatorWidget(
+                                                    candles: widget.candles,
+                                                    indicatorDatas: widget
+                                                        .mainWindowDataContainer
+                                                        .indicatorComponentData,
+                                                    index: widget.index,
+                                                    candleWidth:
+                                                        widget.candleWidth,
+                                                    low: low,
+                                                    high: high,
+                                                    drawing:
+                                                        widget.drawing.first,
+                                                  ),
                                                   CandleStickWidget(
                                                     candles: widget.candles,
                                                     candleWidth:
@@ -243,19 +261,6 @@ class _MobileChartState extends State<MobileChart> {
                                                         .style.primaryBull,
                                                     onChartPanStart:
                                                         widget.onChartPanStart,
-                                                    drawing:
-                                                        widget.drawing.first,
-                                                  ),
-                                                  MainWindowIndicatorWidget(
-                                                    candles: widget.candles,
-                                                    indicatorDatas: widget
-                                                        .mainWindowDataContainer
-                                                        .indicatorComponentData,
-                                                    index: widget.index,
-                                                    candleWidth:
-                                                        widget.candleWidth,
-                                                    low: low,
-                                                    high: high,
                                                     drawing:
                                                         widget.drawing.first,
                                                   ),

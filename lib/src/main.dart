@@ -39,6 +39,12 @@ typedef OnChartPanStart(CandlePosition postion);
 typedef OnChartPanUpdate(CandlePosition postion);
 typedef OnChartPanEnd(CandlePosition postion);
 
+enum PriceIndicatorOption {
+  recent,
+  shownRecent,
+  recentAndShownRecent,
+}
+
 /// StatefulWidget that holds Chart's State (index of
 /// current position and candles width).
 class Candlesticks extends StatefulWidget {
@@ -76,6 +82,10 @@ class Candlesticks extends StatefulWidget {
   final OnChartPanEnd? onChartPanEnd;
   final List<List<ChartDrawing>> drawing;
   // final List<TimeOfDay> skipDateTime = [s]
+
+  final clip;
+
+  final PriceIndicatorOption priceIndicatorOption;
   const Candlesticks({
     Key? key,
     required this.candles,
@@ -87,12 +97,14 @@ class Candlesticks extends StatefulWidget {
     this.indicators,
     this.onRemoveIndicator,
     this.isDrawingMode = false,
+    this.clip = Clip.hardEdge,
     this.onChartPanStart,
     this.onChartPanUpadte,
     this.onChartPanEnd,
     this.subIndicator = const [],
     this.style,
     this.drawing = const [[], [], []],
+    this.priceIndicatorOption = PriceIndicatorOption.shownRecent,
   })  : assert(candles.length == 0 || candles.length > 1,
             "Please provide at least 2 candles"),
         super(key: key);
@@ -282,6 +294,8 @@ class _CandlesticksState extends State<Candlesticks> {
                     chartAdjust: widget.chartAdjust,
                     isDrawing: widget.isDrawingMode,
                     drawing: widget.drawing,
+                    clip: widget.clip,
+                    priceIndicatorOption: widget.priceIndicatorOption,
                     onScaleUpdate: (double scale) {
                       scale = max(0.90, scale);
                       scale = min(1.1, scale);

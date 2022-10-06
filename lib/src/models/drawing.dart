@@ -10,16 +10,18 @@ class ChartDrawing {
   late double? width;
   late DrawingType type;
   late String name = "";
-
-  ChartDrawing({
-    required this.x,
-    required this.y,
-    required this.borderColor,
-    required this.fillColor,
-    required this.type,
-    this.width,
-    String this.name = "",
-  });
+  double? textSize;
+  Color? textColor;
+  ChartDrawing(
+      {required this.x,
+      required this.y,
+      required this.borderColor,
+      required this.fillColor,
+      required this.type,
+      this.width,
+      String this.name = "",
+      this.textSize = 16.0,
+      this.textColor = Colors.black});
 }
 
 enum DrawingType {
