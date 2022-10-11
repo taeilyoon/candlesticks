@@ -254,7 +254,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             text: TextSpan(
           text: draw.name,
           style: TextStyle(
-            color: draw.fillColor.firstOrNull ?? Colors.black,
+            color: draw.textColor ?? Colors.black,
             fontSize: 13,
             fontWeight: FontWeight.w400,
             fontFamily: "Noto Sans",
@@ -274,7 +274,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                 Offset(startX, yVal),
                 Offset(startX + dashWidth, yVal),
                 Paint()
-                  ..color = draw.fillColor.firstOrNull ?? Colors.black
+                  ..color = draw.textColor ?? Colors.black
                   ..strokeWidth = draw.width ?? 3.0
                   ..style = PaintingStyle.stroke);
             // Update the starting X
@@ -287,7 +287,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                 Offset(startX, yVal),
                 Offset(startX + dashWidth, yVal),
                 Paint()
-                  ..color = draw.fillColor.firstOrNull ?? Colors.black
+                  ..color = draw.borderColor.firstOrNull ?? Colors.black
                   ..strokeWidth = draw.width ?? 3.0
                   ..style = PaintingStyle.stroke);
 
