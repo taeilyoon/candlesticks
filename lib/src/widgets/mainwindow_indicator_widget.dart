@@ -385,6 +385,14 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..color = draw.borderColor.firstOrNull ?? Colors.transparent
               ..strokeWidth = 1.0
               ..style = PaintingStyle.stroke);
+
+        context.canvas.drawCircle(
+            Offset(startX, endY),
+            draw.width!,
+            Paint()
+              ..color = draw.fillColor.firstOrNull ?? Colors.transparent
+              ..strokeWidth = 0.0
+              ..style = PaintingStyle.fill);
       }
 
       if (draw.type == DrawingType.fibonacciRetracement) {
