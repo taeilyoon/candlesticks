@@ -62,7 +62,17 @@ class _MyAppState extends State<MyApp> {
   Set<CandlePosition> selectedDrawing = {};
   CandlePosition? nowPosition;
 
-  List<Indicator> indicators = [];
+  List<Indicator> indicators = [
+    BollingerBandsIndicator(
+        length: 20,
+        stdDev: 2,
+        upperColor: const Color(0xFF2962FF),
+        basisColor: const Color(0xFFFF6D00),
+        lowerColor: const Color(0xFF2962FF),
+        label: "Bollinger"),
+    WeightedMovingAverageIndicator(
+        length: 100, color: Colors.green.shade600, label: "WMA"),
+  ];
   List<Indicator> subIndicators = [
     CommodityChannelIndexIndicator(
       color: const Color(0xFF2962FF),

@@ -95,28 +95,28 @@ class _TopPanelState extends State<TopPanel> {
           //             .toList(),
           //       )
           //     : Container(),
-          widget.indicators.length > 1
-              ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showIndicatorNames = !showIndicatorNames;
-                    });
-                  },
-                  child: _PanelButton(
-                    borderColor: widget.style.borderColor,
-                    child: Row(
-                      children: [
-                        Icon(
-                            showIndicatorNames
-                                ? Icons.keyboard_arrow_up_rounded
-                                : Icons.keyboard_arrow_down_rounded,
-                            color: widget.style.primaryTextColor),
-                        Text(widget.indicators.length.toString()),
-                      ],
-                    ),
-                  ),
-                )
-              : Container(),
+          // widget.indicators.length > 1
+          //     ? GestureDetector(
+          //         onTap: () {
+          //           setState(() {
+          //             showIndicatorNames = !showIndicatorNames;
+          //           });
+          //         },
+          //         child: _PanelButton(
+          //           borderColor: widget.style.borderColor,
+          //           child: Row(
+          //             children: [
+          //               Icon(
+          //                   showIndicatorNames
+          //                       ? Icons.keyboard_arrow_up_rounded
+          //                       : Icons.keyboard_arrow_down_rounded,
+          //                   color: widget.style.primaryTextColor),
+          //               Text(widget.indicators.length.toString()),
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
         ],
       ),
     );
