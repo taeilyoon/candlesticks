@@ -1,5 +1,6 @@
 import 'package:candlesticks/src/models/candle.dart';
 import 'package:flutter/material.dart';
+
 import '../models/candle.dart';
 
 class VolumeWidget extends LeafRenderObjectWidget {
@@ -79,8 +80,8 @@ class VolumeRenderObject extends RenderBox {
 
   /// draws a single candle
   void paintBar(PaintingContext context, Offset offset, int index,
-      Candle candle, double range) {
-    Color color = candle.isBull ? _bullColor : _bearColor;
+      Candle candle, double range, bool isBull) {
+    Color color = isBull ? _bullColor : _bearColor;
 
     double x = size.width + offset.dx - (index + 0.5) * _barWidth;
 
@@ -98,7 +99,9 @@ class VolumeRenderObject extends RenderBox {
     for (int i = 0; (i + 1) * _barWidth < size.width; i++) {
       if (i + _index >= _candles.length || i + _index < 0) continue;
       var candle = _candles[i + _index];
-      paintBar(context, offset, i, candle, range);
+      var before = _candles[i + _index + 1];
+      paintBar(
+          context, offset, i, candle, range, before.volume < candle.volume);
     }
     context.canvas.save();
     context.canvas.restore();

@@ -398,8 +398,6 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       if (draw.type == DrawingType.fibonacciRetracement) {
         var startY = offset.dy + (_high - draw.y.first) / range;
         var endY = offset.dy + (_high - draw.y.last) / range;
-        var x1 = draw.x.first;
-        var x2 = draw.x.last;
         var xlast = size.width +
             offset.dx -
             (targetCandles.last - _index + 1 + 0.5) * _candleWidth;

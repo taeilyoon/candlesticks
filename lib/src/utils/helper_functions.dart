@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:candlesticks/src/constant/view_constants.dart';
+import 'package:intl/intl.dart';
 
 class HelperFunctions {
   static double log10(num x) => log(x) / ln10;
@@ -27,6 +28,8 @@ class HelperFunctions {
   }
 
   static String priceToString(double price) {
+    return NumberFormat.currency(locale: 'ko_KR', symbol: "").format(price);
+    return price.floor().toString();
     return price.abs() > 1000
         ? price.toStringAsFixed(2)
         : price.abs() > 100

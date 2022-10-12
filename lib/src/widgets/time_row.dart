@@ -63,6 +63,20 @@ class _TimeRowState extends State<TimeRow> {
     return "${value < 10 ? 0 : ""}$value";
   }
 
+  Text _yearText(DateTime _time, Color color) {
+    return Text(
+      numberFormat(_time.year) +
+          "/" +
+          numberFormat(_time.month) +
+          "/" +
+          numberFormat(_time.day),
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
+      ),
+    );
+  }
+
   /// Day/month text widget
   Text _monthDayText(DateTime _time, Color color) {
     return Text(
@@ -124,9 +138,12 @@ class _TimeRowState extends State<TimeRow> {
                       color: widget.style.borderColor,
                     ),
                   ),
-                  dif.compareTo(Duration(days: 1)) > 0
-                      ? _monthDayText(_time, widget.style.primaryTextColor)
-                      : _hourMinuteText(_time, widget.style.primaryTextColor),
+                  dif.compareTo(Duration(days: 360)) > -1
+                      ? _yearText(_time, widget.style.primaryTextColor)
+                      : dif.compareTo(Duration(days: 1)) > -1
+                          ? _monthDayText(_time, widget.style.primaryTextColor)
+                          : _hourMinuteText(
+                              _time, widget.style.primaryTextColor),
                 ],
               );
             },
