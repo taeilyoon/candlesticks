@@ -362,9 +362,9 @@ class _MobileChartState extends State<MobileChart> {
                                         longPressY! < maxHeight * 0.75
                                             ? HelperFunctions.priceToString(
                                                 high -
-                                                    (longPressY! - 20) /
+                                                    (longPressY! - 10) /
                                                         (maxHeight * 0.75 -
-                                                            40) *
+                                                            20) *
                                                         (high - low))
                                             : HelperFunctions.addMetricPrefix(
                                                 HelperFunctions.getRoof(
