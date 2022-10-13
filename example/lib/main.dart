@@ -209,220 +209,180 @@ class _MyAppState extends State<MyApp> {
             )
           ],
         ),
-        body: Row(
-          children: [
-            Expanded(
-              child: Center(
-                child: StreamBuilder(
-                  stream: _channel == null ? null : _channel!.stream,
-                  builder: (context, snapshot) {
-                    updateCandlesFromSnapshot(snapshot);
-                    return Candlesticks(
-                      // chartAdjust: ChartAdjust.fullRange,
-                      isDrawingMode: this.isDrawing,
-                      key: Key(currentSymbol + currentInterval),
-                      indicators: [
-                        ...indicators,
-                        SimpleDrawIndicator(
-                            dates: selectedDrawing
-                                .map((e) => e.candle!.endDate)
-                                .toList()
-                              ..addNotNull(nowPosition?.candle!.endDate),
-                            values: selectedDrawing
-                                .map((e) => e.candle!.low)
-                                .toList()
-                              ..addNotNull(nowPosition?.candle!.low),
-                            name: DateTime.now().toString())
-                      ],
-                      candles: candles,
-                      onLoadMoreCandles: loadMoreCandles,
-                      onRemoveIndicator: (String indicator) {
-                        setState(() {
-                          indicators = [
-                            ...indicators,
-                          ];
-                          indicators.removeWhere(
-                              (element) => element.name == indicator);
-                        });
-                      },
-                      drawing: [
-                        [
-                          // ChartDrawing(x: [
-                          //   candles[6].endDate,
-                          // ], y: [
-                          //   candles[6].high
-                          // ], borderColor: [
-                          //   Colors.red
-                          // ], fillColor: [
-                          //   Colors.blueAccent.withOpacity(0.5)
-                          // ], type: DrawingType.line, width: 10.0),
-                          ChartDrawing(
-                              x: [candles[20].endDate, candles[10].endDate],
-                              y: [candles[20].high, candles[10].low],
-                              borderColor: [Colors.red],
-                              fillColor: [Colors.blueAccent],
-                              type: DrawingType.fibonacciRetracement,
-                              width: 1.0),
-                          ChartDrawing(
-                              x: [
-                                candles[22].endDate,
-                              ],
-                              y: [
-                                candles[22].high
-                              ],
-                              borderColor: [
-                                Colors.red
-                              ],
-                              fillColor: [
-                                Colors.blueAccent
-                              ],
-                              type: DrawingType.divideLine,
-                              width: 3.0,
-                              name: "2분할"),
-                          ChartDrawing(
-                              x: [
-                                candles[29].endDate,
-                              ],
-                              y: [
-                                candles[29].high
-                              ],
-                              borderColor: [
-                                Colors.red
-                              ],
-                              fillColor: [
-                                Colors.blueAccent
-                              ],
-                              type: DrawingType.divideLine,
-                              width: 3.0,
-                              name: "3분할"),
-                          ChartDrawing(
-                              x: [
-                                candles[20].endDate,
-                              ],
-                              y: [
-                                candles[20].high
-                              ],
-                              borderColor: [
-                                Colors.red
-                              ],
-                              fillColor: [
-                                Colors.blueAccent
-                              ],
-                              type: DrawingType.divideLine,
-                              width: 3.0,
-                              name: "1분할"),
-                        ],
-                        [],
-                        []
-                      ],
-                      onChartPanStart: (p) {
-                        print(p);
-                        setState(() {
-                          selectedDrawing.add(p);
-                        });
-                      },
-                      onChartPanUpadte: (p) {
-                        nowPosition = p;
-                      },
-                      actions: [
-                        ToolBarAction(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Center(
-                                  child: Container(
-                                    width: 200,
-                                    color: Theme.of(context).backgroundColor,
-                                    child: Wrap(
-                                      children: intervals
-                                          .map((e) => Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: SizedBox(
-                                                  width: 50,
-                                                  height: 30,
-                                                  child: RawMaterialButton(
-                                                    elevation: 0,
-                                                    fillColor:
-                                                        const Color(0xFF494537),
-                                                    onPressed: () {
-                                                      fetchCandles(
-                                                          currentSymbol, e);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(
-                                                      e,
-                                                      style: const TextStyle(
-                                                        color:
-                                                            Color(0xFFF0B90A),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ))
-                                          .toList(),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Text(
-                            currentInterval,
+        body: StreamBuilder(
+          stream: _channel == null ? null : _channel!.stream,
+          builder: (context, snapshot) {
+            updateCandlesFromSnapshot(snapshot);
+            return Candlesticks(
+              // chartAdjust: ChartAdjust.fullRange,
+              isDrawingMode: this.isDrawing,
+              key: Key(currentSymbol + currentInterval),
+              indicators: [
+                ...indicators,
+                SimpleDrawIndicator(
+                    dates:
+                        selectedDrawing.map((e) => e.candle!.endDate).toList()
+                          ..addNotNull(nowPosition?.candle!.endDate),
+                    values: selectedDrawing.map((e) => e.candle!.low).toList()
+                      ..addNotNull(nowPosition?.candle!.low),
+                    name: DateTime.now().toString())
+              ],
+              candles: candles,
+              onLoadMoreCandles: loadMoreCandles,
+              onRemoveIndicator: (String indicator) {
+                setState(() {
+                  indicators = [
+                    ...indicators,
+                  ];
+                  indicators
+                      .removeWhere((element) => element.name == indicator);
+                });
+              },
+              drawing: [
+                [
+                  // ChartDrawing(x: [
+                  //   candles[6].endDate,
+                  // ], y: [
+                  //   candles[6].high
+                  // ], borderColor: [
+                  //   Colors.red
+                  // ], fillColor: [
+                  //   Colors.blueAccent.withOpacity(0.5)
+                  // ], type: DrawingType.line, width: 10.0),
+                  // ChartDrawing(
+                  //     x: [candles[20].endDate, candles[10].endDate],
+                  //     y: [candles[20].high, candles[10].low],
+                  //     borderColor: [Colors.red],
+                  //     fillColor: [Colors.blueAccent],
+                  //     type: DrawingType.fibonacciRetracement,
+                  //     width: 1.0),
+                  // ChartDrawing(
+                  //     x: [
+                  //       candles[22].endDate,
+                  //     ],
+                  //     y: [
+                  //       candles[22].high
+                  //     ],
+                  //     borderColor: [
+                  //       Colors.red
+                  //     ],
+                  //     fillColor: [
+                  //       Colors.blueAccent
+                  //     ],
+                  //     type: DrawingType.divideLine,
+                  //     width: 3.0,
+                  //     name: "2분할"),
+                  // ChartDrawing(
+                  //     x: [
+                  //       candles[29].endDate,
+                  //     ],
+                  //     y: [
+                  //       candles[29].high
+                  //     ],
+                  //     borderColor: [
+                  //       Colors.red
+                  //     ],
+                  //     fillColor: [
+                  //       Colors.blueAccent
+                  //     ],
+                  //     type: DrawingType.divideLine,
+                  //     width: 3.0,
+                  //     name: "3분할"),
+                  // ChartDrawing(
+                  //     x: [
+                  //       candles[20].endDate,
+                  //     ],
+                  //     y: [
+                  //       candles[20].high
+                  //     ],
+                  //     borderColor: [
+                  //       Colors.red
+                  //     ],
+                  //     fillColor: [
+                  //       Colors.blueAccent
+                  //     ],
+                  //     type: DrawingType.divideLine,
+                  //     width: 3.0,
+                  //     name: "1분할"),
+                ],
+                [],
+                []
+              ],
+              onChartPanStart: (p) {
+                print(p);
+                setState(() {
+                  selectedDrawing.add(p);
+                });
+              },
+              onChartPanUpadte: (p) {
+                nowPosition = p;
+              },
+              actions: [
+                ToolBarAction(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Center(
+                          child: Container(
+                            width: 200,
+                            color: Theme.of(context).backgroundColor,
+                            child: Wrap(
+                              children: intervals
+                                  .map((e) => Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 30,
+                                          child: RawMaterialButton(
+                                            elevation: 0,
+                                            fillColor: const Color(0xFF494537),
+                                            onPressed: () {
+                                              fetchCandles(currentSymbol, e);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              e,
+                                              style: const TextStyle(
+                                                color: Color(0xFFF0B90A),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
                           ),
-                        ),
-                        ToolBarAction(
-                          width: 100,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SymbolsSearchModal(
-                                  symbols: symbols,
-                                  onSelect: (value) {
-                                    fetchCandles(value, currentInterval);
-                                  },
-                                );
-                              },
-                            );
-                          },
-                          child: Text(
-                            currentSymbol,
-                          ),
-                        )
-                      ],
+                        );
+                      },
                     );
                   },
+                  child: Text(
+                    currentInterval,
+                  ),
                 ),
-              ),
-            ),
-            Column(
-              children: [
-                MaterialButton(
-                  onPressed: () {},
-                  child: Text("음봉 잇기"),
-                ),
-                MaterialButton(
-                  onPressed: () {},
-                  child: Text("허공 잇기"),
-                ),
-                MaterialButton(
-                  onPressed: () {},
-                  child: Text("수평선 긋기"),
-                ),
-                MaterialButton(
-                  onPressed: () {},
-                  child: Text("수평 범위 지정"),
-                ),
-                MaterialButton(
-                  onPressed: () {},
-                  child: Text("상향 삼분할선"),
-                ),
+                ToolBarAction(
+                  width: 100,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SymbolsSearchModal(
+                          symbols: symbols,
+                          onSelect: (value) {
+                            fetchCandles(value, currentInterval);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    currentSymbol,
+                  ),
+                )
               ],
-            )
-          ],
+            );
+          },
         ),
       ),
     );

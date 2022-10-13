@@ -280,6 +280,7 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
+                          Container(height: 10, color: Colors.grey),
                           Expanded(
                             flex: 1,
                             child: Row(
@@ -295,7 +296,7 @@ class _MobileChartState extends State<MobileChart> {
                                       ),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
+                                      padding: const EdgeInsets.only(top: 0),
                                       child: VolumeWidget(
                                         candles: widget.candles,
                                         barWidth: widget.candleWidth,
