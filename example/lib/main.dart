@@ -217,16 +217,7 @@ class _MyAppState extends State<MyApp> {
               // chartAdjust: ChartAdjust.fullRange,
               isDrawingMode: this.isDrawing,
               key: Key(currentSymbol + currentInterval),
-              indicators: [
-                ...indicators,
-                SimpleDrawIndicator(
-                    dates:
-                        selectedDrawing.map((e) => e.candle!.endDate).toList()
-                          ..addNotNull(nowPosition?.candle!.endDate),
-                    values: selectedDrawing.map((e) => e.candle!.low).toList()
-                      ..addNotNull(nowPosition?.candle!.low),
-                    name: DateTime.now().toString())
-              ],
+              indicators: indicators,
               candles: candles,
               onLoadMoreCandles: loadMoreCandles,
               onRemoveIndicator: (String indicator) {

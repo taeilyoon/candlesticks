@@ -280,7 +280,14 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          Container(height: 10, color: Colors.grey),
+                          Container(
+                            height: 10,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Divider(),
+                            ),
+                          ),
                           Expanded(
                             flex: 1,
                             child: Row(
