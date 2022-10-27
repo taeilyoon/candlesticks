@@ -372,6 +372,11 @@ class _MyAppState extends State<MyApp> {
                   ),
                 )
               ],
+              indicatorUpdated: (n) {
+                setState(() {
+                  this.indicators = n;
+                });
+              },
             );
           },
         ),

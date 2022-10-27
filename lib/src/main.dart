@@ -86,6 +86,8 @@ class Candlesticks extends StatefulWidget {
   final clip;
 
   final PriceIndicatorOption priceIndicatorOption;
+  final void Function(List<Indicator> updated) indicatorUpdated;
+
   const Candlesticks({
     Key? key,
     required this.candles,
@@ -105,6 +107,7 @@ class Candlesticks extends StatefulWidget {
     this.style,
     this.drawing = const [[], [], []],
     this.priceIndicatorOption = PriceIndicatorOption.shownRecent,
+    required this.indicatorUpdated,
   })  : assert(candles.length == 0 || candles.length > 1,
             "Please provide at least 2 candles"),
         super(key: key);
@@ -329,6 +332,7 @@ class _CandlesticksState extends State<Candlesticks> {
                         });
                       }
                     },
+                    indicatorUpdated: widget.indicatorUpdated,
                     candleWidth: width,
                     candles: widget.candles,
                     index: index,

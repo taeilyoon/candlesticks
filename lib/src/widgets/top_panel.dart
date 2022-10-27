@@ -2,6 +2,7 @@ import 'package:candlesticks/src/models/candle.dart';
 import 'package:candlesticks/src/models/candle_sticks_style.dart';
 import 'package:candlesticks/src/models/indicator.dart';
 import 'package:candlesticks/src/widgets/candle_info_text.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
 class TopPanel extends StatefulWidget {
@@ -13,12 +14,14 @@ class TopPanel extends StatefulWidget {
     required this.unvisibleIndicators,
     required this.onRemoveIndicator,
     required this.style,
+    required this.indicatorUpdateed,
   }) : super(key: key);
 
   final Candle? currentCandle;
   final List<Indicator> indicators;
   final void Function(String indicatorName) toggleIndicatorVisibility;
   final List<String> unvisibleIndicators;
+  final void Function(List<Indicator> updated) indicatorUpdateed;
   final void Function(String indicatorName)? onRemoveIndicator;
   final CandleSticksStyle style;
 
@@ -48,75 +51,109 @@ class _TopPanelState extends State<TopPanel> {
                   )
                 : Container(),
           ),
-          // showIndicatorNames || widget.indicators.length == 1
-          //     ? Column(
-          //         children: widget.indicators
-          //             .map(
-          //               (e) => _PanelButton(
-          //                 child: Row(
-          //                   children: [
-          //                     Text(e.name),
-          //                     SizedBox(
-          //                       width: 10,
-          //                     ),
-          //                     GestureDetector(
-          //                       onTap: () {
-          //                         widget.toggleIndicatorVisibility(e.name);
-          //                       },
-          //                       child: widget.unvisibleIndicators
-          //                               .contains(e.name)
-          //                           ? Icon(
-          //                               Icons.visibility_off_outlined,
-          //                               size: 16,
-          //                               color: widget.style.primaryTextColor,
-          //                             )
-          //                           : Icon(Icons.visibility_outlined,
-          //                               size: 16,
-          //                               color: widget.style.primaryTextColor),
-          //                     ),
-          //                     SizedBox(
-          //                       width: 10,
-          //                     ),
-          //                     widget.onRemoveIndicator != null
-          //                         ? GestureDetector(
-          //                             onTap: () {
-          //                               widget.onRemoveIndicator!(e.name);
-          //                             },
-          //                             child: Icon(Icons.close,
-          //                                 size: 16,
-          //                                 color: widget.style.primaryTextColor),
-          //                           )
-          //                         : Container(),
-          //                   ],
-          //                 ),
-          //                 borderColor: widget.style.borderColor,
-          //               ),
-          //             )
-          //             .toList(),
-          //       )
-          //     : Container(),
-          // widget.indicators.length > 1
-          //     ? GestureDetector(
-          //         onTap: () {
-          //           setState(() {
-          //             showIndicatorNames = !showIndicatorNames;
-          //           });
-          //         },
-          //         child: _PanelButton(
-          //           borderColor: widget.style.borderColor,
-          //           child: Row(
-          //             children: [
-          //               Icon(
-          //                   showIndicatorNames
-          //                       ? Icons.keyboard_arrow_up_rounded
-          //                       : Icons.keyboard_arrow_down_rounded,
-          //                   color: widget.style.primaryTextColor),
-          //               Text(widget.indicators.length.toString()),
-          //             ],
-          //           ),
-          //         ),
-          //       )
-          //     : Container(),
+          showIndicatorNames || widget.indicators.length == 1
+              ? Column(
+                  children: widget.indicators
+                      .map(
+                        (e) => _PanelButton(
+                          child: Row(
+                            children: [
+                              Text(e.name),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.toggleIndicatorVisibility(e.name);
+                                },
+                                child: widget.unvisibleIndicators
+                                        .contains(e.name)
+                                    ? Icon(
+                                        Icons.visibility_off_outlined,
+                                        size: 16,
+                                        color: widget.style.primaryTextColor,
+                                      )
+                                    : Icon(Icons.visibility_outlined,
+                                        size: 16,
+                                        color: widget.style.primaryTextColor),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (c) {
+                                        return Dialog(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: e
+                                                .indicatorComponentsStyles
+                                                .map((style) => ColorPicker(
+                                                    color: style.color,
+                                                    onColorChanged: (color) {}))
+                                                .toList(),
+                                          ),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  width: 24,
+                                  height: 24,
+                                  child: Row(
+                                    children: e.indicatorComponentsStyles
+                                        .map((e) => Expanded(
+                                                child: Container(
+                                              color: e.color,
+                                            )))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              widget.onRemoveIndicator != null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        widget.onRemoveIndicator!(e.name);
+                                      },
+                                      child: Icon(Icons.close,
+                                          size: 16,
+                                          color: widget.style.primaryTextColor),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                          borderColor: widget.style.borderColor,
+                        ),
+                      )
+                      .toList(),
+                )
+              : Container(),
+          widget.indicators.length > 1
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      showIndicatorNames = !showIndicatorNames;
+                    });
+                  },
+                  child: _PanelButton(
+                    borderColor: widget.style.borderColor,
+                    child: Row(
+                      children: [
+                        Icon(
+                            showIndicatorNames
+                                ? Icons.keyboard_arrow_up_rounded
+                                : Icons.keyboard_arrow_down_rounded,
+                            color: widget.style.primaryTextColor),
+                        Text(widget.indicators.length.toString()),
+                      ],
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
@@ -140,7 +177,7 @@ class _PanelButton extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: 25,
+            height: 30,
             padding: EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               border: Border.all(

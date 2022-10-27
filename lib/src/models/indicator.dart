@@ -33,7 +33,7 @@ class Indicator {
 
 class IndicatorStyle {
   final String name;
-  final Color color;
+  Color color;
 
   IndicatorStyle({
     required this.name,

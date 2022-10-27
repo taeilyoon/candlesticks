@@ -548,6 +548,7 @@ class _DesktopChartState extends State<DesktopChart> {
                           },
                           unvisibleIndicators: widget
                               .mainWindowDataContainer.unvisibleIndicators,
+                          indicatorUpdateed: (List<Indicator> updated) {},
                         ),
                       ),
                       Positioned(

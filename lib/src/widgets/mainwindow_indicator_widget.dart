@@ -5,8 +5,6 @@ import 'package:candlesticks/src/models/main_window_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../models/main_window_indicator.dart';
-
 class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
   final List<IndicatorComponentData> indicatorDatas;
   final int index;
@@ -91,7 +89,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
   void paint(PaintingContext context, Offset offset) {
     double range = (_high - _low) / size.height;
 
-    _indicatorDatas.forEach((element) {
+    _indicatorDatas.where((element) => element.visible).forEach((element) {
       Path? path;
       for (int i = 0; (i + 1) * _candleWidth < size.width; i++) {
         if (i + _index >= element.values.length ||

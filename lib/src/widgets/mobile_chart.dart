@@ -62,6 +62,8 @@ class MobileChart extends StatefulWidget {
 
   final clip;
 
+  final void Function(List<Indicator> updated) indicatorUpdated;
+
   MobileChart(
       {required this.style,
       required this.onScaleUpdate,
@@ -75,6 +77,7 @@ class MobileChart extends StatefulWidget {
       required this.onReachEnd,
       required this.mainWindowDataContainer,
       required this.onRemoveIndicator,
+      required this.indicatorUpdated,
       this.clip = Clip.hardEdge,
       this.onChartPanStart,
       this.onChartPanUpadte,
@@ -529,19 +532,20 @@ class _MobileChartState extends State<MobileChart> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 4, horizontal: 12),
                         child: TopPanel(
-                          style: widget.style,
-                          onRemoveIndicator: widget.onRemoveIndicator,
-                          currentCandle: currentCandle,
-                          indicators: widget.mainWindowDataContainer.indicators,
-                          toggleIndicatorVisibility: (indicatorName) {
-                            setState(() {
-                              widget.mainWindowDataContainer
-                                  .toggleIndicatorVisibility(indicatorName);
-                            });
-                          },
-                          unvisibleIndicators: widget
-                              .mainWindowDataContainer.unvisibleIndicators,
-                        ),
+                            style: widget.style,
+                            onRemoveIndicator: widget.onRemoveIndicator,
+                            currentCandle: currentCandle,
+                            indicators:
+                                widget.mainWindowDataContainer.indicators,
+                            toggleIndicatorVisibility: (indicatorName) {
+                              setState(() {
+                                widget.mainWindowDataContainer
+                                    .toggleIndicatorVisibility(indicatorName);
+                              });
+                            },
+                            unvisibleIndicators: widget
+                                .mainWindowDataContainer.unvisibleIndicators,
+                            indicatorUpdateed: widget.indicatorUpdated),
                       ),
                       Positioned(
                         right: 0,
