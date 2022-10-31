@@ -4,6 +4,7 @@ import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/constant/view_constants.dart';
 import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
+import 'package:candlesticks/src/models/sub_indicator.dart';
 import 'package:candlesticks/src/utils/helper_functions.dart';
 import 'package:candlesticks/src/widgets/candle_stick_widget.dart';
 import 'package:candlesticks/src/widgets/mainwindow_indicator_widget.dart';
@@ -64,6 +65,8 @@ class MobileChart extends StatefulWidget {
 
   final void Function(List<Indicator> updated) indicatorUpdated;
 
+  List<SubIndicator> subIndicator;
+
   MobileChart(
       {required this.style,
       required this.onScaleUpdate,
@@ -78,6 +81,7 @@ class MobileChart extends StatefulWidget {
       required this.mainWindowDataContainer,
       required this.onRemoveIndicator,
       required this.indicatorUpdated,
+      required this.subIndicator,
       this.clip = Clip.hardEdge,
       this.onChartPanStart,
       this.onChartPanUpadte,
@@ -244,6 +248,9 @@ class _MobileChartState extends State<MobileChart> {
                                                     indicatorDatas: widget
                                                         .mainWindowDataContainer
                                                         .indicatorComponentData,
+                                                    indicatorFills: widget
+                                                        .mainWindowDataContainer
+                                                        .fill,
                                                     index: widget.index,
                                                     candleWidth:
                                                         widget.candleWidth,

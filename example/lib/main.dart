@@ -63,15 +63,24 @@ class _MyAppState extends State<MyApp> {
   CandlePosition? nowPosition;
 
   List<Indicator> indicators = [
-    BollingerBandsIndicator(
-        length: 20,
-        stdDev: 2,
-        upperColor: const Color(0xFF2962FF),
-        basisColor: const Color(0xFFFF6D00),
-        lowerColor: const Color(0xFF2962FF),
-        label: "Bollinger"),
-    WeightedMovingAverageIndicator(
-        length: 100, color: Colors.green.shade600, label: "WMA"),
+    // BollingerBandsIndicator(
+    //     length: 20,
+    //     stdDev: 2,
+    //     upperColor: const Color(0xFF2962FF),
+    //     basisColor: const Color(0xFFFF6D00),
+    //     lowerColor: const Color(0xFF2962FF),
+    //     label: "Bollinger"),
+    // WeightedMovingAverageIndicator(
+    //     length: 100, color: Colors.green.shade600, label: "WMA"),
+    IchimokuIndicator(
+        short: 9,
+        middle: 26,
+        long: 52,
+        shortLineColor: Colors.red,
+        middleLineColor: Colors.orange,
+        longLineColor: Colors.yellow,
+        leadLine1Color: Colors.purple,
+        leadLine2Color: Colors.blue),
   ];
   List<Indicator> subIndicators = [
     CommodityChannelIndexIndicator(
@@ -216,6 +225,9 @@ class _MyAppState extends State<MyApp> {
             return Candlesticks(
               // chartAdjust: ChartAdjust.fullRange,
               isDrawingMode: this.isDrawing,
+              subIndicator: [
+                CommodityChannelIndexIndicator(color: Colors.black87)
+              ],
               key: Key(currentSymbol + currentInterval),
               indicators: indicators,
               candles: candles,
@@ -401,6 +413,7 @@ class SymbolsSearchModal extends StatefulWidget {
 
 class _SymbolSearchModalState extends State<SymbolsSearchModal> {
   String symbolSearch = "";
+
   @override
   Widget build(BuildContext context) {
     return Center(

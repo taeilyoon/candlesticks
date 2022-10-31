@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:candlesticks/candlesticks.dart';
 
 class MovingAverageIndicator extends Indicator {
@@ -15,7 +16,7 @@ class MovingAverageIndicator extends Indicator {
               return [sum / length];
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "mv", color: color),
+              IndicatorStyle(name: "mv", bullColor: color),
             ],
             label: label);
 }

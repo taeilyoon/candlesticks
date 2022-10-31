@@ -40,7 +40,7 @@ class LineChartWidget extends LeafRenderObjectWidget {
     indicators.forEach((indicator) {
       indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
         indicatorComponentData.add(IndicatorComponentData(
-            indicator, indicatorComponent.name, indicatorComponent.color));
+            indicator, indicatorComponent.name, indicatorComponent.bullColor));
       });
     });
 

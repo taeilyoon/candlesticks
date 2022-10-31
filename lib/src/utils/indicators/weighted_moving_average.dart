@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:candlesticks/candlesticks.dart';
 
 class WeightedMovingAverageIndicator extends Indicator {
@@ -15,7 +16,7 @@ class WeightedMovingAverageIndicator extends Indicator {
               return [sum / (length * (length + 1)) * 2];
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "wmv", color: color),
+              IndicatorStyle(name: "wmv", bullColor: color),
             ],
             label: label);
 }

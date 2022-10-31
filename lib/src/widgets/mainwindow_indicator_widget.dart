@@ -16,6 +16,8 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
 
   final List<Candle> candles;
 
+  List<IndicatorFillData> indicatorFills;
+
   MainWindowIndicatorWidget(
       {required this.indicatorDatas,
       required this.index,
@@ -24,12 +26,13 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
       required this.high,
       this.drawing = const [],
       required List<Candle> this.candles,
-      this.gap = const Duration(hours: 1)});
+      this.gap = const Duration(hours: 1),
+      List<IndicatorFillData> this.indicatorFills = const []});
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return MainWindowIndicatorRenderObject(
-        indicatorDatas, index, candleWidth, low, high, drawing, candles, gap);
+    return MainWindowIndicatorRenderObject(indicatorDatas, index, candleWidth,
+        low, high, drawing, candles, gap, indicatorFills);
   }
 
   @override
@@ -63,6 +66,8 @@ class MainWindowIndicatorRenderObject extends RenderBox {
   final List<Candle> candles;
   Duration gap;
 
+  List<IndicatorFillData> indicatorFills;
+
   MainWindowIndicatorRenderObject(
       List<IndicatorComponentData> indicatorDatas,
       int index,
@@ -71,7 +76,8 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       double high,
       this.drawing,
       this.candles,
-      this.gap) {
+      this.gap,
+      List<IndicatorFillData> this.indicatorFills) {
     _indicatorDatas = indicatorDatas;
     _index = index;
     _candleWidth = candleWidth;
@@ -139,6 +145,109 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..color = element.color
               ..strokeWidth = 1
               ..style = PaintingStyle.stroke);
+    });
+    indicatorFills.forEach((element) {
+      Offset? offset1;
+      Offset? offset2;
+      for (int i = 0; (i + 1) * _candleWidth < size.width; i++) {
+        if (element.indicatorData
+                .every((element) => element.values.length <= i + _index) ||
+            i + _index < 0 ||
+            element.indicatorData.every((e1) => e1.values[i + _index] == null))
+          continue;
+
+        if (offset1 == null && offset2 == null) {
+          offset1 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[0].values[i + _index]!) /
+                      range);
+          offset2 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[1].values[i + _index]!) /
+                      range);
+        } else {
+          var newOffset1 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[0].values[i + _index]!) /
+                      range);
+
+          var newOffset2 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[1].values[i + _index]!) /
+                      range);
+          if ((offset1!.dy < offset2!.dy && newOffset1.dy < newOffset2.dy) ||
+              (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)) {
+            var path = Path();
+            path.moveTo(offset1!.dx, offset1!.dy);
+            path.lineTo(offset2!.dx, offset2!.dy);
+
+            path.lineTo(newOffset2.dx, newOffset2.dy);
+            path.lineTo(newOffset1.dx, newOffset1.dy);
+
+            var paint = Paint()
+              ..style = PaintingStyle.fill
+              ..color =
+                  (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)
+                      ? element.bullColor
+                      : element.bearColor;
+
+            context.canvas.drawPath(path, paint);
+          } else {
+            var path = Path();
+
+            var center = Offset((offset1.dx + newOffset1.dx) / 2,
+                (offset1.dy + newOffset1.dy) / 2);
+            path.moveTo(offset1!.dx, offset1!.dy);
+            path.lineTo(offset2!.dx, offset2!.dy);
+
+            path.lineTo(center.dx, center.dy);
+
+            var paint = Paint()
+              ..style = PaintingStyle.fill
+              ..color = !(offset1!.dy >= offset2!.dy &&
+                      newOffset1.dy >= newOffset2.dy)
+                  ? element.bullColor
+                  : element.bearColor;
+
+            context.canvas.drawPath(path, paint);
+            var path2 = Path();
+            path2.moveTo(center.dx, center.dy);
+
+            path2.lineTo(newOffset2.dx, newOffset2.dy);
+            path2.lineTo(newOffset1.dx, newOffset1.dy);
+
+            var paint2 = Paint()
+              ..style = PaintingStyle.fill
+              ..color =
+                  (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)
+                      ? element.bullColor
+                      : element.bearColor;
+            context.canvas.drawPath(path2, paint2);
+          }
+          offset1 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[0].values[i + _index]!) /
+                      range);
+          offset2 = Offset(
+              size.width + offset.dx - (i + 0.5) * _candleWidth,
+              offset.dy +
+                  (_high - element.indicatorData[1].values[i + _index]!) /
+                      range);
+        }
+      }
+
+      // if (path != null)
+      //   context.canvas.drawPath(
+      //       path,
+      //       Paint()
+      //         ..color = element.color
+      //         ..strokeWidth = 1
+      //         ..style = PaintingStyle.stroke);
     });
     var showCandleLength = (size.width / _candleWidth);
 

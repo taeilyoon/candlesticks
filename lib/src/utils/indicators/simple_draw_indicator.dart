@@ -24,7 +24,7 @@ class SimpleDrawIndicator extends Indicator {
               }
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "upper", color: color),
+              IndicatorStyle(name: "upper", bullColor: color),
             ],
             label: label);
 }

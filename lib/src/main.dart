@@ -10,6 +10,8 @@ import 'package:candlesticks/src/widgets/toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'models/sub_indicator.dart';
+
 enum ChartAdjust {
   /// Will adjust chart size by max and min value from visible area
   visibleRange,
@@ -75,7 +77,7 @@ class Candlesticks extends StatefulWidget {
   final CandleSticksStyle? style;
   final bool isDrawingMode;
 
-  final List<Indicator> subIndicator;
+  final List<SubIndicator> subIndicator;
 
   final OnChartPanStart? onChartPanStart;
   final OnChartPanUpdate? onChartPanUpadte;
@@ -235,6 +237,58 @@ class _CandlesticksState extends State<Candlesticks> {
               tween: Tween(begin: 6.toDouble(), end: candleWidth),
               duration: Duration(milliseconds: 120),
               builder: (_, double width, __) {
+                return MobileChart(
+                  style: style,
+                  onRemoveIndicator: widget.onRemoveIndicator,
+                  mainWindowDataContainer: mainWindowDataContainer!,
+                  chartAdjust: widget.chartAdjust,
+                  isDrawing: widget.isDrawingMode,
+                  drawing: widget.drawing,
+                  clip: widget.clip,
+                  subIndicator: widget.subIndicator,
+                  priceIndicatorOption: widget.priceIndicatorOption,
+                  onScaleUpdate: (double scale) {
+                    scale = max(0.90, scale);
+                    scale = min(1.1, scale);
+                    setState(() {
+                      candleWidth *= scale;
+                      candleWidth = min(candleWidth, 20);
+                      candleWidth = max(candleWidth, 2);
+                    });
+                  },
+                  onPanEnd: () {
+                    lastIndex = index;
+                  },
+                  onHorizontalDragUpdate: (double x) {
+                    setState(() {
+                      x = x - lastX;
+                      index = lastIndex + x ~/ candleWidth;
+                      index = max(index, -10);
+                      index = min(index, widget.candles.length - 1);
+                    });
+                  },
+                  onPanDown: (double value) {
+                    lastX = value;
+                    lastIndex = index;
+                  },
+                  onReachEnd: () {
+                    if (isCallingLoadMore == false &&
+                        widget.onLoadMoreCandles != null) {
+                      isCallingLoadMore = true;
+                      widget.onLoadMoreCandles!().then((_) {
+                        isCallingLoadMore = false;
+                      });
+                    }
+                  },
+                  indicatorUpdated: widget.indicatorUpdated,
+                  candleWidth: width,
+                  candles: widget.candles,
+                  index: index,
+                  onChartPanStart: widget.onChartPanStart,
+                  onChartPanUpadte: widget.onChartPanUpadte,
+                  onChartPanEnd: widget.onChartPanEnd,
+                );
+
                 if (kIsWeb ||
                     Platform.isMacOS ||
                     Platform.isWindows ||
@@ -290,56 +344,56 @@ class _CandlesticksState extends State<Candlesticks> {
                     isDrawing: widget.isDrawingMode,
                   );
                 } else {
-                  return MobileChart(
-                    style: style,
-                    onRemoveIndicator: widget.onRemoveIndicator,
-                    mainWindowDataContainer: mainWindowDataContainer!,
-                    chartAdjust: widget.chartAdjust,
-                    isDrawing: widget.isDrawingMode,
-                    drawing: widget.drawing,
-                    clip: widget.clip,
-                    priceIndicatorOption: widget.priceIndicatorOption,
-                    onScaleUpdate: (double scale) {
-                      scale = max(0.90, scale);
-                      scale = min(1.1, scale);
-                      setState(() {
-                        candleWidth *= scale;
-                        candleWidth = min(candleWidth, 20);
-                        candleWidth = max(candleWidth, 2);
-                      });
-                    },
-                    onPanEnd: () {
-                      lastIndex = index;
-                    },
-                    onHorizontalDragUpdate: (double x) {
-                      setState(() {
-                        x = x - lastX;
-                        index = lastIndex + x ~/ candleWidth;
-                        index = max(index, -10);
-                        index = min(index, widget.candles.length - 1);
-                      });
-                    },
-                    onPanDown: (double value) {
-                      lastX = value;
-                      lastIndex = index;
-                    },
-                    onReachEnd: () {
-                      if (isCallingLoadMore == false &&
-                          widget.onLoadMoreCandles != null) {
-                        isCallingLoadMore = true;
-                        widget.onLoadMoreCandles!().then((_) {
-                          isCallingLoadMore = false;
-                        });
-                      }
-                    },
-                    indicatorUpdated: widget.indicatorUpdated,
-                    candleWidth: width,
-                    candles: widget.candles,
-                    index: index,
-                    onChartPanStart: widget.onChartPanStart,
-                    onChartPanUpadte: widget.onChartPanUpadte,
-                    onChartPanEnd: widget.onChartPanEnd,
-                  );
+                  // return MobileChart(
+                  //   style: style,
+                  //   onRemoveIndicator: widget.onRemoveIndicator,
+                  //   mainWindowDataContainer: mainWindowDataContainer!,
+                  //   chartAdjust: widget.chartAdjust,
+                  //   isDrawing: widget.isDrawingMode,
+                  //   drawing: widget.drawing,
+                  //   clip: widget.clip,
+                  //   priceIndicatorOption: widget.priceIndicatorOption,
+                  //   onScaleUpdate: (double scale) {
+                  //     scale = max(0.90, scale);
+                  //     scale = min(1.1, scale);
+                  //     setState(() {
+                  //       candleWidth *= scale;
+                  //       candleWidth = min(candleWidth, 20);
+                  //       candleWidth = max(candleWidth, 2);
+                  //     });
+                  //   },
+                  //   onPanEnd: () {
+                  //     lastIndex = index;
+                  //   },
+                  //   onHorizontalDragUpdate: (double x) {
+                  //     setState(() {
+                  //       x = x - lastX;
+                  //       index = lastIndex + x ~/ candleWidth;
+                  //       index = max(index, -10);
+                  //       index = min(index, widget.candles.length - 1);
+                  //     });
+                  //   },
+                  //   onPanDown: (double value) {
+                  //     lastX = value;
+                  //     lastIndex = index;
+                  //   },
+                  //   onReachEnd: () {
+                  //     if (isCallingLoadMore == false &&
+                  //         widget.onLoadMoreCandles != null) {
+                  //       isCallingLoadMore = true;
+                  //       widget.onLoadMoreCandles!().then((_) {
+                  //         isCallingLoadMore = false;
+                  //       });
+                  //     }
+                  //   },
+                  //   indicatorUpdated: widget.indicatorUpdated,
+                  //   candleWidth: width,
+                  //   candles: widget.candles,
+                  //   index: index,
+                  //   onChartPanStart: widget.onChartPanStart,
+                  //   onChartPanUpadte: widget.onChartPanUpadte,
+                  //   onChartPanEnd: widget.onChartPanEnd,
+                  // );
                 }
               },
             ),

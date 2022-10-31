@@ -14,9 +14,22 @@ class IndicatorComponentData {
   bool visible = true;
 }
 
+class IndicatorFillData {
+  final String name;
+  final Color bullColor;
+  final Color bearColor;
+
+  final List<IndicatorComponentData> indicatorData;
+
+  IndicatorFillData(
+      this.name, this.bullColor, this.bearColor, this.indicatorData);
+  bool visible = true;
+}
+
 class MainWindowDataContainer {
   List<IndicatorComponentData> indicatorComponentData = [];
   List<Indicator> indicators;
+  late List<IndicatorFillData> fill;
   List<double> highs = [];
   List<double> lows = [];
   List<String> unvisibleIndicators = [];
@@ -45,9 +58,19 @@ class MainWindowDataContainer {
     endDate = candles[0].endDate;
     beginDate = candles.last.endDate;
     indicators.forEach((indicator) {
+      var start = indicatorComponentData.length;
       indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
         indicatorComponentData.add(IndicatorComponentData(
-            indicator, indicatorComponent.name, indicatorComponent.color));
+            indicator, indicatorComponent.name, indicatorComponent.bullColor));
+      });
+
+      fill = [];
+      indicator.indicatorFill.forEach((element) {
+        fill.add(IndicatorFillData(
+            element.name, element.bullColor, element.bearColor!, [
+          indicatorComponentData[start + element.startIndex!],
+          indicatorComponentData[start + element.endIndex!]
+        ]));
       });
     });
 

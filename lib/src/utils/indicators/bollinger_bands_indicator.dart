@@ -1,6 +1,7 @@
-import 'package:candlesticks/candlesticks.dart';
 import 'dart:math' as math;
 import 'dart:ui';
+
+import 'package:candlesticks/candlesticks.dart';
 
 class BollingerBandsIndicator extends Indicator {
   BollingerBandsIndicator(
@@ -38,9 +39,9 @@ class BollingerBandsIndicator extends Indicator {
               ];
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "upper", color: upperColor),
-              IndicatorStyle(name: "basis", color: basisColor),
-              IndicatorStyle(name: "lower", color: lowerColor)
+              IndicatorStyle(name: "upper", bullColor: upperColor),
+              IndicatorStyle(name: "basis", bullColor: basisColor),
+              IndicatorStyle(name: "lower", bullColor: lowerColor)
             ],
             label: label);
 }

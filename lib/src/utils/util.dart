@@ -53,6 +53,22 @@ extension intExt on int {
   int get sigma => (2 * this + 1 / 2).floor();
 }
 
+extension ListNumExt<T extends num> on List<T> {
+  T max() {
+    if (length == 0) {
+      return 0.0 as T;
+    }
+    return reduce((curr, next) => curr > next ? curr : next);
+  }
+
+  T min() {
+    if (length == 0) {
+      return 0.0 as T;
+    }
+    return reduce((curr, next) => curr < next ? curr : next);
+  }
+}
+
 extension ListExt<T> on List<T> {
   void addNotNull(T? value) {
     if (value == null) return;

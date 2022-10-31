@@ -91,7 +91,7 @@ class _TopPanelState extends State<TopPanel> {
                                             children: e
                                                 .indicatorComponentsStyles
                                                 .map((style) => ColorPicker(
-                                                    color: style.color,
+                                                    color: style.bullColor,
                                                     onColorChanged: (color) {}))
                                                 .toList(),
                                           ),
@@ -105,7 +105,7 @@ class _TopPanelState extends State<TopPanel> {
                                     children: e.indicatorComponentsStyles
                                         .map((e) => Expanded(
                                                 child: Container(
-                                              color: e.color,
+                                              color: e.bullColor,
                                             )))
                                         .toList(),
                                   ),
