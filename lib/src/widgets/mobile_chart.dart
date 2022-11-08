@@ -248,8 +248,6 @@ class _MobileChartState extends State<MobileChart> {
                                               child: Stack(
                                                 children: [
                                                   MainWindowIndicatorWidget(
-                                                    key: Key(DateTime.now()
-                                                        .toString()),
                                                     candles: widget.candles,
                                                     indicatorDatas: widget
                                                         .mainWindowDataContainer

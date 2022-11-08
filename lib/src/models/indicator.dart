@@ -37,19 +37,24 @@ class Indicator {
   }
 
   bool operator ==(other) {
-    if (other is Indicator) {
-      var s = other.indicatorComponentsStyles
-          .asMap()
-          .map((key, value) {
-            return MapEntry(
-                key,
-                this.indicatorComponentsStyles[key].bullColor ==
-                    value.bullColor);
-          })
-          .values
-          .every((element) => element);
-      return other.name == this.name && s;
-    } else {
+    try{
+      if (other is Indicator) {
+        var s = other.indicatorComponentsStyles
+            .asMap()
+            .map((key, value) {
+          return MapEntry(
+              key,
+              this.indicatorComponentsStyles[key].bullColor ==
+                  value.bullColor);
+        })
+            .values
+            .every((element) => element);
+        return other.name == this.name && s;
+      }
+      else {
+        return false;
+      }
+    }catch(e){
       return false;
     }
   }

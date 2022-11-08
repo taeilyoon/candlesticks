@@ -193,23 +193,33 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text("Binance Candles"),
           actions: [
+            // IconButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       themeIsDark = !themeIsDark;
+            //     });
+            //   },
+            //   icon: Icon(
+            //     themeIsDark
+            //         ? Icons.wb_sunny_sharp
+            //         : Icons.nightlight_round_outlined,
+            //   ),
+            // ),
+            // IconButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       this.isDrawing = !this.isDrawing;
+            //       selectedDrawing.removeWhere((element) => true);
+            //     });
+            //   },
+            //   icon: Icon(Icons.add),
+            //   color: this.isDrawing ? Colors.black : Colors.white,
+            // ),
             IconButton(
               onPressed: () {
                 setState(() {
-                  themeIsDark = !themeIsDark;
-                });
-              },
-              icon: Icon(
-                themeIsDark
-                    ? Icons.wb_sunny_sharp
-                    : Icons.nightlight_round_outlined,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  this.isDrawing = !this.isDrawing;
-                  selectedDrawing.removeWhere((element) => true);
+                  this.indicators.add(
+                      MovingAverageIndicator(length: 10, color: Colors.black));
                 });
               },
               icon: Icon(Icons.draw_rounded),
@@ -222,7 +232,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             updateCandlesFromSnapshot(snapshot);
             return Candlesticks(
-              // chartAdjust: ChartAdjust.fullRange,
+              chartAdjust: ChartAdjust.fullRange,
               isDrawingMode: this.isDrawing,
               subIndicator: this.subIndicators,
               key: Key(currentSymbol + currentInterval),
@@ -383,7 +393,7 @@ class _MyAppState extends State<MyApp> {
               ],
               indicatorUpdated: (n) {
                 setState(() {
-                  this.indicators = [...n];
+                  this.indicators.addAll([...n]);
                 });
               },
             );
