@@ -38,8 +38,17 @@ class Indicator {
 
   bool operator ==(other) {
     if (other is Indicator) {
-      return other.name == this.name &&
-          other.indicatorComponentsStyles == this.indicatorComponentsStyles;
+      var s = other.indicatorComponentsStyles
+          .asMap()
+          .map((key, value) {
+            return MapEntry(
+                key,
+                this.indicatorComponentsStyles[key].bullColor ==
+                    value.bullColor);
+          })
+          .values
+          .every((element) => element);
+      return other.name == this.name && s;
     } else {
       return false;
     }

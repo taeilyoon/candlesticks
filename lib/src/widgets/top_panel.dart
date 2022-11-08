@@ -2,7 +2,6 @@ import 'package:candlesticks/src/models/candle.dart';
 import 'package:candlesticks/src/models/candle_sticks_style.dart';
 import 'package:candlesticks/src/models/indicator.dart';
 import 'package:candlesticks/src/widgets/candle_info_text.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
 class TopPanel extends StatefulWidget {
@@ -80,40 +79,64 @@ class _TopPanelState extends State<TopPanel> {
                               SizedBox(
                                 width: 10,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (c) {
-                                        return Dialog(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: e
-                                                .indicatorComponentsStyles
-                                                .map((style) => ColorPicker(
-                                                    color: style.bullColor,
-                                                    onColorChanged: (color) {}))
-                                                .toList(),
-                                          ),
-                                        );
-                                      });
-                                },
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  child: Row(
-                                    children: e.indicatorComponentsStyles
-                                        .map((e) => Expanded(
-                                                child: Container(
-                                              color: e.bullColor,
-                                            )))
-                                        .toList(),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     showDialog(
+                              //         context: context,
+                              //         builder: (c) {
+                              //           return AlertDialog(
+                              //             content: Container(
+                              //               child: SingleChildScrollView(
+                              //                 child: Column(
+                              //                   mainAxisSize: MainAxisSize.min,
+                              //                   children: e
+                              //                       .indicatorComponentsStyles
+                              //                       .map((style) => Column(
+                              //                             children: [
+                              //                               Text(style.name),
+                              //                               ColorPicker(
+                              //                                   color: style
+                              //                                       .bullColor,
+                              //                                   enableShadesSelection:
+                              //                                       false,
+                              //                                   onColorChanged:
+                              //                                       (color) {
+                              //                                     style.bullColor =
+                              //                                         color;
+                              //                                   }),
+                              //                             ],
+                              //                           ))
+                              //                       .toList(),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //             actions: [
+                              //               MaterialButton(
+                              //                   onPressed: () {
+                              //                     Navigator.pop(context);
+                              //                     widget.indicatorUpdateed([e]);
+                              //                   },
+                              //                   child: Text("확인"))
+                              //             ],
+                              //           );
+                              //         });
+                              //   },
+                              //   child: Container(
+                              //     width: 24,
+                              //     height: 24,
+                              //     child: Row(
+                              //       children: e.indicatorComponentsStyles
+                              //           .map((e) => Expanded(
+                              //                   child: Container(
+                              //                 color: e.bullColor,
+                              //               )))
+                              //           .toList(),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 10,
+                              // ),
                               widget.onRemoveIndicator != null
                                   ? GestureDetector(
                                       onTap: () {

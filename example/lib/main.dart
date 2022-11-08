@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
         shortLineColor: Colors.red,
         middleLineColor: Colors.orange,
         longLineColor: Colors.yellow,
-        leadLine1Color: Colors.purple,
+        leadLine1Color: Colors.black,
         leadLine2Color: Colors.blue),
   ];
   List<SubIndicator> subIndicators = [
@@ -383,7 +383,7 @@ class _MyAppState extends State<MyApp> {
               ],
               indicatorUpdated: (n) {
                 setState(() {
-                  this.indicators = n;
+                  this.indicators = [...n];
                 });
               },
             );

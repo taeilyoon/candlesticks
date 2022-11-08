@@ -19,7 +19,8 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
   List<IndicatorFillData> indicatorFills;
 
   MainWindowIndicatorWidget(
-      {required this.indicatorDatas,
+      {key,
+      required this.indicatorDatas,
       required this.index,
       required this.candleWidth,
       required this.low,
@@ -27,7 +28,8 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
       this.drawing = const [],
       required List<Candle> this.candles,
       this.gap = const Duration(hours: 1),
-      List<IndicatorFillData> this.indicatorFills = const []});
+      List<IndicatorFillData> this.indicatorFills = const []})
+      : super(key: key);
 
   @override
   RenderObject createRenderObject(BuildContext context) {

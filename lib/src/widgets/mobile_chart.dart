@@ -248,6 +248,8 @@ class _MobileChartState extends State<MobileChart> {
                                               child: Stack(
                                                 children: [
                                                   MainWindowIndicatorWidget(
+                                                    key: Key(DateTime.now()
+                                                        .toString()),
                                                     candles: widget.candles,
                                                     indicatorDatas: widget
                                                         .mainWindowDataContainer
@@ -389,7 +391,7 @@ class _MobileChartState extends State<MobileChart> {
                                 }
                               });
                             }
-                            widget.onScaleUpdate(details.scale);
+                            widget.onScaleUpdate(pow(details.scale, 1 / 100));
                           },
                           onScaleStart: (details) {
                             widget.onPanDown(details.localFocalPoint.dx);
@@ -504,7 +506,9 @@ class _MobileChartState extends State<MobileChart> {
                             },
                             unvisibleIndicators: widget
                                 .mainWindowDataContainer.unvisibleIndicators,
-                            indicatorUpdateed: widget.indicatorUpdated),
+                            indicatorUpdateed: (d) {
+                              widget.indicatorUpdated(d);
+                            }),
                       ),
                       Positioned(
                         right: 0,
@@ -601,10 +605,13 @@ class _MobileChartState extends State<MobileChart> {
       List<Candle> candles, List<Candle> inRangeCandles, high, low) {
     var div = 1 / (3 + widget.subIndicator.length);
     if (longPressY! < maxHeight * 3 * div) {
-      return HelperFunctions.priceToString(high -
-          (longPressY! - 10) /
-              (maxHeight * (3 / (3 + widget.subIndicator.length)) - 20) *
-              (high - low));
+      var startP = 10;
+      var endP = 3 * div * maxHeight;
+      var range = endP - startP;
+      var v = (longPressY - startP) / range;
+
+      return HelperFunctions.priceToString(
+          high - (longPressY! - 10) / (maxHeight * 0.75 - 20) * (high - low));
     }
 
     for (int i = 0; i < widget.subIndicator.length; i++) {
