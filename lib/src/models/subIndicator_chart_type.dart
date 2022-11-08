@@ -5,4 +5,6 @@ enum SubIndicatorChartType {
   candle0,
   stick0,
   line0,
+  fill,
+  dashLine,
 }

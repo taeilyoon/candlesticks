@@ -15,7 +15,17 @@ class HelperFunctions {
   }
 
   static String addMetricPrefix(double price) {
-    if (price < 1) price = 1;
+    if (price.isNegative) {
+      int log = log10(-price).floor();
+      if (log > 9)
+        return "-${price ~/ 1000000000}B";
+      else if (log > 6)
+        return "-${price ~/ 1000000}M";
+      else if (log > 3)
+        return "-${price ~/ 1000}K";
+      else
+        return "-${price.toStringAsFixed(0)}";
+    }
     int log = log10(price).floor();
     if (log > 9)
       return "${price ~/ 1000000000}B";

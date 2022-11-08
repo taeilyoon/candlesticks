@@ -2,23 +2,29 @@ import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/models/color_with_calculator_value.dart';
 import 'package:candlesticks/src/models/subIndicator_chart_type.dart';
 
-class SubIndicator extends Indicator {
+class SubIndicator {
   SubIndicatorChartType chartStyle;
 
-  List<ColorWithCalculatorValue> Function(int p1, List<Candle> p2)?
+  List<ColorWithCalculatorValue?> Function(int p1, List<Candle> p2)
       calculatorWithStyle;
+  num Function(int p1, List<Candle> p2, List<Candle> p3)? max;
+  num Function(int p1, List<Candle> p2, List<Candle> p3)? min;
+  final String name;
+  final String? label;
+  final int dependsOnNPrevCandles;
+
+  // final List<IndicatorStyle> indicatorComponentsStyles;
+  // final List<IndicatorStyle> indicatorFill;
 
   SubIndicator(
-      {required String name,
-      required int dependsOnNPrevCandles,
-      required List<IndicatorStyle> indicatorComponentsStyles,
+      {required this.name,
+      required this.dependsOnNPrevCandles,
+      // required List<IndicatorStyle> this.indicatorComponentsStyles,
       required this.chartStyle,
       required List<double?> Function(int, List<Candle>) calculator,
-      List<ColorWithCalculatorValue> Function(int, List<Candle>)?
-          this.calculatorWithStyle})
-      : super(
-            name: name,
-            dependsOnNPrevCandles: dependsOnNPrevCandles,
-            indicatorComponentsStyles: indicatorComponentsStyles,
-            calculator: calculator);
+      required this.calculatorWithStyle,
+      // this.indicatorFill = const [],
+      this.label,
+      this.max,
+      this.min});
 }

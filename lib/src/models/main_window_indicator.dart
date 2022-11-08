@@ -18,12 +18,14 @@ class IndicatorFillData {
   final String name;
   final Color bullColor;
   final Color bearColor;
+  bool visible = true;
 
   final List<IndicatorComponentData> indicatorData;
 
-  IndicatorFillData(
-      this.name, this.bullColor, this.bearColor, this.indicatorData);
-  bool visible = true;
+  final Indicator parentIndicator;
+
+  IndicatorFillData(this.name, this.bullColor, this.bearColor,
+      this.indicatorData, this.parentIndicator);
 }
 
 class MainWindowDataContainer {
@@ -44,9 +46,19 @@ class MainWindowDataContainer {
           element.visible = true;
         }
       });
+      fill.forEach((element) {
+        if (element.parentIndicator.name == indicatorName) {
+          element.visible = true;
+        }
+      });
     } else {
       unvisibleIndicators.add(indicatorName);
       indicatorComponentData.forEach((element) {
+        if (element.parentIndicator.name == indicatorName) {
+          element.visible = false;
+        }
+      });
+      fill.forEach((element) {
         if (element.parentIndicator.name == indicatorName) {
           element.visible = false;
         }
@@ -67,10 +79,14 @@ class MainWindowDataContainer {
       fill = [];
       indicator.indicatorFill.forEach((element) {
         fill.add(IndicatorFillData(
-            element.name, element.bullColor, element.bearColor!, [
-          indicatorComponentData[start + element.startIndex!],
-          indicatorComponentData[start + element.endIndex!]
-        ]));
+            element.name,
+            element.bullColor,
+            element.bearColor!,
+            [
+              indicatorComponentData[start + element.startIndex!],
+              indicatorComponentData[start + element.endIndex!]
+            ],
+            indicator));
       });
     });
 

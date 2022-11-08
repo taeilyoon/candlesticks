@@ -146,7 +146,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..strokeWidth = 1
               ..style = PaintingStyle.stroke);
     });
-    indicatorFills.forEach((element) {
+    indicatorFills.where((element) => element.visible).forEach((element) {
       Offset? offset1;
       Offset? offset2;
       for (int i = 0; (i + 1) * _candleWidth < size.width; i++) {

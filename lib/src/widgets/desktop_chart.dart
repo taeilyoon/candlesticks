@@ -7,11 +7,8 @@ import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
 import 'package:candlesticks/src/utils/helper_functions.dart';
 import 'package:candlesticks/src/widgets/candle_stick_widget.dart';
-import 'package:candlesticks/src/widgets/mainwindow_indicator_widget.dart';
-import 'package:candlesticks/src/widgets/price_column.dart';
 import 'package:candlesticks/src/widgets/time_row.dart';
 import 'package:candlesticks/src/widgets/top_panel.dart';
-import 'package:candlesticks/src/widgets/volume_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -194,224 +191,224 @@ class _DesktopChartState extends State<DesktopChart> {
                         indicatorTime: currentCandle?.endDate,
                         index: widget.index,
                       ),
-                      Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Stack(
-                              children: [
-                                PriceColumn(
-                                  style: widget.style,
-                                  low: candlesLowPrice,
-                                  high: candlesHighPrice,
-                                  width: constraints.maxWidth,
-                                  chartHeight: chartHeight,
-                                  lastCandle: widget.candles[
-                                      widget.index < 0 ? 0 : widget.index],
-                                  onScale: (delta) {
-                                    if (manualScaleHigh == null) {
-                                      manualScaleHigh = candlesHighPrice;
-                                      manualScaleLow = candlesLowPrice;
-                                    }
-                                    setState(() {
-                                      double deltaPrice = delta /
-                                          chartHeight *
-                                          (manualScaleHigh! - manualScaleLow!);
-                                      manualScaleHigh =
-                                          manualScaleHigh! + deltaPrice;
-                                      manualScaleLow =
-                                          manualScaleLow! - deltaPrice;
-                                    });
-                                  },
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            right: BorderSide(
-                                              color: widget.style.borderColor,
-                                              width: 1,
-                                            ),
-                                          ),
-                                        ),
-                                        child: AnimatedPadding(
-                                          duration: Duration(milliseconds: 300),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical:
-                                                  MAIN_CHART_VERTICAL_PADDING),
-                                          child: RepaintBoundary(
-                                            child: Stack(
-                                              children: [
-                                                MainWindowIndicatorWidget(
-                                                  candles: widget.candles,
-                                                  indicatorDatas: widget
-                                                      .mainWindowDataContainer
-                                                      .indicatorComponentData,
-                                                  index: widget.index,
-                                                  candleWidth:
-                                                      widget.candleWidth,
-                                                  low: low,
-                                                  high: high,
-                                                  drawing: widget.drawing.first,
-                                                ),
-                                                CandleStickWidget(
-                                                  candles: widget.candles,
-                                                  candleWidth:
-                                                      widget.candleWidth,
-                                                  index: widget.index,
-                                                  high: high,
-                                                  low: low,
-                                                  bearColor:
-                                                      widget.style.primaryBear,
-                                                  bullColor:
-                                                      widget.style.primaryBull,
-                                                  onChartPanStart:
-                                                      widget.onChartPanStart,
-                                                  drawing: widget.drawing.first,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: PRICE_BAR_WIDTH,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        right: BorderSide(
-                                          color: widget.style.borderColor,
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: VolumeWidget(
-                                        candles: widget.candles,
-                                        barWidth: widget.candleWidth,
-                                        index: widget.index,
-                                        high:
-                                            HelperFunctions.getRoof(volumeHigh),
-                                        bearColor: widget.style.secondaryBear,
-                                        bullColor: widget.style.secondaryBull,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: DATE_BAR_HEIGHT,
-                                        child: Center(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
-                                                style: TextStyle(
-                                                  color:
-                                                      widget.style.borderColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  width: PRICE_BAR_WIDTH,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        right: BorderSide(
-                                          color: widget.style.borderColor,
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: LineChartWidget(
-                                        candles: widget.candles,
-                                        barWidth: widget.candleWidth,
-                                        index: widget.index,
-                                        highs: [200],
-                                        lows: [-200],
-                                        bearColor: widget.style.secondaryBear,
-                                        bullColor: widget.style.secondaryBull,
-                                        bull: 0,
-                                        bear: 0,
-                                        indicators: [
-                                          CommodityChannelIndexIndicator(
-                                              color: Colors.black)
-                                        ],
-                                        unvisibleIndicators: [],
-                                        drawing: [],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: DATE_BAR_HEIGHT,
-                                        child: Center(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(200))}",
-                                                style: TextStyle(
-                                                  color:
-                                                      widget.style.borderColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  width: PRICE_BAR_WIDTH,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: DATE_BAR_HEIGHT,
-                          ),
-                        ],
-                      ),
+                      // Column(
+                      //   children: [
+                      //     Expanded(
+                      //       flex: 3,
+                      //       child: Stack(
+                      //         children: [
+                      //           PriceColumn(
+                      //             style: widget.style,
+                      //             low: candlesLowPrice,
+                      //             high: candlesHighPrice,
+                      //             width: constraints.maxWidth,
+                      //             chartHeight: chartHeight,
+                      //             lastCandle: widget.candles[
+                      //                 widget.index < 0 ? 0 : widget.index],
+                      //             onScale: (delta) {
+                      //               if (manualScaleHigh == null) {
+                      //                 manualScaleHigh = candlesHighPrice;
+                      //                 manualScaleLow = candlesLowPrice;
+                      //               }
+                      //               setState(() {
+                      //                 double deltaPrice = delta /
+                      //                     chartHeight *
+                      //                     (manualScaleHigh! - manualScaleLow!);
+                      //                 manualScaleHigh =
+                      //                     manualScaleHigh! + deltaPrice;
+                      //                 manualScaleLow =
+                      //                     manualScaleLow! - deltaPrice;
+                      //               });
+                      //             },
+                      //           ),
+                      //           Row(
+                      //             children: [
+                      //               Expanded(
+                      //                 child: Container(
+                      //                   decoration: BoxDecoration(
+                      //                     border: Border(
+                      //                       right: BorderSide(
+                      //                         color: widget.style.borderColor,
+                      //                         width: 1,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                   child: AnimatedPadding(
+                      //                     duration: Duration(milliseconds: 300),
+                      //                     padding: EdgeInsets.symmetric(
+                      //                         vertical:
+                      //                             MAIN_CHART_VERTICAL_PADDING),
+                      //                     child: RepaintBoundary(
+                      //                       child: Stack(
+                      //                         children: [
+                      //                           MainWindowIndicatorWidget(
+                      //                             candles: widget.candles,
+                      //                             indicatorDatas: widget
+                      //                                 .mainWindowDataContainer
+                      //                                 .indicatorComponentData,
+                      //                             index: widget.index,
+                      //                             candleWidth:
+                      //                                 widget.candleWidth,
+                      //                             low: low,
+                      //                             high: high,
+                      //                             drawing: widget.drawing.first,
+                      //                           ),
+                      //                           CandleStickWidget(
+                      //                             candles: widget.candles,
+                      //                             candleWidth:
+                      //                                 widget.candleWidth,
+                      //                             index: widget.index,
+                      //                             high: high,
+                      //                             low: low,
+                      //                             bearColor:
+                      //                                 widget.style.primaryBear,
+                      //                             bullColor:
+                      //                                 widget.style.primaryBull,
+                      //                             onChartPanStart:
+                      //                                 widget.onChartPanStart,
+                      //                             drawing: widget.drawing.first,
+                      //                           ),
+                      //                         ],
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               SizedBox(
+                      //                 width: PRICE_BAR_WIDTH,
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Row(
+                      //         children: [
+                      //           Expanded(
+                      //             child: Container(
+                      //               decoration: BoxDecoration(
+                      //                 border: Border(
+                      //                   right: BorderSide(
+                      //                     color: widget.style.borderColor,
+                      //                     width: 1,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.only(top: 10.0),
+                      //                 child: VolumeWidget(
+                      //                   candles: widget.candles,
+                      //                   barWidth: widget.candleWidth,
+                      //                   index: widget.index,
+                      //                   high:
+                      //                       HelperFunctions.getRoof(volumeHigh),
+                      //                   bearColor: widget.style.secondaryBear,
+                      //                   bullColor: widget.style.secondaryBull,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           SizedBox(
+                      //             child: Column(
+                      //               crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //               children: [
+                      //                 SizedBox(
+                      //                   height: DATE_BAR_HEIGHT,
+                      //                   child: Center(
+                      //                     child: Row(
+                      //                       children: [
+                      //                         Text(
+                      //                           "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                      //                           style: TextStyle(
+                      //                             color:
+                      //                                 widget.style.borderColor,
+                      //                             fontSize: 12,
+                      //                           ),
+                      //                         ),
+                      //                       ],
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //             width: PRICE_BAR_WIDTH,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Row(
+                      //         children: [
+                      //           Expanded(
+                      //             child: Container(
+                      //               decoration: BoxDecoration(
+                      //                 border: Border(
+                      //                   right: BorderSide(
+                      //                     color: widget.style.borderColor,
+                      //                     width: 1,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.only(top: 10.0),
+                      //                 child: LineChartWidget(
+                      //                   candles: widget.candles,
+                      //                   barWidth: widget.candleWidth,
+                      //                   index: widget.index,
+                      //                   highs: [200],
+                      //                   lows: [-200],
+                      //                   bearColor: widget.style.secondaryBear,
+                      //                   bullColor: widget.style.secondaryBull,
+                      //                   bull: 0,
+                      //                   bear: 0,
+                      //                   indicators: [
+                      //                     CommodityChannelIndexIndicator(
+                      //                         color: Colors.black)
+                      //                   ],
+                      //                   unvisibleIndicators: [],
+                      //                   drawing: [],
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           SizedBox(
+                      //             child: Column(
+                      //               crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //               children: [
+                      //                 SizedBox(
+                      //                   height: DATE_BAR_HEIGHT,
+                      //                   child: Center(
+                      //                     child: Row(
+                      //                       children: [
+                      //                         Text(
+                      //                           "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(200))}",
+                      //                           style: TextStyle(
+                      //                             color:
+                      //                                 widget.style.borderColor,
+                      //                             fontSize: 12,
+                      //                           ),
+                      //                         ),
+                      //                       ],
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //             width: PRICE_BAR_WIDTH,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       height: DATE_BAR_HEIGHT,
+                      //     ),
+                      //   ],
+                      // ),
                       mouseHoverY != null && showHoverIndicator
                           ? Positioned(
                               top: mouseHoverY! - 10,

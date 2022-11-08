@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
+import 'package:candlesticks/src/models/sub_window_indicator.dart';
 import 'package:candlesticks/src/widgets/desktop_chart.dart';
 import 'package:candlesticks/src/widgets/mobile_chart.dart';
 import 'package:candlesticks/src/widgets/toolbar.dart';
@@ -133,6 +134,7 @@ class _CandlesticksState extends State<Candlesticks> {
   bool isCallingLoadMore = false;
 
   MainWindowDataContainer? mainWindowDataContainer;
+  SubIndicatorDataContainer? subWindowDataContainer;
 
   @override
   void initState() {
@@ -143,6 +145,11 @@ class _CandlesticksState extends State<Candlesticks> {
     if (mainWindowDataContainer == null) {
       mainWindowDataContainer =
           MainWindowDataContainer(widget.indicators ?? [], widget.candles);
+    }
+
+    if (subWindowDataContainer == null) {
+      subWindowDataContainer =
+          SubIndicatorDataContainer(widget.subIndicator ?? [], widget.candles);
     }
   }
 
@@ -179,6 +186,7 @@ class _CandlesticksState extends State<Candlesticks> {
         mainWindowDataContainer =
             MainWindowDataContainer(widget.indicators ?? [], widget.candles);
       }
+      //TODO Sub too;
     }
   }
 
@@ -241,6 +249,7 @@ class _CandlesticksState extends State<Candlesticks> {
                   style: style,
                   onRemoveIndicator: widget.onRemoveIndicator,
                   mainWindowDataContainer: mainWindowDataContainer!,
+                  subWindowDataContainer: subWindowDataContainer!,
                   chartAdjust: widget.chartAdjust,
                   isDrawing: widget.isDrawingMode,
                   drawing: widget.drawing,

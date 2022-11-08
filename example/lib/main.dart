@@ -82,10 +82,9 @@ class _MyAppState extends State<MyApp> {
         leadLine1Color: Colors.purple,
         leadLine2Color: Colors.blue),
   ];
-  List<Indicator> subIndicators = [
-    CommodityChannelIndexIndicator(
-      color: const Color(0xFF2962FF),
-    )
+  List<SubIndicator> subIndicators = [
+    VolumeIndicatorIndicator(color: Colors.black),
+    CommodityChannelIndexIndicator(color: Colors.white)
   ];
 
   @override
@@ -225,9 +224,7 @@ class _MyAppState extends State<MyApp> {
             return Candlesticks(
               // chartAdjust: ChartAdjust.fullRange,
               isDrawingMode: this.isDrawing,
-              subIndicator: [
-                CommodityChannelIndexIndicator(color: Colors.black87)
-              ],
+              subIndicator: this.subIndicators,
               key: Key(currentSymbol + currentInterval),
               indicators: indicators,
               candles: candles,
