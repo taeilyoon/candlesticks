@@ -89,7 +89,7 @@ class Candlesticks extends StatefulWidget {
   final clip;
 
   final PriceIndicatorOption priceIndicatorOption;
-  final void Function(List<Indicator> updated) indicatorUpdated;
+  final void Function(int index, List<Indicator> updated) indicatorUpdated;
 
   const Candlesticks({
     Key? key,
@@ -167,13 +167,13 @@ class _CandlesticksState extends State<Candlesticks> {
       final oldIndicators = oldWidget.indicators ?? [];
       if (currentIndicators.length == oldIndicators.length) {
         for (int i = 0; i < currentIndicators.length; i++) {
-          if (currentIndicators[i] == oldIndicators[i]) {
-            continue;
-          } else {
-            mainWindowDataContainer = MainWindowDataContainer(
-                widget.indicators ?? [], widget.candles);
-            return;
-          }
+          // if (currentIndicators[i] == oldIndicators[i]) {
+          // continue;
+          // } else {
+          mainWindowDataContainer =
+              MainWindowDataContainer(widget.indicators ?? [], widget.candles);
+          return;
+          // }
         }
       } else {
         mainWindowDataContainer =

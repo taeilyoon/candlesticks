@@ -21,7 +21,7 @@ class TopPanel extends StatefulWidget {
   final List<Indicator> indicators;
   final void Function(String indicatorName) toggleIndicatorVisibility;
   final List<String> unvisibleIndicators;
-  final void Function(List<Indicator> updated) indicatorUpdateed;
+  final void Function(int i, List<Indicator> updated) indicatorUpdateed;
   final void Function(String indicatorName)? onRemoveIndicator;
   final CandleSticksStyle style;
 
@@ -115,7 +115,10 @@ class _TopPanelState extends State<TopPanel> {
                                             MaterialButton(
                                                 onPressed: () {
                                                   Navigator.pop(context);
-                                                  widget.indicatorUpdateed([e]);
+                                                  widget.indicatorUpdateed(
+                                                      0,
+                                                      List.from(
+                                                          widget.indicators));
                                                 },
                                                 child: Text("확인"))
                                           ],

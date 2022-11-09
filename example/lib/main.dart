@@ -391,9 +391,14 @@ class _MyAppState extends State<MyApp> {
                   ),
                 )
               ],
-              indicatorUpdated: (n) {
+              indicatorUpdated: (i, n) {
                 setState(() {
-                  this.indicators.addAll([...n]);
+                  this.indicators.removeWhere((element) => true);
+                });
+                Future.delayed(Duration(seconds: 1), () {
+                  setState(() {
+                    this.indicators.addAll(n);
+                  });
                 });
               },
             );

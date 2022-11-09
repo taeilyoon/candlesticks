@@ -64,7 +64,7 @@ class MobileChart extends StatefulWidget {
 
   final clip;
 
-  final void Function(List<Indicator> updated) indicatorUpdated;
+  final void Function(int i, List<Indicator> updated) indicatorUpdated;
 
   List<SubIndicator> subIndicator;
 
@@ -504,8 +504,8 @@ class _MobileChartState extends State<MobileChart> {
                             },
                             unvisibleIndicators: widget
                                 .mainWindowDataContainer.unvisibleIndicators,
-                            indicatorUpdateed: (d) {
-                              widget.indicatorUpdated(d);
+                            indicatorUpdateed: (i, d) {
+                              widget.indicatorUpdated(i, d);
                             }),
                       ),
                       Positioned(
