@@ -13,6 +13,7 @@ import 'package:candlesticks/src/widgets/mainwindow_indicator_widget.dart';
 import 'package:candlesticks/src/widgets/price_column.dart';
 import 'package:candlesticks/src/widgets/time_row.dart';
 import 'package:candlesticks/src/widgets/top_panel.dart';
+import 'package:candlesticks/src/widgets/volume_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'dash_line.dart';
@@ -304,16 +305,74 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          for (int i = 0;
-                              i < widget.subWindowDataContainer.data.length;
-                              i++)
-                            Expanded(
-                              flex: 1,
-                              child: buildRow(i, inRangeCandles),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        right: BorderSide(
+                                          color: widget.style.borderColor,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: VolumeWidget(
+                                        candles: widget.candles,
+                                        barWidth: widget.candleWidth,
+                                        index: widget.index,
+                                        high:
+                                            HelperFunctions.getRoof(volumeHigh),
+                                        bearColor: widget.style.secondaryBear,
+                                        bullColor: widget.style.secondaryBull,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: DATE_BAR_HEIGHT,
+                                        child: Center(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                                                style: TextStyle(
+                                                  color:
+                                                      widget.style.borderColor,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  width: PRICE_BAR_WIDTH,
+                                ),
+                              ],
                             ),
-                          SizedBox(
-                            height: DATE_BAR_HEIGHT,
                           ),
+
+                          // for (int i = 0;
+                          //     i < widget.subWindowDataContainer.data.length;
+                          //     i++)
+                          //   Expanded(
+                          //     flex: 1,
+                          //     child: buildRow(i, inRangeCandles),
+                          //   ),
+                          // SizedBox(
+                          //   height: DATE_BAR_HEIGHT,
+                          //),
                         ],
                       ),
                       longPressY != null
