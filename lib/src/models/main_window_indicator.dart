@@ -31,7 +31,7 @@ class IndicatorFillData {
 class MainWindowDataContainer {
   List<IndicatorComponentData> indicatorComponentData = [];
   List<Indicator> indicators;
-  late List<IndicatorFillData> fill;
+  List<IndicatorFillData> fill = [];
   List<double> highs = [];
   List<double> lows = [];
   List<String> unvisibleIndicators = [];
