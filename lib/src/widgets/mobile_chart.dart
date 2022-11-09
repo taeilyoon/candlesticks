@@ -362,7 +362,31 @@ class _MobileChartState extends State<MobileChart> {
                               ],
                             ),
                           ),
-
+                          SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: DATE_BAR_HEIGHT,
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        // Text(
+                                        //   "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                                        //   style: TextStyle(
+                                        //     color:
+                                        //     widget.style.borderColor,
+                                        //     fontSize: 12,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            width: PRICE_BAR_WIDTH,
+                          ),
                           // for (int i = 0;
                           //     i < widget.subWindowDataContainer.data.length;
                           //     i++)
@@ -391,17 +415,26 @@ class _MobileChartState extends State<MobileChart> {
                                         .style.hoverIndicatorBackgroundColor,
                                     child: Center(
                                       child: Text(
-                                        buildLongPress2Percent(
-                                            maxHeight,
-                                            longPressY,
-                                            widget.index,
-                                            widget.candles,
-                                            inRangeCandles,
-                                            high,
-                                            low),
+                                        longPressY! < maxHeight * 0.75
+                                            ? HelperFunctions.priceToString(
+                                            high -
+                                                (longPressY! - 20) /
+                                                    (maxHeight * 0.75 -
+                                                        40) *
+                                                    (high - low))
+                                            : HelperFunctions.addMetricPrefix(
+                                            HelperFunctions.getRoof(
+                                                volumeHigh) *
+                                                (1 -
+                                                    (longPressY! -
+                                                        maxHeight *
+                                                            0.75 -
+                                                        10) /
+                                                        (maxHeight * 0.25 -
+                                                            10))),
                                         style: TextStyle(
                                           color:
-                                              widget.style.secondaryTextColor,
+                                          widget.style.secondaryTextColor,
                                           fontSize: 12,
                                         ),
                                       ),
@@ -409,6 +442,29 @@ class _MobileChartState extends State<MobileChart> {
                                     width: PRICE_BAR_WIDTH,
                                     height: 20,
                                   ),
+                                  // Container(
+                                  //   color: widget
+                                  //       .style.hoverIndicatorBackgroundColor,
+                                  //   child: Center(
+                                  //     child: Text(
+                                  //       buildLongPress2Percent(
+                                  //           maxHeight,
+                                  //           longPressY,
+                                  //           widget.index,
+                                  //           widget.candles,
+                                  //           inRangeCandles,
+                                  //           high,
+                                  //           low),
+                                  //       style: TextStyle(
+                                  //         color:
+                                  //             widget.style.secondaryTextColor,
+                                  //         fontSize: 12,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  //   width: PRICE_BAR_WIDTH,
+                                  //   height: 20,
+                                  // ),
                                 ],
                               ),
                             )
