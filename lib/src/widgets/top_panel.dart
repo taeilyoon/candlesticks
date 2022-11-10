@@ -62,21 +62,22 @@ class _TopPanelState extends State<TopPanel> {
                               SizedBox(
                                 width: 10,
                               ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     widget.toggleIndicatorVisibility(e.name);
-                              //   },
-                              //   child: widget.unvisibleIndicators
-                              //           .contains(e.name)
-                              //       ? Icon(
-                              //           Icons.visibility_off_outlined,
-                              //           size: 16,
-                              //           color: widget.style.primaryTextColor,
-                              //         )
-                              //       : Icon(Icons.visibility_outlined,
-                              //           size: 16,
-                              //           color: widget.style.primaryTextColor),
-                              // ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.toggleIndicatorVisibility(e.name);
+                                  widget.indicatorUpdateed(
+                                      0, widget.indicators);
+                                },
+                                child: e.visible
+                                    ? Icon(
+                                        Icons.visibility_off_outlined,
+                                        size: 16,
+                                        color: widget.style.primaryTextColor,
+                                      )
+                                    : Icon(Icons.visibility_outlined,
+                                        size: 16,
+                                        color: widget.style.primaryTextColor),
+                              ),
                               SizedBox(
                                 width: 10,
                               ),

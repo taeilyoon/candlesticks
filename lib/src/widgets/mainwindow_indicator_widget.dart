@@ -51,6 +51,7 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
     candlestickRenderObject._low = low;
     candlestickRenderObject.drawing = drawing;
     candlestickRenderObject.gap = gap;
+    candlestickRenderObject.indicatorFills = indicatorFills;
     candlestickRenderObject.markNeedsPaint();
     super.updateRenderObject(context, renderObject);
   }
@@ -66,7 +67,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
   final List<Candle> candles;
   Duration gap;
 
-  List<IndicatorFillData> indicatorFills;
+  late List<IndicatorFillData> indicatorFills;
 
   MainWindowIndicatorRenderObject(
       List<IndicatorComponentData> indicatorDatas,
@@ -77,12 +78,13 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       this.drawing,
       this.candles,
       this.gap,
-      List<IndicatorFillData> this.indicatorFills) {
+      List<IndicatorFillData> indicatorFill) {
     _indicatorDatas = indicatorDatas;
     _index = index;
     _candleWidth = candleWidth;
     _low = low;
     _high = high;
+    indicatorFills = indicatorFill;
   }
 
   /// set size as large as possible

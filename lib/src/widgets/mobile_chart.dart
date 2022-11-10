@@ -70,6 +70,8 @@ class MobileChart extends StatefulWidget {
 
   SubIndicatorDataContainer subWindowDataContainer;
 
+  Function(int i) onSubIndicatorSettingPressed;
+
   MobileChart(
       {required this.style,
       required this.onScaleUpdate,
@@ -92,6 +94,7 @@ class MobileChart extends StatefulWidget {
       this.isDrawing = false,
       this.drawing = const [[], [], []],
       required priceIndicatorOption,
+      required this.onSubIndicatorSettingPressed,
       required SubIndicatorDataContainer this.subWindowDataContainer});
 
   @override
@@ -294,7 +297,7 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             height: 0,
                             child: Padding(
                               padding:
@@ -615,8 +618,8 @@ class _MobileChartState extends State<MobileChart> {
                                 widget.mainWindowDataContainer
                                     .toggleIndicatorVisibility(indicatorName);
                               });
-                              widget.indicatorUpdated(
-                                  0, widget.mainWindowDataContainer.indicators);
+                              // widget.indicatorUpdated(
+                              //     0, widget.mainWindowDataContainer.indicators);
                             },
                             unvisibleIndicators: widget
                                 .mainWindowDataContainer.unvisibleIndicators,
@@ -672,8 +675,13 @@ class _MobileChartState extends State<MobileChart> {
             child: Padding(
               padding: const EdgeInsets.only(top: 0),
               child: SubIndicatorWidget(
+                onSetting: widget.onSubIndicatorSettingPressed,
                 candles: widget.candles,
-                indicatorDatas: widget.subWindowDataContainer.data,
+                indicatorDatas: widget.subWindowDataContainer.data
+                    .where((element) =>
+                        element.parentIndicator.name ==
+                        widget.subIndicator[i].name)
+                    .toList(),
                 indicatorData: widget.subWindowDataContainer,
                 index: widget.index,
                 barWidth: widget.candleWidth,

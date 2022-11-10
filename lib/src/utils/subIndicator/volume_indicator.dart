@@ -15,7 +15,7 @@ class VolumeIndicatorIndicator extends SubIndicator {
     String? label,
   }) : super(
             chartStyle: SubIndicatorChartType.stick,
-            name: label ?? "CCI ${periods}",
+            name: label ?? "거래량 ${periods}",
             dependsOnNPrevCandles: periods * 2,
             calculator: (index, candles) {
               return [candles[index].volume];

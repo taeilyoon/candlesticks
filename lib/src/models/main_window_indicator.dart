@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:candlesticks/src/models/indicator.dart';
 import 'package:flutter/material.dart';
 
 import 'candle.dart';
+import 'package:candlesticks/candlesticks.dart';
 
 class IndicatorComponentData {
   final String name;
@@ -41,6 +41,12 @@ class MainWindowDataContainer {
   void toggleIndicatorVisibility(String indicatorName) {
     if (unvisibleIndicators.contains(indicatorName)) {
       unvisibleIndicators.remove(indicatorName);
+      var s = indicators
+          .where((element) => element.name == indicatorName)
+          .toList()
+          .firstOrNull;
+      s?.visible = true;
+
       indicatorComponentData.forEach((element) {
         if (element.parentIndicator.name == indicatorName) {
           element.visible = true;
@@ -53,6 +59,11 @@ class MainWindowDataContainer {
       });
     } else {
       unvisibleIndicators.add(indicatorName);
+      var s = indicators
+          .where((element) => element.name == indicatorName)
+          .toList()
+          .firstOrNull;
+      s?.visible = false;
       indicatorComponentData.forEach((element) {
         if (element.parentIndicator.name == indicatorName) {
           element.visible = false;
@@ -73,7 +84,8 @@ class MainWindowDataContainer {
       var start = indicatorComponentData.length;
       indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
         indicatorComponentData.add(IndicatorComponentData(
-            indicator, indicatorComponent.name, indicatorComponent.bullColor));
+            indicator, indicatorComponent.name, indicatorComponent.bullColor)
+          ..visible = indicator.visible);
       });
 
       fill = [];
@@ -86,7 +98,8 @@ class MainWindowDataContainer {
               indicatorComponentData[start + element.startIndex!],
               indicatorComponentData[start + element.endIndex!]
             ],
-            indicator));
+            indicator)
+          ..visible = indicator.visible);
       });
     });
 
@@ -124,6 +137,32 @@ class MainWindowDataContainer {
 
   void tickUpdate(List<Candle> candles) {
     // update last candles
+
+    this.indicators.forEach((parent) {
+      this
+          .indicatorComponentData
+          .where((element) => element.parentIndicator.name == parent.name)
+          .toList()
+          .forEach((element) {
+        element.visible = parent.visible;
+        if (element.visible) {
+          unvisibleIndicators.remove(element.name);
+        } else {
+          unvisibleIndicators.add(element.name);
+        }
+        indicatorComponentData.forEach((element) {
+          if (element.parentIndicator.name == parent.name) {
+            element.visible = parent.visible;
+          }
+        });
+
+        for (var f in fill) {
+          if (f.parentIndicator.name == parent.name) {
+            f.visible = parent.visible;
+          }
+        }
+      });
+    });
     for (int i = 0; candles[i].endDate.compareTo(endDate) > 0; i++) {
       highs.insert(i, candles[i].high);
       lows.insert(i, candles[i].low);
