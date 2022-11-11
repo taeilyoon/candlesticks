@@ -12,9 +12,9 @@ class IchimokuIndicator extends Indicator {
       required Color longLineColor,
       required Color leadLine1Color,
       required Color leadLine2Color,
-      String? label})
+      String? label, String? name})
       : super(
-            name: "IchiMoku ${short.toString()}/ ${middle.toString()}/ $long",
+            name: name ?? "IchiMoku ${short.toString()}/ ${middle.toString()}/ $long",
             dependsOnNPrevCandles: middle,
             calculator: (index, candles) {
               double? conversionLine = null;
