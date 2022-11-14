@@ -43,11 +43,11 @@ class SubIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-            child: IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {},
-        )),
+        // Positioned(
+        //     child: IconButton(
+        //   icon: Icon(Icons.settings),
+        //   onPressed: () {},
+        // )),
         Container(
           child: SubIndicatorWidgetCanvas(
               candles: candles,
