@@ -68,7 +68,7 @@ class _TopPanelState extends State<TopPanel> {
                                   widget.indicatorUpdateed(
                                       0, widget.indicators);
                                 },
-                                child: e.visible
+                                child: !e.visible
                                     ? Icon(
                                         Icons.visibility_off_outlined,
                                         size: 16,
