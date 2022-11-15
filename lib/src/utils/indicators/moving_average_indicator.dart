@@ -16,7 +16,7 @@ class MovingAverageIndicator extends Indicator {
               return [sum / length];
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "mv", bullColor: color),
+              IndicatorStyle(name: "이동평균선", bullColor: color),
             ],
             label: label);
 }
