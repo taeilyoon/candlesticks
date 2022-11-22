@@ -67,6 +67,14 @@ extension ListNumExt<T extends num> on List<T> {
     }
     return reduce((curr, next) => curr < next ? curr : next);
   }
+
+  T ema() {}
+
+  T sma() {
+    return reduce((value, element) {
+      return value + element as T;
+    });
+  }
 }
 
 extension ListExt<T> on List<T> {
@@ -103,4 +111,11 @@ extension ListExt<T> on List<T> {
 
 extension DateTimeExt on DateTime {
   isAfterOrSame() {}
+}
+
+num nz(num? number) {
+  if (number?.isNaN != false) {
+    return 0;
+  }
+  return number!;
 }
