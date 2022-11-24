@@ -68,7 +68,9 @@ extension ListNumExt<T extends num> on List<T> {
     return reduce((curr, next) => curr < next ? curr : next);
   }
 
-  T ema() {}
+  T ema() {
+    return this.first;
+  }
 
   T sma() {
     return reduce((value, element) {

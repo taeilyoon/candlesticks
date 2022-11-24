@@ -403,7 +403,7 @@ class _MobileChartState extends State<MobileChart> {
                       ),
                       longPressY != null
                           ? Positioned(
-                              top: longPressY! - 10,
+                              top: longPressY!-10,
                               child: Row(
                                 children: [
                                   DashLine(
@@ -412,38 +412,6 @@ class _MobileChartState extends State<MobileChart> {
                                     direction: Axis.horizontal,
                                     thickness: 0.5,
                                   ),
-                                  // Container(
-                                  //   color: widget
-                                  //       .style.hoverIndicatorBackgroundColor,
-                                  //   child: Center(
-                                  //     child: Text(
-                                  //       longPressY! < maxHeight * 0.75
-                                  //           ? HelperFunctions.priceToString(
-                                  //               high -
-                                  //                   (longPressY! - 20) /
-                                  //                       (maxHeight * 0.75 -
-                                  //                           40) *
-                                  //                       (high - low))
-                                  //           : HelperFunctions.addMetricPrefix(
-                                  //               HelperFunctions.getRoof(
-                                  //                       volumeHigh) *
-                                  //                   (1 -
-                                  //                       (longPressY! -
-                                  //                               maxHeight *
-                                  //                                   0.75 -
-                                  //                               10) /
-                                  //                           (maxHeight * 0.25 -
-                                  //                               10))),
-                                  //       style: TextStyle(
-                                  //         color:
-                                  //             widget.style.secondaryTextColor,
-                                  //         fontSize: 12,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  //   width: PRICE_BAR_WIDTH,
-                                  //   height: 20,
-                                  // ),
                                   Container(
                                     color: widget
                                         .style.hoverIndicatorBackgroundColor,
@@ -598,8 +566,8 @@ class _MobileChartState extends State<MobileChart> {
                               }
                             }
                             setState(() {
-                              longPressX = null;
-                              longPressY = null;
+                              // longPressX = null;
+                              // longPressY = null;
                             });
                           },
                         ),
@@ -726,24 +694,19 @@ class _MobileChartState extends State<MobileChart> {
   String buildLongPress2Percent(double maxHeight, double? longPressY, int index,
       List<Candle> candles, List<Candle> inRangeCandles, high, low) {
     var div = 1 / (3 + widget.subIndicator.length);
-    if (longPressY! < maxHeight * 3 * div) {
-      var startP = 10;
-      var endP = 3 * div * maxHeight;
-      var range = endP - startP;
-      var v = (longPressY - startP) / range;
-
-      return HelperFunctions.priceToString(
-          high - (longPressY! - 10) / (maxHeight * 0.75 - 20) * (high - low));
+    if (longPressY! < (maxHeight) * 3 * div) {
+      double chartHeight = (maxHeight-DATE_BAR_HEIGHT) * 3 *div;
+      return HelperFunctions.priceToString((chartHeight -longPressY+5)/ (chartHeight) * (high - low) +low);
     }
 
     for (int i = 0; i < widget.subIndicator.length; i++) {
-      if (longPressY! > maxHeight * (3 + i) * div &&
-          longPressY < maxHeight * (4 + i) * div) {
+      if (longPressY! > (maxHeight-DATE_BAR_HEIGHT) * (3 + i) * div &&
+          longPressY < (maxHeight-DATE_BAR_HEIGHT) * (4 + i) * div) {
         var h = widget.subIndicator[i].max!(index, candles, inRangeCandles);
         var l = widget.subIndicator[i].min!(index, candles, inRangeCandles);
 
-        var startP = (3 + i) * div * maxHeight - 10;
-        var endP = (4 + i) * div * maxHeight - 10;
+        var startP = (3 + i) * div * (maxHeight -DATE_BAR_HEIGHT);
+        var endP = (4 + i) * div * (maxHeight-DATE_BAR_HEIGHT);
         var range = endP - startP;
         var v = (longPressY - 10 - startP) / range;
         // return ;

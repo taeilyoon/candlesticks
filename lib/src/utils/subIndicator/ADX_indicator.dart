@@ -43,6 +43,8 @@ class ADXIndicatorIndicator extends SubIndicator {
         var minusm = candles[index + 1].low - candles[index].low;
 
         if (plusm > minusm) {}
+
+        return [];
       },
       max: (i, c, c2) {
         return c2.map((e) => e.volume).toList().max();
