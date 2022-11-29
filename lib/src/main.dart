@@ -91,6 +91,8 @@ class Candlesticks extends StatefulWidget {
   final PriceIndicatorOption priceIndicatorOption;
   final void Function(int index, List<Indicator> updated) indicatorUpdated;
 
+  final Function(int index) onSubIndicatorSettingPressed;
+
   const Candlesticks({
     Key? key,
     required this.candles,
@@ -111,6 +113,7 @@ class Candlesticks extends StatefulWidget {
     this.drawing = const [[], [], []],
     this.priceIndicatorOption = PriceIndicatorOption.shownRecent,
     required this.indicatorUpdated,
+    required this.onSubIndicatorSettingPressed,
   })  : assert(candles.length == 0 || candles.length > 1,
             "Please provide at least 2 candles"),
         super(key: key);
@@ -149,7 +152,7 @@ class _CandlesticksState extends State<Candlesticks> {
 
     if (subWindowDataContainer == null) {
       subWindowDataContainer =
-          SubIndicatorDataContainer(widget.subIndicator ?? [], widget.candles);
+          SubIndicatorDataContainer(widget.subIndicator , widget.candles);
     }
   }
 
@@ -246,6 +249,8 @@ class _CandlesticksState extends State<Candlesticks> {
               duration: Duration(milliseconds: 120),
               builder: (_, double width, __) {
                 return MobileChart(
+                  onSubIndicatorSettingPressed:
+                      widget.onSubIndicatorSettingPressed,
                   style: style,
                   onRemoveIndicator: widget.onRemoveIndicator,
                   mainWindowDataContainer: mainWindowDataContainer!,

@@ -12,9 +12,9 @@ class IchimokuIndicator extends Indicator {
       required Color longLineColor,
       required Color leadLine1Color,
       required Color leadLine2Color,
-      String? label})
+      String? label, String? name})
       : super(
-            name: "IchiMoku ${short.toString()}/ ${middle.toString()}/ $long",
+            name: name ?? "IchiMoku ${short.toString()}/ ${middle.toString()}/ $long",
             dependsOnNPrevCandles: middle,
             calculator: (index, candles) {
               double? conversionLine = null;
@@ -94,11 +94,11 @@ class IchimokuIndicator extends Indicator {
               ];
             },
             indicatorComponentsStyles: [
-              IndicatorStyle(name: "short", bullColor: shortLineColor),
-              IndicatorStyle(name: "middle", bullColor: middleLineColor),
-              IndicatorStyle(name: "long", bullColor: longLineColor),
-              IndicatorStyle(name: "leadline1", bullColor: leadLine1Color),
-              IndicatorStyle(name: "leadLine2", bullColor: leadLine2Color),
+              IndicatorStyle(name: "전환선", bullColor: shortLineColor),
+              IndicatorStyle(name: "기준선", bullColor: middleLineColor),
+              IndicatorStyle(name: "후행스팬", bullColor: longLineColor),
+              IndicatorStyle(name: "선행스팬 1", bullColor: leadLine1Color),
+              IndicatorStyle(name: "선행스팬 2", bullColor: leadLine2Color),
             ],
             indicatorFill: [
               IndicatorStyle(

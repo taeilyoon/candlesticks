@@ -8,6 +8,7 @@ class Indicator {
   /// Indicator name. visible at top right side of chart
   final String name;
   final String? label;
+  bool visible = true;
 
   /// Calculates indicator value for givien index.
   /// if your indicator has muliple lines (values) always return results in the same order.
@@ -37,24 +38,23 @@ class Indicator {
   }
 
   bool operator ==(other) {
-    try{
+    try {
       if (other is Indicator) {
         var s = other.indicatorComponentsStyles
             .asMap()
             .map((key, value) {
-          return MapEntry(
-              key,
-              this.indicatorComponentsStyles[key].bullColor ==
-                  value.bullColor);
-        })
+              return MapEntry(
+                  key,
+                  this.indicatorComponentsStyles[key].bullColor ==
+                      value.bullColor);
+            })
             .values
             .every((element) => element);
         return other.name == this.name && s;
-      }
-      else {
+      } else {
         return false;
       }
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }

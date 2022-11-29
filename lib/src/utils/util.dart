@@ -67,12 +67,22 @@ extension ListNumExt<T extends num> on List<T> {
     }
     return reduce((curr, next) => curr < next ? curr : next);
   }
+
+  T ema() {
+    return this.first;
+  }
+
+  T sma() {
+    return reduce((value, element) {
+      return value + element as T;
+    });
+  }
 }
 
 extension ListExt<T> on List<T> {
   void addNotNull(T? value) {
     if (value == null) return;
-    add(value!);
+    add(value);
   }
 
   T? get firstOrNull {
@@ -103,4 +113,11 @@ extension ListExt<T> on List<T> {
 
 extension DateTimeExt on DateTime {
   isAfterOrSame() {}
+}
+
+num nz(num? number) {
+  if (number?.isNaN != false) {
+    return 0;
+  }
+  return number!;
 }

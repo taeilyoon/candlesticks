@@ -51,6 +51,7 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
     candlestickRenderObject._low = low;
     candlestickRenderObject.drawing = drawing;
     candlestickRenderObject.gap = gap;
+    candlestickRenderObject.indicatorFills = indicatorFills;
     candlestickRenderObject.markNeedsPaint();
     super.updateRenderObject(context, renderObject);
   }
@@ -66,7 +67,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
   final List<Candle> candles;
   Duration gap;
 
-  List<IndicatorFillData> indicatorFills;
+  late List<IndicatorFillData> indicatorFills;
 
   MainWindowIndicatorRenderObject(
       List<IndicatorComponentData> indicatorDatas,
@@ -77,12 +78,13 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       this.drawing,
       this.candles,
       this.gap,
-      List<IndicatorFillData> this.indicatorFills) {
+      List<IndicatorFillData> indicatorFill) {
     _indicatorDatas = indicatorDatas;
     _index = index;
     _candleWidth = candleWidth;
     _low = low;
     _high = high;
+    indicatorFills = indicatorFill;
   }
 
   /// set size as large as possible
@@ -180,10 +182,10 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                   (_high - element.indicatorData[1].values[i + _index]!) /
                       range);
           if ((offset1!.dy < offset2!.dy && newOffset1.dy < newOffset2.dy) ||
-              (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)) {
+              (offset1.dy >= offset2.dy && newOffset1.dy >= newOffset2.dy)) {
             var path = Path();
-            path.moveTo(offset1!.dx, offset1!.dy);
-            path.lineTo(offset2!.dx, offset2!.dy);
+            path.moveTo(offset1.dx, offset1.dy);
+            path.lineTo(offset2.dx, offset2.dy);
 
             path.lineTo(newOffset2.dx, newOffset2.dy);
             path.lineTo(newOffset1.dx, newOffset1.dy);
@@ -191,7 +193,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             var paint = Paint()
               ..style = PaintingStyle.fill
               ..color =
-                  (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)
+                  (offset1.dy >= offset2.dy && newOffset1.dy >= newOffset2.dy)
                       ? element.bullColor
                       : element.bearColor;
 
@@ -201,14 +203,14 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
             var center = Offset((offset1.dx + newOffset1.dx) / 2,
                 (offset1.dy + newOffset1.dy) / 2);
-            path.moveTo(offset1!.dx, offset1!.dy);
-            path.lineTo(offset2!.dx, offset2!.dy);
+            path.moveTo(offset1.dx, offset1.dy);
+            path.lineTo(offset2.dx, offset2.dy);
 
             path.lineTo(center.dx, center.dy);
 
             var paint = Paint()
               ..style = PaintingStyle.fill
-              ..color = !(offset1!.dy >= offset2!.dy &&
+              ..color = !(offset1.dy >= offset2.dy &&
                       newOffset1.dy >= newOffset2.dy)
                   ? element.bullColor
                   : element.bearColor;
@@ -223,7 +225,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             var paint2 = Paint()
               ..style = PaintingStyle.fill
               ..color =
-                  (offset1!.dy >= offset2!.dy && newOffset1.dy >= newOffset2.dy)
+                  (offset1.dy >= offset2.dy && newOffset1.dy >= newOffset2.dy)
                       ? element.bullColor
                       : element.bearColor;
             context.canvas.drawPath(path2, paint2);

@@ -13,7 +13,6 @@ import 'package:candlesticks/src/widgets/mainwindow_indicator_widget.dart';
 import 'package:candlesticks/src/widgets/price_column.dart';
 import 'package:candlesticks/src/widgets/time_row.dart';
 import 'package:candlesticks/src/widgets/top_panel.dart';
-import 'package:candlesticks/src/widgets/volume_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'dash_line.dart';
@@ -71,6 +70,8 @@ class MobileChart extends StatefulWidget {
 
   SubIndicatorDataContainer subWindowDataContainer;
 
+  Function(int i) onSubIndicatorSettingPressed;
+
   MobileChart(
       {required this.style,
       required this.onScaleUpdate,
@@ -93,6 +94,7 @@ class MobileChart extends StatefulWidget {
       this.isDrawing = false,
       this.drawing = const [[], [], []],
       required priceIndicatorOption,
+      required this.onSubIndicatorSettingPressed,
       required SubIndicatorDataContainer this.subWindowDataContainer});
 
   @override
@@ -295,7 +297,7 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             height: 0,
                             child: Padding(
                               padding:
@@ -305,103 +307,103 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        right: BorderSide(
-                                          color: widget.style.borderColor,
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: VolumeWidget(
-                                        candles: widget.candles,
-                                        barWidth: widget.candleWidth,
-                                        index: widget.index,
-                                        high:
-                                            HelperFunctions.getRoof(volumeHigh),
-                                        bearColor: widget.style.secondaryBear,
-                                        bullColor: widget.style.secondaryBull,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: DATE_BAR_HEIGHT,
-                                        child: Center(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
-                                                style: TextStyle(
-                                                  color:
-                                                      widget.style.borderColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  width: PRICE_BAR_WIDTH,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: DATE_BAR_HEIGHT,
-                                  child: Center(
-                                    child: Row(
-                                      children: [
-                                        // Text(
-                                        //   "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
-                                        //   style: TextStyle(
-                                        //     color:
-                                        //     widget.style.borderColor,
-                                        //     fontSize: 12,
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            width: PRICE_BAR_WIDTH,
-                          ),
-                          // for (int i = 0;
-                          //     i < widget.subWindowDataContainer.data.length;
-                          //     i++)
-                          //   Expanded(
-                          //     flex: 1,
-                          //     child: buildRow(i, inRangeCandles),
+                          // Expanded(
+                          //   flex: 1,
+                          //   child: Row(
+                          //     children: [
+                          //       Expanded(
+                          //         child: Container(
+                          //           decoration: BoxDecoration(
+                          //             border: Border(
+                          //               right: BorderSide(
+                          //                 color: widget.style.borderColor,
+                          //                 width: 1,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.only(top: 10.0),
+                          //             child: VolumeWidget(
+                          //               candles: widget.candles,
+                          //               barWidth: widget.candleWidth,
+                          //               index: widget.index,
+                          //               high:
+                          //                   HelperFunctions.getRoof(volumeHigh),
+                          //               bearColor: widget.style.secondaryBear,
+                          //               bullColor: widget.style.secondaryBull,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       SizedBox(
+                          //         child: Column(
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: [
+                          //             SizedBox(
+                          //               height: DATE_BAR_HEIGHT,
+                          //               child: Center(
+                          //                 child: Row(
+                          //                   children: [
+                          //                     Text(
+                          //                       "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                          //                       style: TextStyle(
+                          //                         color:
+                          //                             widget.style.borderColor,
+                          //                         fontSize: 12,
+                          //                       ),
+                          //                     ),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         width: PRICE_BAR_WIDTH,
+                          //       ),
+                          //     ],
                           //   ),
+                          // ),
                           // SizedBox(
-                          //   height: DATE_BAR_HEIGHT,
-                          //),
+                          //   child: Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       SizedBox(
+                          //         height: DATE_BAR_HEIGHT,
+                          //         child: Center(
+                          //           child: Row(
+                          //             children: [
+                          //               // Text(
+                          //               //   "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
+                          //               //   style: TextStyle(
+                          //               //     color:
+                          //               //     widget.style.borderColor,
+                          //               //     fontSize: 12,
+                          //               //   ),
+                          //               // ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   width: PRICE_BAR_WIDTH,
+                          // ),
+                          for (int i = 0;
+                              i < widget.subWindowDataContainer.data.length;
+                              i++)
+                            Expanded(
+                              flex: 1,
+                              child: buildRow(i, inRangeCandles),
+                            ),
+                          SizedBox(
+                            height: DATE_BAR_HEIGHT,
+                          ),
                         ],
                       ),
                       longPressY != null
                           ? Positioned(
-                              top: longPressY! - 10,
+                              top: longPressY!-10,
                               child: Row(
                                 children: [
                                   DashLine(
@@ -415,26 +417,17 @@ class _MobileChartState extends State<MobileChart> {
                                         .style.hoverIndicatorBackgroundColor,
                                     child: Center(
                                       child: Text(
-                                        longPressY! < maxHeight * 0.75
-                                            ? HelperFunctions.priceToString(
-                                            high -
-                                                (longPressY! - 20) /
-                                                    (maxHeight * 0.75 -
-                                                        40) *
-                                                    (high - low))
-                                            : HelperFunctions.addMetricPrefix(
-                                            HelperFunctions.getRoof(
-                                                volumeHigh) *
-                                                (1 -
-                                                    (longPressY! -
-                                                        maxHeight *
-                                                            0.75 -
-                                                        10) /
-                                                        (maxHeight * 0.25 -
-                                                            10))),
+                                        buildLongPress2Percent(
+                                            maxHeight,
+                                            longPressY,
+                                            widget.index,
+                                            widget.candles,
+                                            inRangeCandles,
+                                            high,
+                                            low),
                                         style: TextStyle(
                                           color:
-                                          widget.style.secondaryTextColor,
+                                              widget.style.secondaryTextColor,
                                           fontSize: 12,
                                         ),
                                       ),
@@ -442,29 +435,6 @@ class _MobileChartState extends State<MobileChart> {
                                     width: PRICE_BAR_WIDTH,
                                     height: 20,
                                   ),
-                                  // Container(
-                                  //   color: widget
-                                  //       .style.hoverIndicatorBackgroundColor,
-                                  //   child: Center(
-                                  //     child: Text(
-                                  //       buildLongPress2Percent(
-                                  //           maxHeight,
-                                  //           longPressY,
-                                  //           widget.index,
-                                  //           widget.candles,
-                                  //           inRangeCandles,
-                                  //           high,
-                                  //           low),
-                                  //       style: TextStyle(
-                                  //         color:
-                                  //             widget.style.secondaryTextColor,
-                                  //         fontSize: 12,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  //   width: PRICE_BAR_WIDTH,
-                                  //   height: 20,
-                                  // ),
                                 ],
                               ),
                             )
@@ -518,7 +488,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight * 0.75 - 40) *
                                           (high - low)));
                               if (widget.onChartPanStart != null) {
@@ -548,7 +518,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight * 0.75 - 40) *
                                           (high - low)));
                               if (widget.onChartPanUpadte != null) {
@@ -576,7 +546,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight *
                                                   (3 /
                                                       (3 +
@@ -596,8 +566,8 @@ class _MobileChartState extends State<MobileChart> {
                               }
                             }
                             setState(() {
-                              longPressX = null;
-                              longPressY = null;
+                              // longPressX = null;
+                              // longPressY = null;
                             });
                           },
                         ),
@@ -616,6 +586,8 @@ class _MobileChartState extends State<MobileChart> {
                                 widget.mainWindowDataContainer
                                     .toggleIndicatorVisibility(indicatorName);
                               });
+                              // widget.indicatorUpdated(
+                              //     0, widget.mainWindowDataContainer.indicators);
                             },
                             unvisibleIndicators: widget
                                 .mainWindowDataContainer.unvisibleIndicators,
@@ -671,8 +643,13 @@ class _MobileChartState extends State<MobileChart> {
             child: Padding(
               padding: const EdgeInsets.only(top: 0),
               child: SubIndicatorWidget(
+                onSetting: widget.onSubIndicatorSettingPressed,
                 candles: widget.candles,
-                indicatorDatas: widget.subWindowDataContainer.data,
+                indicatorDatas: widget.subWindowDataContainer.data
+                    .where((element) =>
+                        element.parentIndicator.name ==
+                        widget.subIndicator[i].name)
+                    .toList(),
                 indicatorData: widget.subWindowDataContainer,
                 index: widget.index,
                 barWidth: widget.candleWidth,
@@ -717,24 +694,19 @@ class _MobileChartState extends State<MobileChart> {
   String buildLongPress2Percent(double maxHeight, double? longPressY, int index,
       List<Candle> candles, List<Candle> inRangeCandles, high, low) {
     var div = 1 / (3 + widget.subIndicator.length);
-    if (longPressY! < maxHeight * 3 * div) {
-      var startP = 10;
-      var endP = 3 * div * maxHeight;
-      var range = endP - startP;
-      var v = (longPressY - startP) / range;
-
-      return HelperFunctions.priceToString(
-          high - (longPressY! - 10) / (maxHeight * 0.75 - 20) * (high - low));
+    if (longPressY! < (maxHeight) * 3 * div) {
+      double chartHeight = (maxHeight-DATE_BAR_HEIGHT) * 3 *div;
+      return HelperFunctions.priceToString((chartHeight -longPressY+5)/ (chartHeight) * (high - low) +low);
     }
 
     for (int i = 0; i < widget.subIndicator.length; i++) {
-      if (longPressY! > maxHeight * (3 + i) * div &&
-          longPressY < maxHeight * (4 + i) * div) {
+      if (longPressY> (maxHeight-DATE_BAR_HEIGHT) * (3 + i) * div &&
+          longPressY < (maxHeight-DATE_BAR_HEIGHT) * (4 + i) * div) {
         var h = widget.subIndicator[i].max!(index, candles, inRangeCandles);
         var l = widget.subIndicator[i].min!(index, candles, inRangeCandles);
 
-        var startP = (3 + i) * div * maxHeight - 10;
-        var endP = (4 + i) * div * maxHeight - 10;
+        var startP = (3 + i) * div * (maxHeight -DATE_BAR_HEIGHT);
+        var endP = (4 + i) * div * (maxHeight-DATE_BAR_HEIGHT);
         var range = endP - startP;
         var v = (longPressY - 10 - startP) / range;
         // return ;

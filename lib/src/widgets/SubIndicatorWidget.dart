@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../candlesticks.dart';
 import '../models/sub_window_indicator.dart';
 
-class SubIndicatorWidget extends LeafRenderObjectWidget {
+class SubIndicatorWidget extends StatelessWidget {
   final List<Candle> candles;
   final int index;
   final double barWidth;
@@ -21,7 +21,65 @@ class SubIndicatorWidget extends LeafRenderObjectWidget {
   SubIndicatorDataContainer indicatorData;
   List<SubIndicatorComponentData> indicatorDatas;
 
-  SubIndicatorWidget(
+  Function(int i) onSetting;
+
+  SubIndicatorWidget({
+    required this.candles,
+    required this.indicatorData,
+    required this.index,
+    required this.barWidth,
+    required this.high,
+    required this.low,
+    required this.indicator,
+    this.drawing = const [],
+    required List<SubIndicatorComponentData> this.indicatorDatas,
+    required this.onSetting,
+  }) {
+    endDate = candles[0].endDate;
+    beginDate = candles.last.endDate;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Positioned(
+        //     child: IconButton(
+        //   icon: Icon(Icons.settings),
+        //   onPressed: () {},
+        // )),
+        Container(
+          child: SubIndicatorWidgetCanvas(
+              candles: candles,
+              indicatorData: indicatorData,
+              index: index,
+              barWidth: barWidth,
+              high: high,
+              low: low,
+              indicator: indicator,
+              indicatorDatas: indicatorDatas),
+        ),
+      ],
+    );
+  }
+}
+
+class SubIndicatorWidgetCanvas extends LeafRenderObjectWidget {
+  final List<Candle> candles;
+  final int index;
+  final double barWidth;
+  final List<ChartDrawing> drawing;
+
+  SubIndicator indicator;
+  num high;
+  num low;
+  late DateTime beginDate;
+  late DateTime endDate;
+
+  SubIndicatorDataContainer indicatorData;
+  List<SubIndicatorComponentData> indicatorDatas;
+
+  SubIndicatorWidgetCanvas(
       {required this.candles,
       required this.indicatorData,
       required this.index,
@@ -33,37 +91,6 @@ class SubIndicatorWidget extends LeafRenderObjectWidget {
       required List<SubIndicatorComponentData> this.indicatorDatas}) {
     endDate = candles[0].endDate;
     beginDate = candles.last.endDate;
-    // indicators.forEach((indicator) {
-    //   indicator.indicatorComponentsStyles.forEach((indicatorComponent) {
-    //     indicatorComponentData.add(IndicatorComponentData(
-    //         indicator, indicatorComponent.name, indicatorComponent.bullColor));
-    //   });
-    // });
-    //
-    // indicators.forEach((indicator) {
-    //   final List<IndicatorComponentData> containers = indicatorComponentData
-    //       .where((element) => element.parentIndicator == indicator)
-    //       .toList();
-    //
-    //   print("s");
-    //   for (int i = 0; i < candles.length; i++) {
-    //     List<double?> indicatorDatas = List.generate(
-    //         indicator.indicatorComponentsStyles.length, (index) => null);
-    //
-    //     if (i + indicator.dependsOnNPrevCandles < candles.length) {
-    //       indicatorDatas = indicator.calculator(i, candles);
-    //     }
-    //
-    //     for (int i = 0; i < indicatorDatas.length; i++) {
-    //       containers[i].values.add(indicatorDatas[i]);
-    //       if (indicatorDatas[i] != null) {
-    //         // lows[i] = min(candles[i].low, indicatorDatas[i]!);
-    //         // highs[i] = max(candles[i].high, indicatorDatas[i]!);
-    //       }
-    //     }
-    //   }
-    //   print(indicators);
-    // });
   }
 
   @override
@@ -107,14 +134,15 @@ class LineChartRenderObject extends RenderBox {
   List<SubIndicatorComponentData> indicatorDatas;
 
   LineChartRenderObject(
-      this.candles,
-      this.index,
-      this.barWidth,
-      this.high,
-      this.low,
-      this.drawing,
-      this.indicatorData,
-      List<SubIndicatorComponentData> this.indicatorDatas);
+    this.candles,
+    this.index,
+    this.barWidth,
+    this.high,
+    this.low,
+    this.drawing,
+    this.indicatorData,
+    List<SubIndicatorComponentData> this.indicatorDatas,
+  );
 
   /// set size as large as possible
 
@@ -146,17 +174,16 @@ class LineChartRenderObject extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     double range = (high) / size.height;
-    var targetIndicator = indicatorDatas
-        .firstWhereOrNull((element) => element.parentIndicator == indicator);
+    var targetIndicator = indicatorDatas[0];
 
-    for (int li = 0; li < targetIndicator!.values.first.length; li++) {
+    for (int li = 0; li < targetIndicator.values.first.length; li++) {
       Path? path;
 
       for (int i = 0; (i + 1) * barWidth < size.width; i++) {
         if (i + index >= candles.length || i + index < 0) continue;
 
         var value =
-            targetIndicator!.values[i + index].reversed.toList()[li]!.value ??
+            targetIndicator.values[i + index].reversed.toList()[li]!.value ??
                 0.0;
 
         context.canvas.drawPath(

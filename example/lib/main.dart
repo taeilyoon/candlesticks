@@ -400,7 +400,7 @@ class _MyAppState extends State<MyApp> {
                     this.indicators.addAll(n);
                   });
                 });
-              },
+              }, onSubIndicatorSettingPressed: (int index) {  },
             );
           },
         ),

@@ -7,15 +7,14 @@ import 'package:flutter/material.dart';
 
 import '../../models/sub_indicator.dart';
 
-//Range = (-100~100)
-class VolumeIndicatorIndicator extends SubIndicator {
-  VolumeIndicatorIndicator({
+class MACDIndicatorIndicator extends SubIndicator {
+  MACDIndicatorIndicator({
     int periods = 0,
     required Color color,
     String? label,
   }) : super(
-            chartStyle: SubIndicatorChartType.stick,
-            name: label ?? "거래량 ${periods}",
+            chartStyle: SubIndicatorChartType.line,
+            name: label ?? "ADC ${periods}",
             dependsOnNPrevCandles: periods * 2,
             calculator: (index, candles) {
               return [candles[index].volume];
@@ -31,7 +30,7 @@ class VolumeIndicatorIndicator extends SubIndicator {
               return [
                 ColorWithCalculatorValue()
                   ..value = candles[index].volume
-                  ..color = candles[index + 1].volume < candles[index].volume
+                  ..color = candles[index + 1].volume > candles[index].volume
                       ? Colors.red
                       : Colors.blue
               ];

@@ -37,6 +37,8 @@ class _PriceColumnState extends State<PriceColumn> {
         10 -
         (widget.lastCandle.close - low) / (high - low) * chartHeight -
         MAIN_CHART_VERTICAL_PADDING;
+
+
   }
 
   @override
