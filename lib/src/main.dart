@@ -152,7 +152,7 @@ class _CandlesticksState extends State<Candlesticks> {
 
     if (subWindowDataContainer == null) {
       subWindowDataContainer =
-          SubIndicatorDataContainer(widget.subIndicator ?? [], widget.candles);
+          SubIndicatorDataContainer(widget.subIndicator , widget.candles);
     }
   }
 

@@ -488,7 +488,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight * 0.75 - 40) *
                                           (high - low)));
                               if (widget.onChartPanStart != null) {
@@ -518,7 +518,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight * 0.75 - 40) *
                                           (high - low)));
                               if (widget.onChartPanUpadte != null) {
@@ -546,7 +546,7 @@ class _MobileChartState extends State<MobileChart> {
                                       .floor();
                               double price = double.parse(
                                   HelperFunctions.priceToString(high -
-                                      (details.localPosition.dy! - 20) /
+                                      (details.localPosition.dy- 20) /
                                           (maxHeight *
                                                   (3 /
                                                       (3 +
@@ -700,7 +700,7 @@ class _MobileChartState extends State<MobileChart> {
     }
 
     for (int i = 0; i < widget.subIndicator.length; i++) {
-      if (longPressY! > (maxHeight-DATE_BAR_HEIGHT) * (3 + i) * div &&
+      if (longPressY> (maxHeight-DATE_BAR_HEIGHT) * (3 + i) * div &&
           longPressY < (maxHeight-DATE_BAR_HEIGHT) * (4 + i) * div) {
         var h = widget.subIndicator[i].max!(index, candles, inRangeCandles);
         var l = widget.subIndicator[i].min!(index, candles, inRangeCandles);

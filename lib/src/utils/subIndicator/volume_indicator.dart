@@ -31,7 +31,7 @@ class VolumeIndicatorIndicator extends SubIndicator {
               return [
                 ColorWithCalculatorValue()
                   ..value = candles[index].volume
-                  ..color = candles[index + 1].volume > candles[index].volume
+                  ..color = candles[index + 1].volume < candles[index].volume
                       ? Colors.red
                       : Colors.blue
               ];

@@ -82,7 +82,7 @@ extension ListNumExt<T extends num> on List<T> {
 extension ListExt<T> on List<T> {
   void addNotNull(T? value) {
     if (value == null) return;
-    add(value!);
+    add(value);
   }
 
   T? get firstOrNull {

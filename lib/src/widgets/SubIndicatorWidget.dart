@@ -176,14 +176,14 @@ class LineChartRenderObject extends RenderBox {
     double range = (high) / size.height;
     var targetIndicator = indicatorDatas[0];
 
-    for (int li = 0; li < targetIndicator!.values.first.length; li++) {
+    for (int li = 0; li < targetIndicator.values.first.length; li++) {
       Path? path;
 
       for (int i = 0; (i + 1) * barWidth < size.width; i++) {
         if (i + index >= candles.length || i + index < 0) continue;
 
         var value =
-            targetIndicator!.values[i + index].reversed.toList()[li]!.value ??
+            targetIndicator.values[i + index].reversed.toList()[li]!.value ??
                 0.0;
 
         context.canvas.drawPath(
