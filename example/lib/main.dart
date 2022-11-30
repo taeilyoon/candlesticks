@@ -237,7 +237,13 @@ class _MyAppState extends State<MyApp> {
               subIndicator: this.subIndicators,
               key: Key(currentSymbol + currentInterval),
               indicators: indicators,
-              candles: candles,
+              candles:[
+                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
+                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
+                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
+                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
+                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
+              ],
               onLoadMoreCandles: loadMoreCandles,
               onRemoveIndicator: (String indicator) {
                 setState(() {

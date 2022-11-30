@@ -47,9 +47,8 @@ class _PriceColumnState extends State<PriceColumn> {
         widget.chartHeight, widget.high, widget.low);
     final double priceTileHeight =
         widget.chartHeight / ((widget.high - widget.low) / priceScale);
-    final double newHigh = (widget.high ~/ priceScale + 1) * priceScale;
+    final double newHigh = (widget.high ~/ priceScale ) * priceScale;
     final double top = -priceTileHeight / priceScale * (newHigh - widget.high) +
-        MAIN_CHART_VERTICAL_PADDING -
         priceTileHeight / 2;
     return GestureDetector(
       onVerticalDragUpdate: (details) {
@@ -60,13 +59,13 @@ class _PriceColumnState extends State<PriceColumn> {
           children: [
             AnimatedPositioned(
               duration: Duration(milliseconds: 300),
-              top: top,
+              top: top- priceTileHeight,
               height:
-                  widget.chartHeight + 2 * MAIN_CHART_VERTICAL_PADDING - top,
+                  widget.chartHeight+top,
               width: widget.width,
               child: ListView(
                 controller: scrollController,
-                children: List<Widget>.generate(20, (i) {
+                children: List<Widget>.generate(30, (i) {
                   return AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     height: priceTileHeight,

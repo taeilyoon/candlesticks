@@ -4,7 +4,7 @@ import 'package:candlesticks/candlesticks.dart';
 
 class MovingAverageIndicator extends Indicator {
   MovingAverageIndicator(
-      {required int length, required Color color, String? label, String? name})
+      {required int length, required Color color, String? label, String? name,})
       : super(
             name: name ?? "MA " + length.toString(),
             dependsOnNPrevCandles: length,
@@ -18,5 +18,6 @@ class MovingAverageIndicator extends Indicator {
             indicatorComponentsStyles: [
               IndicatorStyle(name: "이동평균선", bullColor: color),
             ],
-            label: label);
+            label: label
+            );
 }

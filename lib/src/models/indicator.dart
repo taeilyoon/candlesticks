@@ -9,9 +9,6 @@ class Indicator {
   final String name;
   final String? label;
   bool visible = true;
-
-  /// Calculates indicator value for givien index.
-  /// if your indicator has muliple lines (values) always return results in the same order.
   @JsonKey(ignore: true)
   late List<double?> Function(int index, List<Candle> candles) calculator;
   final int dependsOnNPrevCandles;

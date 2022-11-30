@@ -155,7 +155,8 @@ class _MobileChartState extends State<MobileChart> {
         }
 
         // calculate priceScale
-        double chartHeight = maxHeight * 0.75 - 2 * MAIN_CHART_VERTICAL_PADDING;
+        var div = 1 / (3 + widget.subIndicator.length);
+        double chartHeight =  (maxHeight) * 3 *div;
 
         // calculate highest volume
         double volumeHigh = inRangeCandles.map((e) => e.volume).reduce(max);
@@ -188,14 +189,14 @@ class _MobileChartState extends State<MobileChart> {
                   color: widget.style.background,
                   child: Stack(
                     children: [
-                      TimeRow(
-                        style: widget.style,
-                        indicatorX: longPressX,
-                        candles: widget.candles,
-                        candleWidth: widget.candleWidth,
-                        indicatorTime: currentCandle?.endDate,
-                        index: widget.index,
-                      ),
+                      // TimeRow(
+                      //   style: widget.style,
+                      //   indicatorX: longPressX,
+                      //   candles: widget.candles,
+                      //   candleWidth: widget.candleWidth,
+                      //   indicatorTime: currentCandle?.endDate,
+                      //   index: widget.index,
+                      // ),
                       Column(
                         children: [
                           Expanded(
@@ -241,49 +242,42 @@ class _MobileChartState extends State<MobileChart> {
                                               ),
                                             ),
                                           ),
-                                          child: AnimatedPadding(
-                                            duration:
-                                                Duration(milliseconds: 300),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical:
-                                                    MAIN_CHART_VERTICAL_PADDING),
-                                            child: RepaintBoundary(
-                                              child: Stack(
-                                                children: [
-                                                  MainWindowIndicatorWidget(
-                                                    candles: widget.candles,
-                                                    indicatorDatas: widget
-                                                        .mainWindowDataContainer
-                                                        .indicatorComponentData,
-                                                    indicatorFills: widget
-                                                        .mainWindowDataContainer
-                                                        .fill,
-                                                    index: widget.index,
-                                                    candleWidth:
-                                                        widget.candleWidth,
-                                                    low: low,
-                                                    high: high,
-                                                    drawing:
-                                                        widget.drawing.first,
-                                                  ),
-                                                  CandleStickWidget(
-                                                    candles: widget.candles,
-                                                    candleWidth:
-                                                        widget.candleWidth,
-                                                    index: widget.index,
-                                                    high: high,
-                                                    low: low,
-                                                    bearColor: widget
-                                                        .style.primaryBear,
-                                                    bullColor: widget
-                                                        .style.primaryBull,
-                                                    onChartPanStart:
-                                                        widget.onChartPanStart,
-                                                    drawing:
-                                                        widget.drawing.first,
-                                                  ),
-                                                ],
-                                              ),
+                                          child: RepaintBoundary(
+                                            child: Stack(
+                                              children: [
+                                                MainWindowIndicatorWidget(
+                                                  candles: widget.candles,
+                                                  indicatorDatas: widget
+                                                      .mainWindowDataContainer
+                                                      .indicatorComponentData,
+                                                  indicatorFills: widget
+                                                      .mainWindowDataContainer
+                                                      .fill,
+                                                  index: widget.index,
+                                                  candleWidth:
+                                                      widget.candleWidth,
+                                                  low: low,
+                                                  high: high,
+                                                  drawing:
+                                                      widget.drawing.first,
+                                                ),
+                                                CandleStickWidget(
+                                                  candles: widget.candles,
+                                                  candleWidth:
+                                                      widget.candleWidth,
+                                                  index: widget.index,
+                                                  high: high,
+                                                  low: low,
+                                                  bearColor: widget
+                                                      .style.primaryBear,
+                                                  bullColor: widget
+                                                      .style.primaryBull,
+                                                  onChartPanStart:
+                                                      widget.onChartPanStart,
+                                                  drawing:
+                                                      widget.drawing.first,
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -307,88 +301,7 @@ class _MobileChartState extends State<MobileChart> {
                               ),
                             ),
                           ),
-                          // Expanded(
-                          //   flex: 1,
-                          //   child: Row(
-                          //     children: [
-                          //       Expanded(
-                          //         child: Container(
-                          //           decoration: BoxDecoration(
-                          //             border: Border(
-                          //               right: BorderSide(
-                          //                 color: widget.style.borderColor,
-                          //                 width: 1,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           child: Padding(
-                          //             padding: const EdgeInsets.only(top: 10.0),
-                          //             child: VolumeWidget(
-                          //               candles: widget.candles,
-                          //               barWidth: widget.candleWidth,
-                          //               index: widget.index,
-                          //               high:
-                          //                   HelperFunctions.getRoof(volumeHigh),
-                          //               bearColor: widget.style.secondaryBear,
-                          //               bullColor: widget.style.secondaryBull,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       SizedBox(
-                          //         child: Column(
-                          //           crossAxisAlignment:
-                          //               CrossAxisAlignment.start,
-                          //           children: [
-                          //             SizedBox(
-                          //               height: DATE_BAR_HEIGHT,
-                          //               child: Center(
-                          //                 child: Row(
-                          //                   children: [
-                          //                     Text(
-                          //                       "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
-                          //                       style: TextStyle(
-                          //                         color:
-                          //                             widget.style.borderColor,
-                          //                         fontSize: 12,
-                          //                       ),
-                          //                     ),
-                          //                   ],
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //         width: PRICE_BAR_WIDTH,
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       SizedBox(
-                          //         height: DATE_BAR_HEIGHT,
-                          //         child: Center(
-                          //           child: Row(
-                          //             children: [
-                          //               // Text(
-                          //               //   "-${HelperFunctions.addMetricPrefix(HelperFunctions.getRoof(volumeHigh))}",
-                          //               //   style: TextStyle(
-                          //               //     color:
-                          //               //     widget.style.borderColor,
-                          //               //     fontSize: 12,
-                          //               //   ),
-                          //               // ),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   width: PRICE_BAR_WIDTH,
-                          // ),
+
                           for (int i = 0;
                               i < widget.subWindowDataContainer.data.length;
                               i++)
@@ -566,8 +479,8 @@ class _MobileChartState extends State<MobileChart> {
                               }
                             }
                             setState(() {
-                              longPressX = null;
-                              longPressY = null;
+                              // longPressX = null;
+                              // longPressY = null;
                             });
                           },
                         ),
@@ -695,8 +608,10 @@ class _MobileChartState extends State<MobileChart> {
       List<Candle> candles, List<Candle> inRangeCandles, high, low) {
     var div = 1 / (3 + widget.subIndicator.length);
     if (longPressY! < (maxHeight) * 3 * div) {
-      double chartHeight = (maxHeight-DATE_BAR_HEIGHT) * 3 *div;
-      return HelperFunctions.priceToString((chartHeight -longPressY+5)/ (chartHeight) * (high - low) +low);
+      double chartHeight = (maxHeight) * 3 *div ;
+      return HelperFunctions.priceToString(
+        (chartHeight - longPressY  )/ (chartHeight) * (high - low) +low
+        );
     }
 
     for (int i = 0; i < widget.subIndicator.length; i++) {
