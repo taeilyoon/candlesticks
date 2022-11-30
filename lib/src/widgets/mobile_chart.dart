@@ -566,8 +566,8 @@ class _MobileChartState extends State<MobileChart> {
                               }
                             }
                             setState(() {
-                              // longPressX = null;
-                              // longPressY = null;
+                              longPressX = null;
+                              longPressY = null;
                             });
                           },
                         ),
