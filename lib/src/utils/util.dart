@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:candlesticks/candlesticks.dart';
 
 extension CandleCalulate on Candle {
@@ -6,7 +8,56 @@ extension CandleCalulate on Candle {
   }
 }
 
+na(num? n){
+  return n == null ? 0: n;
+}
+
+
+extension numListExt on List<num>{
+  num exponentialMovingAverage(int len, {int? index}){
+    if(index == null){
+      index = this.length - 1;
+    }
+    var sum = 0.0;
+    var count = 0;
+    for(var i = index; i >= 0; i--){
+      sum += this[i];
+      count++;
+      if(count == len){
+        break;
+      }
+    }
+    return sum / len;
+  }
+
+}
+
+
+class Math {
+  static double Max(double a, double b) {
+    return a > b ? a : b;
+  }
+
+  static double Abs(double a) {
+    return a > 0 ? a : -a;
+  }
+}
+
 extension CandleListCalulate on List<Candle> {
+
+  trueRange(int index){
+    var truerange = 0.0;
+    if(index == 0){
+      truerange = this[index].high - this[index].low;
+    }else{
+      truerange = max(this[index].high - this[index].low, max((this[index].high - this[index + 1].close).abs(), (this[index + 1].close - this[index+1].low).abs()));
+    }
+    return truerange;
+  }
+
+  num taChange(int index, num Function(Candle e) mapper){
+    return na(mapper(this[index])) - na(mapper(this[index-1]));
+  }
   num hlcMovingAverage(int periods, {int index = 0}) {
     var avg = 0.0;
     this.skip(index).take(periods).forEach((element) {
@@ -17,10 +68,10 @@ extension CandleListCalulate on List<Candle> {
 
   num simpleMovingAverage(int periods, {int index = 0}) {
     var avg = 0.0;
-    this.skip(0).take(periods).forEach((element) {
-      avg += element.close;
+    this.skip(0).take(periods).toList().asMap().forEach((i ,element) {
+      avg += element.close * (periods - i) / periods;
     });
-    return avg / periods;
+    return avg / periods*2;
   }
 
   num weightMovingAverage(int periods, {int index = 0}) {
@@ -31,13 +82,6 @@ extension CandleListCalulate on List<Candle> {
     return avg / periods;
   }
 
-  num exponentialMovingAverage(int periods, {int index = 0}) {
-    var avg = 0.0;
-    this.skip(index).take(periods).forEach((element) {
-      avg += element.close;
-    });
-    return avg / periods;
-  }
 
   num sum(num Function(Candle c, int index) loop,
       {required int periods, int index = 0}) {
@@ -48,6 +92,8 @@ extension CandleListCalulate on List<Candle> {
     return avg / periods;
   }
 }
+
+
 
 extension intExt on int {
   int get sigma => (2 * this + 1 / 2).floor();

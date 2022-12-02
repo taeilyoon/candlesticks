@@ -244,7 +244,7 @@ class LineChartRenderObject extends RenderBox {
         context.canvas.drawPath(
             path,
             Paint()
-              ..color = Colors.black
+              ..color = targetIndicator.values[0].reversed.toList()[li]!.color
               ..strokeWidth = 1
               ..style = PaintingStyle.stroke);
     }

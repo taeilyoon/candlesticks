@@ -72,19 +72,22 @@ class _MyAppState extends State<MyApp> {
     //     label: "Bollinger"),
     // WeightedMovingAverageIndicator(
     //     length: 100, color: Colors.green.shade600, label: "WMA"),
-    IchimokuIndicator(
-        short: 9,
-        middle: 26,
-        long: 52,
-        shortLineColor: Colors.red,
-        middleLineColor: Colors.orange,
-        longLineColor: Colors.yellow,
-        leadLine1Color: Colors.black,
-        leadLine2Color: Colors.blue),
+    // IchimokuIndicator(
+    //     short: 9,
+    //     middle: 26,
+    //     long: 52,
+    //     shortLineColor: Colors.red,
+    //     middleLineColor: Colors.orange,
+    //     longLineColor: Colors.yellow,
+    //     leadLine1Color: Colors.black,
+    //     leadLine2Color: Colors.blue),
+    InfurenceIndicator (
+        label: "Influence", shortPeriod: 9, midPeriod: 26, ),
   ];
   List<SubIndicator> subIndicators = [
     VolumeIndicatorIndicator(color: Colors.black),
-    CommodityChannelIndexIndicator(color: Colors.white)
+    ADXIndicator(color: Colors.black),
+    // CommodityChannelIndexIndicator(color: Colors.white)
   ];
 
   @override
@@ -237,13 +240,7 @@ class _MyAppState extends State<MyApp> {
               subIndicator: this.subIndicators,
               key: Key(currentSymbol + currentInterval),
               indicators: indicators,
-              candles:[
-                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
-                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
-                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
-                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
-                Candle(endDate: DateTime.now(), startDate: DateTime.now(), high: 15000, low: 14000, open: 14300, close: 14400, volume: 10),
-              ],
+              candles: candles,
               onLoadMoreCandles: loadMoreCandles,
               onRemoveIndicator: (String indicator) {
                 setState(() {

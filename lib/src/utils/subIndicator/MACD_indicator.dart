@@ -9,31 +9,39 @@ import '../../models/sub_indicator.dart';
 
 class MACDIndicatorIndicator extends SubIndicator {
   MACDIndicatorIndicator({
-    int periods = 0,
+    int shortPeriod = 0,
+    int longPeriod = 0,
     required Color color,
     String? label,
   }) : super(
             chartStyle: SubIndicatorChartType.line,
-            name: label ?? "ADC ${periods}",
-            dependsOnNPrevCandles: periods * 2,
+            name: label ?? "ADC ${shortPeriod}",
+            dependsOnNPrevCandles: 0,
             calculator: (index, candles) {
               return [candles[index].volume];
             },
             calculatorWithStyle: (index, candles) {
-              if (index == candles.length - 1) {
-                return [
-                  ColorWithCalculatorValue()
-                    ..value = candles[index].volume
-                    ..color = color
-                ];
+              var shortValue = null;
+              var longValue = null;
+
+              if(candles.length - index -1>= shortPeriod) {
+                var nc = candles.sublist( index, candles.length).map((e) => e.close as num).toList();
+                shortValue = nc.exponentialMovingAverage(shortPeriod, index: index);
               }
+
+
+              if(candles.length - index -1>= longPeriod) {
+                var nc = candles.sublist( index, candles.length).map((e) => e.close as num).toList();
+                longValue = nc.exponentialMovingAverage(longPeriod, index: index);
+              }
+
               return [
-                ColorWithCalculatorValue()
-                  ..value = candles[index].volume
-                  ..color = candles[index + 1].volume > candles[index].volume
-                      ? Colors.red
-                      : Colors.blue
+                ColorWithCalculatorValue(
+                    color: color,
+                    value: shortValue != null && longValue != null ? shortValue - longValue : null)
               ];
+
+
             },
             max: (i, c, c2) {
               return c2.map((e) => e.volume).toList().max();

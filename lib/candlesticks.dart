@@ -17,3 +17,5 @@ export 'src/utils/util.dart';
 export 'src/widgets/candle_stick_widget.dart';
 export 'src/widgets/line_chart_widget.dart';
 export 'src/widgets/toolbar_action.dart';
+export 'src/utils/subIndicator/ADX_indicator.dart';
+export 'src/utils/indicators/index.dart';

@@ -8,52 +8,120 @@ import 'package:flutter/material.dart';
 import '../../models/sub_indicator.dart';
 import 'dart:math';
 
-class ADXIndicatorIndicator extends SubIndicator {
-  ADXIndicatorIndicator({
-    int periods = 1,
+class ADXIndicator extends SubIndicator {
+  ADXIndicator({
+    int adxLen = 14,
+    int diLen = 14,
     required Color color,
     String? label,
   }) : super(
-      chartStyle: SubIndicatorChartType.line,
-      name: label ?? "ADC ${periods}",
-      dependsOnNPrevCandles: periods * 2,
-      calculator: (index, candles) {
-        return [candles[index].volume];
-      },
-      calculatorWithStyle: (index, candles) {
-        var trueRange = max(
-            max(
-                candles[index].high - candles[index].low,
-                (candles[index].high - nz(candles[index + 1].close))
-                    .abs()),
-            (candles[index].low - nz(candles[index + 1].close)).abs());
+            chartStyle: SubIndicatorChartType.line0,
+            name: label ?? "ADX ${adxLen}",
+            dependsOnNPrevCandles: adxLen * 2,
+            calculator: (index, candles) {
+              return [candles[index].volume];
+            },
+            calculatorWithStyle: (index, candles) {
+              try {
+                if (candles.length - index < 2) {
+                  return [];
+                }
+                // DI+
+                var left = (index) => candles.length - 2 < index
+                    ? 0
+                    : candles[index].high - candles[index + 1].high > 0 &&
+                            candles[index].high - candles[index + 1].high >
+                                candles[index + 1].low - candles[index].low
+                        ? candles[index].high - candles[index + 1].high
+                        : 0;
 
-        var directionalMovementPlus = candles[index].high -
-            nz(candles[index + 1].high) >
-            nz(candles[index + 1].low) - candles[index].low ? max(
-            candles[index].high - nz(candles[index + 1].high), 0) : 0;
-        var directionalMovementMinus = nz(candles[index+1].low) - candles[index].low > candles[index].high - nz(candles[index+1].high)
-            ? max(nz(candles[index+1].low) - candles[index].low, 0)
-            : 0;
+                var right = (index) => candles.length - 2 < index
+                    ? 0
+                    : (Math.Max(
+                        Math.Max(
+                            candles[index].high - candles[index].low,
+                            Math.Abs(candles[index + 1].close -
+                                candles[index].high)),
+                        Math.Abs(
+                            candles[index + 1].close - candles[index].low)));
 
+                var DPleftList =
+                    candles.map((e) => left(candles.indexOf(e))).toList();
+                var DPrightList =
+                    candles.map((e) => right(candles.indexOf(e))).toList();
 
+                // DI-
+                var mleft = (index) =>candles.length - 2 < index
+                    ? 0
+                    :
+                (candles[index + 1].low - candles[index].low > 0 &&
+                            candles[index].high - candles[index + 1].high <
+                                candles[index + 1].low - candles[index].low
+                        ? candles[index + 1].low - candles[index].low
+                        : 0);
+                var mright = (index) =>candles.length - 2 < index
+                    ? 0
+                    :  Math.Max(
+                    Math.Max(
+                        candles[index].high - candles[index].low,
+                        Math.Abs(
+                            candles[index + 1].close - candles[index].high)),
+                    Math.Abs(candles[index + 1].close - candles[index].low));
 
+                var DMleftList =
+                    candles.map((e) => mleft(candles.indexOf(e))).toList();
+                var DMrightList =
+                    candles.map((e) => mright(candles.indexOf(e))).toList();
 
-        var plusm = candles[index].high - candles[index + 1].high;
-        var minusm = candles[index + 1].low - candles[index].low;
+                var dpleftAvg = (index) =>
+                    DPleftList.exponentialMovingAverage(adxLen, index: index);
+                var dprightAvg = (index) =>
+                    DPrightList.exponentialMovingAverage(adxLen, index: index);
+                var dmleftAvg = (index) =>
+                    DMleftList.exponentialMovingAverage(adxLen, index: index);
+                var dmrightAvg = (index) =>
+                    DMrightList.exponentialMovingAverage(adxLen, index: index);
 
-        if (plusm > minusm) {}
+                var diPlus =
+                    (index) => dpleftAvg(index) / dprightAvg(index) * 100;
+                var diMinus =
+                    (index) => dmleftAvg(index) / dmrightAvg(index) * 100;
 
-        return [];
-      },
-      max: (i, c, c2) {
-        return c2.map((e) => e.volume).toList().max();
-      },
-      min: (i, c, _) {
-        return 0;
-      }
-    // indicatorComponentsStyles: [
-    //   IndicatorStyle(name: "cci", bullColor: color),
-    // ]
-  );
+                var dx = (index) =>
+                    Math.Abs(diPlus(index) - diMinus(index)) /
+                    (diPlus(index) + diMinus(index)) *
+                    100;
+                var adx = candles
+                    .map((e) => dx(candles.indexOf(e)))
+                    .toList()
+                    .exponentialMovingAverage(adxLen, index: index);
+
+                return [
+                  ColorWithCalculatorValue(
+                    color: Colors.yellow,
+                    value: adx.toDouble(),
+                  ),
+                  ColorWithCalculatorValue(
+                    color: Colors.red,
+                    value: diMinus(index).toDouble(),
+                  ),
+                  ColorWithCalculatorValue(
+                    color: Colors.green,
+                    value: diPlus(index).toDouble(),
+                  ),
+                ];
+              } catch (e) {
+                return [];
+              }
+            },
+            max: (i, c, c2) {
+              return 100;
+            },
+            min: (i, c, _) {
+              return 0;
+            },
+            // indicatorComponentsStyles: [
+            //   IndicatorStyle(name: "cci", bullColor: color),
+            // ]
+            );
 }
