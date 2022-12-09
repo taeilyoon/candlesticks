@@ -21,9 +21,9 @@ class InfurenceIndicator extends Indicator {
 
 
 
-        if (candles.length - index >= (shortPeriod - 1))
+        if ( candles.length >= shortPeriod+index )
         {
-          var range = candles.sublist(candles.length - index - (shortPeriod ), candles.length - index);
+          var range = candles.sublist(index, index + shortPeriod);
 
           var high = range.map((x) => x.high).toList().max();
           var low = range.map((x) => x.low).toList().min();
@@ -31,9 +31,9 @@ class InfurenceIndicator extends Indicator {
           change = (high+ low)/2;
         }
 
-        if (candles.length - index >= (midPeriod - 1))
+        if (candles.length >= midPeriod+index)
         {
-          var range = candles.sublist(candles.length - index - (midPeriod ), candles.length - index );
+          var range = candles.sublist(index, index + midPeriod );
 
           var high = range.map((x) => x.high).toList().max();
           var low = range.map((x) => x.low).toList().min();
@@ -45,18 +45,18 @@ class InfurenceIndicator extends Indicator {
           before = candles[index - midPeriod -1].close;
 
         // 세력중심선
-        if (candles.length-index >= shortPeriod)
+        if (candles.length >= shortPeriod+index)
         {
-          var lowest = candles.sublist(candles.length-index - shortPeriod, candles.length-index).map((x) => x.low).toList().min();
-          var hignest = candles.sublist(candles.length-index - shortPeriod, candles.length-index).map((x) => x.high).toList().max();
+          var lowest = candles.sublist(index , index+shortPeriod).map((x) => x.low).toList().min();
+          var hignest = candles.sublist(index , index+shortPeriod).map((x) => x.high).toList().max();
 
-          infCenter = lowest + (hignest - lowest)*0.618;
+          infCenter = lowest + (hignest - lowest) *0.618;
         }
         // 세력중심선
-        if (candles.length - index>= (shortPeriod - 1))
+        if (candles.length >= shortPeriod+index+1)
         {
-          var lowest = candles.sublist(candles.length - index- (shortPeriod - 1), candles.length - index-  1).map((e) => e.low).toList().min();
-          var hignest = candles.sublist(candles.length - index- (shortPeriod - 1), candles.length - index-  1).map((e) => e.high).toList().max();
+          var lowest = candles.sublist(index +1 , index+shortPeriod).map((e) => e.low).toList().min();
+          var hignest = candles.sublist(index +1, index+shortPeriod).map((e) => e.high).toList().max();
 
           infChange = candles[index].close > (lowest + ((hignest - lowest) * 0.618)) ? candles[index].high : candles[index].low;
         }

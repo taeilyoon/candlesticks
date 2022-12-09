@@ -567,9 +567,9 @@ class _MobileChartState extends State<MobileChart> {
                 index: widget.index,
                 barWidth: widget.candleWidth,
                 low: widget.subIndicator[i].min!(
-                    widget.index, widget.candles, inRangeCandles),
+                    widget.index, widget.candles,widget.subWindowDataContainer.data[i].values),
                 high: widget.subIndicator[i].max!(
-                    widget.index, widget.candles, inRangeCandles),
+                    widget.index, widget.candles, widget.subWindowDataContainer.data[i].values),
                 drawing: widget.drawing.first,
                 indicator: widget.subIndicator[i],
               ),
@@ -586,7 +586,7 @@ class _MobileChartState extends State<MobileChart> {
                   child: Row(
                     children: [
                       Text(
-                        "${HelperFunctions.addMetricPrefix(widget.subIndicator[i].max!(widget.index, widget.candles, inRangeCandles).toDouble())}",
+                        "${HelperFunctions.addMetricPrefix(widget.subIndicator[i].max!(widget.index, widget.candles, widget.subWindowDataContainer.data[i].values).toDouble())}",
                         style: TextStyle(
                           color: widget.style.borderColor,
                           fontSize: 12,
@@ -617,8 +617,8 @@ class _MobileChartState extends State<MobileChart> {
     for (int i = 0; i < widget.subIndicator.length; i++) {
       if (longPressY> (maxHeight-DATE_BAR_HEIGHT) * (3 + i) * div &&
           longPressY < (maxHeight-DATE_BAR_HEIGHT) * (4 + i) * div) {
-        var h = widget.subIndicator[i].max!(index, candles, inRangeCandles);
-        var l = widget.subIndicator[i].min!(index, candles, inRangeCandles);
+        var h = widget.subIndicator[i].max!(index, candles, widget.subWindowDataContainer.data[i].values);
+        var l = widget.subIndicator[i].min!(index, candles,  widget.subWindowDataContainer.data[i].values);
 
         var startP = (3 + i) * div * (maxHeight -DATE_BAR_HEIGHT);
         var endP = (4 + i) * div * (maxHeight-DATE_BAR_HEIGHT);

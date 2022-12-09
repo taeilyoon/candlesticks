@@ -37,7 +37,7 @@ class VolumeIndicatorIndicator extends SubIndicator {
               ];
             },
             max: (i, c, c2) {
-              return c2.map((e) => e.volume).toList().max();
+              return c2.map((e) => e.map((e) => e?.value ??0).toList().reduce((value, element) => Math.Max(value, element))).toList().max();
             },
             min: (i, c, _) {
               return 0;
