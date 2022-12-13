@@ -1,84 +1,111 @@
 import 'package:candlesticks/candlesticks.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+import '../converters/color_converter.dart';
+
+part 'influence_inidcator.g.dart';
+
+@JsonSerializable()
 class InfurenceIndicator extends Indicator {
+  String koreanName = "세력차트";
+
+  int shortPeriod;
+  int midPeriod;
+  @ColorConverter()
+  Color centerColor;
+  @ColorConverter()
+  Color centerChange;
+  String name;
+
   InfurenceIndicator(
-      {
-        required int shortPeriod,
-        required int midPeriod,
-        Color centerColor = Colors.blue,
-        Color centerChange = Colors.red,
-        String? label, String? name})
+      {required int this.shortPeriod,
+      required int this.midPeriod,
+      Color this.centerColor = Colors.blue,
+      Color this.centerChange = Colors.red,
+      String? label,
+      String this.name = "세력 중심선"})
       : super(
-      name: name ?? "세력 중심선",
-      dependsOnNPrevCandles: midPeriod,
-      calculator: (index, candles) {
-        var change = null;
-        var standard = null;
-        var before = null;
-        var infCenter = null;
-        var infChange = null;
+            name: name,
+            dependsOnNPrevCandles: midPeriod,
+            calculator: (index, candles) {
+              var change = null;
+              var standard = null;
+              var before = null;
+              var infCenter = null;
+              var infChange = null;
 
+              if (candles.length >= shortPeriod + index) {
+                var range = candles.sublist(index, index + shortPeriod);
 
+                var high = range.map((x) => x.high).toList().max();
+                var low = range.map((x) => x.low).toList().min();
 
-        if (candles.length - index >= (shortPeriod - 1))
-        {
-          var range = candles.sublist(candles.length - index - (shortPeriod ), candles.length - index);
+                change = (high + low) / 2;
+              }
 
-          var high = range.map((x) => x.high).toList().max();
-          var low = range.map((x) => x.low).toList().min();
+              if (candles.length >= midPeriod + index) {
+                var range = candles.sublist(index, index + midPeriod);
 
-          change = (high+ low)/2;
-        }
+                var high = range.map((x) => x.high).toList().max();
+                var low = range.map((x) => x.low).toList().min();
 
-        if (candles.length - index >= (midPeriod - 1))
-        {
-          var range = candles.sublist(candles.length - index - (midPeriod ), candles.length - index );
+                change = (high + low) / 2;
+              }
 
-          var high = range.map((x) => x.high).toList().max();
-          var low = range.map((x) => x.low).toList().min();
+              if (index > (midPeriod + 1))
+                before = candles[index - midPeriod - 1].close;
 
-          change = (high+ low)/2;
-        }
+              // 세력중심선
+              if (candles.length >= shortPeriod + index) {
+                var lowest = candles
+                    .sublist(index, index + shortPeriod)
+                    .map((x) => x.low)
+                    .toList()
+                    .min();
+                var hignest = candles
+                    .sublist(index, index + shortPeriod)
+                    .map((x) => x.high)
+                    .toList()
+                    .max();
 
-        if (index > (midPeriod + 1))
-          before = candles[index - midPeriod -1].close;
+                infCenter = lowest + (hignest - lowest) * 0.618;
+              }
+              // 세력중심선
+              if (candles.length >= shortPeriod + index + 1) {
+                var lowest = candles
+                    .sublist(index + 1, index + shortPeriod)
+                    .map((e) => e.low)
+                    .toList()
+                    .min();
+                var hignest = candles
+                    .sublist(index + 1, index + shortPeriod)
+                    .map((e) => e.high)
+                    .toList()
+                    .max();
 
-        // 세력중심선
-        if (candles.length-index >= shortPeriod)
-        {
-          var lowest = candles.sublist(candles.length-index - shortPeriod, candles.length-index).map((x) => x.low).toList().min();
-          var hignest = candles.sublist(candles.length-index - shortPeriod, candles.length-index).map((x) => x.high).toList().max();
+                infChange = candles[index].close >
+                        (lowest + ((hignest - lowest) * 0.618))
+                    ? candles[index].high
+                    : candles[index].low;
+              }
 
-          infCenter = lowest + (hignest - lowest)*0.618;
-        }
-        // 세력중심선
-        if (candles.length - index>= (shortPeriod - 1))
-        {
-          var lowest = candles.sublist(candles.length - index- (shortPeriod - 1), candles.length - index-  1).map((e) => e.low).toList().min();
-          var hignest = candles.sublist(candles.length - index- (shortPeriod - 1), candles.length - index-  1).map((e) => e.high).toList().max();
+              return [infCenter, infChange];
+            },
+            indicatorComponentsStyles: [
+              IndicatorStyle(name: "세력 중심선", bullColor: centerColor),
+              IndicatorStyle(name: "세력 전환선", bullColor: centerChange),
+            ],
+            indicatorFill: [
+              IndicatorStyle(
+                  name: "cloud1",
+                  bullColor: centerChange.withOpacity(0.3),
+                  bearColor: centerColor.withOpacity(0.3),
+                  startIndex: 0,
+                  endIndex: 1),
+            ],
+            label: label);
 
-          infChange = candles[index].close > (lowest + ((hignest - lowest) * 0.618)) ? candles[index].high : candles[index].low;
-        }
-
-        return [
-          infCenter,
-          infChange
-        ];
-
-      },
-      indicatorComponentsStyles: [
-        IndicatorStyle(name: "세력 중심선", bullColor: centerColor),
-        IndicatorStyle(name: "세력 전환선", bullColor: centerChange),
-      ],
-      indicatorFill: [
-        IndicatorStyle(
-            name: "cloud1",
-            bullColor: centerChange.withOpacity(0.3),
-            bearColor: centerColor.withOpacity(0.3),
-            startIndex: 0,
-            endIndex: 1),
-      ],
-      label: label);
+  factory InfurenceIndicator.fromJson(Map<String, dynamic> json) => _$InfurenceIndicatorFromJson(json);
+  Map<String, dynamic> toJson() => _$InfurenceIndicatorToJson(this);
 }
-

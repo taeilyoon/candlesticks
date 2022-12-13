@@ -22,7 +22,6 @@ class ADXIndicator extends SubIndicator {
               return [candles[index].volume];
             },
             calculatorWithStyle: (index, candles) {
-              try {
                 if (candles.length - index < 2) {
                   return [];
                 }
@@ -91,33 +90,29 @@ class ADXIndicator extends SubIndicator {
                     Math.Abs(diPlus(index) - diMinus(index)) /
                     (diPlus(index) + diMinus(index)) *
                     100;
-                var adx = candles
-                    .map((e) => dx(candles.indexOf(e)))
-                    .toList()
-                    .exponentialMovingAverage(adxLen, index: index);
 
-                return [
-                  ColorWithCalculatorValue(
-                    color: Colors.yellow,
-                    value: adx.toDouble(),
-                  ),
-                  ColorWithCalculatorValue(
-                    color: Colors.red,
-                    value: diMinus(index).toDouble(),
-                  ),
-                  ColorWithCalculatorValue(
-                    color: Colors.green,
-                    value: diPlus(index).toDouble(),
-                  ),
-                ];
-              } catch (e) {
-                return [];
-              }
+                if(candles.length > index+adxLen*2){
+                  var adx = List.generate(adxLen+1, (i) => index+i)
+                      .map((e) => dx(e))
+                      .toList();
+
+                  var adxList = adx.exponentialMovingAverage(adxLen, index: 0);
+                  return [
+                    ColorWithCalculatorValue(
+                      color: Colors.yellow,
+                      value: adxList.toDouble(),
+                    ),
+                  ];
+                }else{
+                  return [];
+                }
+
+
             },
-            max: (i, c, c2) {
+            max: (i, c, c2, start, end) {
               return 100;
             },
-            min: (i, c, _) {
+            min: (i, c, _, start, end) {
               return 0;
             },
             // indicatorComponentsStyles: [

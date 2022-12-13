@@ -1,20 +1,50 @@
 import 'dart:ui';
 
 import 'package:candlesticks/candlesticks.dart';
+import 'package:candlesticks/src/utils/converters/color_converter.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+
+part 'ilmok_indicator.g.dart';
+
+
+@JsonSerializable()
 class IchimokuIndicator extends Indicator {
+  String koreanName = "일목균형표";
+
+  int short;
+  int middle;
+  int long;
+  @ColorConverter()
+  Color shortLineColor;
+  @ColorConverter()
+  Color longLineColor;
+  @ColorConverter()
+  Color middleLineColor;
+  @ColorConverter()
+  Color leadLine1Color;
+  @ColorConverter()
+  Color leadLine2Color;
+
+  String name;
+
+  factory IchimokuIndicator.fromJson(Map<String, dynamic> json) =>
+      _$IchimokuIndicatorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IchimokuIndicatorToJson(this);
+
   IchimokuIndicator(
-      {required int short,
-      required int middle,
-      required int long,
-      required Color shortLineColor,
-      required Color middleLineColor,
-      required Color longLineColor,
-      required Color leadLine1Color,
-      required Color leadLine2Color,
-      String? label, String? name})
+      {required int this.short,
+      required int this.middle,
+      required int this.long,
+      required Color this.shortLineColor,
+      required Color this.middleLineColor,
+      required Color this.longLineColor,
+      required Color this.leadLine1Color,
+      required Color this.leadLine2Color,
+      String? label, required this.name})
       : super(
-            name: name ?? "IchiMoku ${short.toString()}/ ${middle.toString()}/ $long",
+            name: name,
             dependsOnNPrevCandles: middle,
             calculator: (index, candles) {
               double? conversionLine = null;
@@ -109,4 +139,5 @@ class IchimokuIndicator extends Indicator {
                   endIndex: 4),
             ],
             label: label);
+
 }

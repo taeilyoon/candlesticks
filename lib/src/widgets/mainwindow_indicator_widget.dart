@@ -12,7 +12,6 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
   final double high;
   final double low;
   final List<ChartDrawing> drawing;
-  Duration gap;
 
   final List<Candle> candles;
 
@@ -26,13 +25,12 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
       required this.high,
       this.drawing = const [],
       required List<Candle> this.candles,
-      this.gap = const Duration(hours: 1),
       List<IndicatorFillData> this.indicatorFills = const []});
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return MainWindowIndicatorRenderObject(indicatorDatas, index, candleWidth,
-        low, high, drawing, candles, gap, indicatorFills);
+        low, high, drawing, candles, indicatorFills);
   }
 
   @override
@@ -50,7 +48,6 @@ class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
     candlestickRenderObject._high = high;
     candlestickRenderObject._low = low;
     candlestickRenderObject.drawing = drawing;
-    candlestickRenderObject.gap = gap;
     candlestickRenderObject.indicatorFills = indicatorFills;
     candlestickRenderObject.markNeedsPaint();
     super.updateRenderObject(context, renderObject);
@@ -65,7 +62,6 @@ class MainWindowIndicatorRenderObject extends RenderBox {
   late double _high;
   late List<ChartDrawing> drawing;
   final List<Candle> candles;
-  Duration gap;
 
   late List<IndicatorFillData> indicatorFills;
 
@@ -77,7 +73,6 @@ class MainWindowIndicatorRenderObject extends RenderBox {
       double high,
       this.drawing,
       this.candles,
-      this.gap,
       List<IndicatorFillData> indicatorFill) {
     _indicatorDatas = indicatorDatas;
     _index = index;
@@ -242,15 +237,8 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                       range);
         }
       }
-
-      // if (path != null)
-      //   context.canvas.drawPath(
-      //       path,
-      //       Paint()
-      //         ..color = element.color
-      //         ..strokeWidth = 1
-      //         ..style = PaintingStyle.stroke);
     });
+
     var showCandleLength = (size.width / _candleWidth);
 
     for (ChartDrawing draw in drawing) {

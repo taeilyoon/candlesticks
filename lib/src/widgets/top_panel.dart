@@ -51,116 +51,140 @@ class _TopPanelState extends State<TopPanel> {
                   )
                 : Container(),
           ),
-          showIndicatorNames || widget.indicators.length == 1
-              ? Column(
-                  children: widget.indicators
-                      .map(
-                        (e) => _PanelButton(
-                          child: Row(
-                            children: [
-                              Text(e.name),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  widget.toggleIndicatorVisibility(e.name);
-                                  widget.indicatorUpdateed(
-                                      0, widget.indicators);
-                                },
-                                child: !e.visible
-                                    ? Icon(
-                                        Icons.visibility_off_outlined,
-                                        size: 16,
-                                        color: widget.style.primaryTextColor,
-                                      )
-                                    : Icon(Icons.visibility_outlined,
-                                        size: 16,
-                                        color: widget.style.primaryTextColor),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (c) {
-                                        return AlertDialog(
-                                          content: Container(
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: e
-                                                    .indicatorComponentsStyles
-                                                    .map((style) => Column(
-                                                          children: [
-                                                            Text(style.name),
-                                                            ColorPicker(
-                                                                color: style
-                                                                    .bullColor,
-                                                                enableShadesSelection:
-                                                                    false,
-                                                                onColorChanged:
-                                                                    (color) {
-                                                                  style.bullColor =
-                                                                      color;
-                                                                }),
-                                                          ],
-                                                        ))
-                                                    .toList(),
-                                              ),
-                                            ),
-                                          ),
-                                          actions: [
-                                            MaterialButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  widget.indicatorUpdateed(
-                                                      0,
-                                                      List.from(
-                                                          widget.indicators));
-                                                },
-                                                child: Text("확인"))
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  child: Row(
-                                    children: e.indicatorComponentsStyles
-                                        .map((e) => Expanded(
-                                                child: Container(
-                                              color: e.bullColor,
-                                            )))
-                                        .toList(),
+          showIndicatorNames
+              ? Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                      children: [...widget.indicators
+                          .map(
+                            (e) => _PanelButton(
+                              child: Row(
+                                children: [
+                                  Text(e.name),
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      widget.toggleIndicatorVisibility(e.name);
+                                      widget.indicatorUpdateed(
+                                          0, widget.indicators);
+                                    },
+                                    child: !e.visible
+                                        ? Icon(
+                                            Icons.visibility_off_outlined,
+                                            size: 16,
+                                            color: widget.style.primaryTextColor,
+                                          )
+                                        : Icon(Icons.visibility_outlined,
+                                            size: 16,
+                                            color: widget.style.primaryTextColor),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (c) {
+                                            return AlertDialog(
+                                              content: Container(
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: e
+                                                        .indicatorComponentsStyles
+                                                        .map((style) => Column(
+                                                              children: [
+                                                                Text(style.name),
+                                                                ColorPicker(
+                                                                    color: style
+                                                                        .bullColor,
+                                                                    enableShadesSelection:
+                                                                        false,
+                                                                    onColorChanged:
+                                                                        (color) {
+                                                                      style.bullColor =
+                                                                          color;
+                                                                    }),
+                                                              ],
+                                                            ))
+                                                        .toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                              actions: [
+                                                MaterialButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      widget.indicatorUpdateed(
+                                                          0,
+                                                          List.from(
+                                                              widget.indicators));
+                                                    },
+                                                    child: Text("확인"))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      child: Row(
+                                        children: e.indicatorComponentsStyles
+                                            .map((e) => Expanded(
+                                                    child: Container(
+                                                  color: e.bullColor,
+                                                )))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  widget.onRemoveIndicator != null
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            widget.onRemoveIndicator!(e.name);
+                                          },
+                                          child: Icon(Icons.close,
+                                              size: 16,
+                                              color: widget.style.primaryTextColor),
+                                        )
+                                      : Container(),
+                                ],
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              widget.onRemoveIndicator != null
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        widget.onRemoveIndicator!(e.name);
-                                      },
-                                      child: Icon(Icons.close,
-                                          size: 16,
-                                          color: widget.style.primaryTextColor),
-                                    )
-                                  : Container(),
-                            ],
+                              borderColor: widget.style.borderColor,
+                            ),
+                          )
+                          .toList(),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showIndicatorNames = !showIndicatorNames;
+                            });
+                          },
+                          child: _PanelButton(
+                            borderColor: widget.style.borderColor,
+                            child: Row(
+                              children: [
+                                Icon(
+                                    showIndicatorNames
+                                        ? Icons.keyboard_arrow_up_rounded
+                                        : Icons.keyboard_arrow_down_rounded,
+                                    color: widget.style.primaryTextColor),
+                                Text(widget.indicators.length.toString()),
+                              ],
+                            ),
                           ),
-                          borderColor: widget.style.borderColor,
-                        ),
-                      )
-                      .toList(),
-                )
+                        )],
+                    ),
+                ),
+              )
               : Container(),
-          widget.indicators.length > 1
+           !showIndicatorNames
               ? GestureDetector(
                   onTap: () {
                     setState(() {

@@ -63,31 +63,16 @@ class _MyAppState extends State<MyApp> {
   CandlePosition? nowPosition;
 
   List<Indicator> indicators = [
-    // BollingerBandsIndicator(
-    //     length: 20,
-    //     stdDev: 2,
-    //     upperColor: const Color(0xFF2962FF),
-    //     basisColor: const Color(0xFFFF6D00),
-    //     lowerColor: const Color(0xFF2962FF),
-    //     label: "Bollinger"),
-    // WeightedMovingAverageIndicator(
-    //     length: 100, color: Colors.green.shade600, label: "WMA"),
-    // IchimokuIndicator(
-    //     short: 9,
-    //     middle: 26,
-    //     long: 52,
-    //     shortLineColor: Colors.red,
-    //     middleLineColor: Colors.orange,
-    //     longLineColor: Colors.yellow,
-    //     leadLine1Color: Colors.black,
-    //     leadLine2Color: Colors.blue),
+
     InfurenceIndicator (
         label: "Influence", shortPeriod: 9, midPeriod: 26, ),
   ];
   List<SubIndicator> subIndicators = [
-    VolumeIndicatorIndicator(color: Colors.black),
+    // VolumeIndicatorIndicator(color: Colors.black),
     ADXIndicator(color: Colors.black),
-    // CommodityChannelIndexIndicator(color: Colors.white)
+    OBVIndicator(color: Colors.black),
+    MACDIndicator(),
+    // CommodityChannㅌelIndexIndicator(color: Colors.white)
   ];
 
   @override
@@ -220,10 +205,10 @@ class _MyAppState extends State<MyApp> {
             // ),
             IconButton(
               onPressed: () {
-                setState(() {
-                  this.indicators.add(
-                      MovingAverageIndicator(length: 10, color: Colors.black));
-                });
+                // setState(() {
+                //   this.indicators.add(
+                //       MovingAverageIndicator(length: 10, color: Colors.black, name: '10'));
+                // });
               },
               icon: Icon(Icons.draw_rounded),
               color: this.isDrawing ? Colors.black : Colors.white,
@@ -403,7 +388,9 @@ class _MyAppState extends State<MyApp> {
                     this.indicators.addAll(n);
                   });
                 });
-              }, onSubIndicatorSettingPressed: (int index) {  },
+              }, onSubIndicatorSettingPressed: (int index) {
+
+            },
             );
           },
         ),

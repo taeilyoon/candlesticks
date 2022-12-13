@@ -19,3 +19,4 @@ export 'src/widgets/line_chart_widget.dart';
 export 'src/widgets/toolbar_action.dart';
 export 'src/utils/subIndicator/ADX_indicator.dart';
 export 'src/utils/indicators/index.dart';
+export 'src/utils/subIndicator/index.dart';

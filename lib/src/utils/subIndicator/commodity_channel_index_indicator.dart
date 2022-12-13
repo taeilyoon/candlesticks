@@ -41,22 +41,10 @@ class CommodityChannelIndexIndicator extends SubIndicator {
                 ..chartStyle = SubIndicatorChartType.line
             ];
           },
-          max: (index, candles, c) {
-            var f = (int index, List<Candle> candles) {
-              var c1 = candles[index].typicalPrice;
-              var c2 = candles.hlcMovingAverage(periods, index: index);
-              var c3 = candles.sum((p0, i) {
-                var tmp = p0.typicalPrice;
-                var tmp2 = candles.hlcMovingAverage(periods, index: i);
-                return (tmp - tmp2).abs();
-              }, periods: periods, index: index);
-
-              return ((c1 - c2) / c3) * 66.666666666666666666666;
-            };
+          max: (index, candles,  List<List<ColorWithCalculatorValue?>> c, start, end) {
             List<num> resultList = [];
             c.forEach((element) {
-              var index = candles.indexWhere((e) => e == element);
-              resultList.add(f(index, candles));
+              resultList.add(element.map((e) => e?.value ?? 0).reduce(Math.Max));
             });
             if (resultList
                 .every((element) => element < 100 && element > -100)) {
@@ -68,22 +56,11 @@ class CommodityChannelIndexIndicator extends SubIndicator {
               return 300;
             }
           },
-          min: (i, candles, c2) {
-            var f = (int index, List<Candle> candles) {
-              var c1 = candles[index].typicalPrice;
-              var c2 = candles.hlcMovingAverage(periods, index: index);
-              var c3 = candles.sum((p0, i) {
-                var tmp = p0.typicalPrice;
-                var tmp2 = candles.hlcMovingAverage(periods, index: i);
-                return (tmp - tmp2).abs();
-              }, periods: periods, index: index);
-
-              return ((c1 - c2) / c3) * 66.666666666666666666666;
-            };
+          min: (i, candles,  List<List<ColorWithCalculatorValue?>> c, start, end) {
             List<num> resultList = [];
-            c2.forEach((element) {
-              var index = candles.indexWhere((e) => e == element);
-              resultList.add(f(index, candles));
+
+            c.forEach((element) {
+              resultList.add(element.map((e) => e?.value ?? 0).reduce(Math.Min));
             });
             if (resultList
                 .every((element) => element < 100 && element > -100)) {
