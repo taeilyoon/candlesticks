@@ -51,7 +51,7 @@ class _TopPanelState extends State<TopPanel> {
                   )
                 : Container(),
           ),
-          showIndicatorNames || widget.indicators.length == 0
+          showIndicatorNames
               ? Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -184,7 +184,7 @@ class _TopPanelState extends State<TopPanel> {
                 ),
               )
               : Container(),
-          widget.indicators.length > 0 && !showIndicatorNames
+           !showIndicatorNames
               ? GestureDetector(
                   onTap: () {
                     setState(() {

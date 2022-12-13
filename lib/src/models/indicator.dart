@@ -13,6 +13,7 @@ class Indicator {
   late List<double?> Function(int index, List<Candle> candles) calculator;
   final int dependsOnNPrevCandles;
 
+String koreanName = "지표";
   /// Indicator lines style.
   /// the order of this should be same as calculator function results order.
   final List<IndicatorStyle> indicatorComponentsStyles;

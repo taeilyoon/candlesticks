@@ -8,9 +8,9 @@ class SubIndicator {
   List<ColorWithCalculatorValue?> Function(int p1, List<Candle> p2)
       calculatorWithStyle;
   num Function(
-      int p1, List<Candle> p2, List<List<ColorWithCalculatorValue?>> p3)? max;
+      int p1, List<Candle> p2, List<List<ColorWithCalculatorValue?>> p3, int start, int? end)? max;
   num Function(
-      int p1, List<Candle> p2, List<List<ColorWithCalculatorValue?>> p3)? min;
+      int p1, List<Candle> p2, List<List<ColorWithCalculatorValue?>> p3, int start, int end)? min;
 
   final String name;
   final String? label;

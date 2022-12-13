@@ -52,10 +52,10 @@ class MACDIndicator extends SubIndicator {
                 ];
               }
             },
-            max: (i, c, c2) {
+            max: (i, c, c2, start, end) {
               return c2.map((e) => e.map((e) => e?.value ??0).toList().reduce((value, element) => Math.Max(value, element))).toList().max();
             },
-            min: (i, c, c2) {
+            min: (i, c, c2, start, end) {
               return c2.map((e) => e.map((e) => e?.value ??0).toList().reduce((value, element) => [value, element].min())).toList().min();
             }
             // indicatorComponentsStyles: [

@@ -28,6 +28,9 @@ class Math {
   static double Max(double a, double b) {
     return a > b ? a : b;
   }
+  static double Min(double a, double b) {
+    return a < b ? a : b;
+  }
 
   static double Abs(double a) {
     return a > 0 ? a : -a;

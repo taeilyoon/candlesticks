@@ -6,12 +6,14 @@ import 'package:candlesticks/src/models/subIndicator_chart_type.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/sub_indicator.dart';
-import 'dart:math';
-
+// part 'rsi_indicator.g.dart';
 class RsiIndicator extends SubIndicator {
+  int len;
+  Color color;
+
   RsiIndicator({
-    int len = 2,
-    required Color color,
+    int this.len = 2,
+    required Color this.color,
     String? label,
   }) : super(
     chartStyle: SubIndicatorChartType.line0,
@@ -40,16 +42,16 @@ class RsiIndicator extends SubIndicator {
       ];
 
     },
-    max: (i, c, c2) {
+    max: (i, c, c2, start, end) {
       var ls = [0.0];
-      c2.map((e) => e.map((e) => e!.value ?? 0.0)).forEach((element) {
+      c2.sublist(start, end).map((e) => e.map((e) => e!.value ?? 0.0)).forEach((element) {
         ls.addAll(element);
       });
       return ls.max();
 
 
     },
-    min: (i, c, c2) {
+    min: (i, c, c2, start, end) {
       var ls = <double>[];
       c2.map((e) => e.map((e) => e!.value!).where((element) => element != null)).forEach((element) {
         ls.addAll(element);

@@ -1,12 +1,23 @@
 import 'dart:ui';
 
 import 'package:candlesticks/candlesticks.dart';
+import 'package:candlesticks/src/utils/converters/color_converter.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'moving_average_indicator.g.dart';
+@JsonSerializable()
 class MovingAverageIndicator extends Indicator {
+  int length;
+  @ColorConverter()
+  Color color;
+  String koreanName = "단순 이동 평균선";
+  String name;
+
+
   MovingAverageIndicator(
-      {required int length, required Color color, String? label, String? name,})
+      {required this.length, required Color this.color, String? label, required this.name,})
       : super(
-            name: name ?? "MA " + length.toString(),
+            name: name,
             dependsOnNPrevCandles: length,
             calculator: (index, candles) {
               double sum = 0;
@@ -19,5 +30,10 @@ class MovingAverageIndicator extends Indicator {
               IndicatorStyle(name: "이동평균선", bullColor: color),
             ],
             label: label
-            );
+            ){
+
+  }
+  factory MovingAverageIndicator.fromJson(Map<String, dynamic> json) =>
+      _$MovingAverageIndicatorFromJson(json);
+  Map<String, dynamic> toJson() => _$MovingAverageIndicatorToJson(this);
 }

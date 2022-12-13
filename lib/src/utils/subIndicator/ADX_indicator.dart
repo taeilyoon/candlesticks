@@ -109,10 +109,10 @@ class ADXIndicator extends SubIndicator {
 
 
             },
-            max: (i, c, c2) {
+            max: (i, c, c2, start, end) {
               return 100;
             },
-            min: (i, c, _) {
+            min: (i, c, _, start, end) {
               return 0;
             },
             // indicatorComponentsStyles: [

@@ -1,10 +1,21 @@
 import 'dart:ui';
 
 import 'package:candlesticks/candlesticks.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+import '../converters/color_converter.dart';
+
+@JsonSerializable()
 class WeightedMovingAverageIndicator extends Indicator {
+  late String name;
+  int length;
+
+  @ColorConverter()
+  Color color;
+  String koreanName = "가중 이동 평균선";
+
   WeightedMovingAverageIndicator(
-      {required int length, required Color color, String? label})
+      {required int this.length, required Color this.color, String? label})
       : super(
             name: "WMA " + length.toString(),
             dependsOnNPrevCandles: length,
@@ -18,5 +29,7 @@ class WeightedMovingAverageIndicator extends Indicator {
             indicatorComponentsStyles: [
               IndicatorStyle(name: "wmv", bullColor: color),
             ],
-            label: label);
+            label: label) {
+    name = "WMA " + length.toString();
+  }
 }

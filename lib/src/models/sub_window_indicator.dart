@@ -20,6 +20,10 @@ class SubIndicatorDataContainer {
   List<SubIndicator> subIndicators;
   List<SubIndicatorComponentData> data = [];
 
+  tickUpdate(List<Candle> candles) {
+
+
+  }
   SubIndicatorDataContainer(this.subIndicators, List<Candle> candles) {
     for (int i = 0; i < subIndicators.length; i++) {
       var indicator = subIndicators[i];

@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     ADXIndicator(color: Colors.black),
     OBVIndicator(color: Colors.black),
     MACDIndicator(),
-    // CommodityChannelIndexIndicator(color: Colors.white)
+    // CommodityChannㅌelIndexIndicator(color: Colors.white)
   ];
 
   @override
@@ -205,10 +205,10 @@ class _MyAppState extends State<MyApp> {
             // ),
             IconButton(
               onPressed: () {
-                setState(() {
-                  this.indicators.add(
-                      MovingAverageIndicator(length: 10, color: Colors.black));
-                });
+                // setState(() {
+                //   this.indicators.add(
+                //       MovingAverageIndicator(length: 10, color: Colors.black, name: '10'));
+                // });
               },
               icon: Icon(Icons.draw_rounded),
               color: this.isDrawing ? Colors.black : Colors.white,
@@ -388,7 +388,9 @@ class _MyAppState extends State<MyApp> {
                     this.indicators.addAll(n);
                   });
                 });
-              }, onSubIndicatorSettingPressed: (int index) {  },
+              }, onSubIndicatorSettingPressed: (int index) {
+
+            },
             );
           },
         ),

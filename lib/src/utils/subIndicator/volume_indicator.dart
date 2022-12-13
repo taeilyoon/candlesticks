@@ -36,10 +36,10 @@ class VolumeIndicatorIndicator extends SubIndicator {
                       : Colors.blue
               ];
             },
-            max: (i, c, c2) {
-              return c2.map((e) => e.map((e) => e?.value ??0).toList().reduce((value, element) => Math.Max(value, element))).toList().max();
+            max: (i, c, c2, start, end) {
+              return c2.sublist(start,end).map((e) => e.map((e) => e?.value ??0).toList().reduce((value, element) => Math.Max(value, element))).toList().max();
             },
-            min: (i, c, _) {
+            min: (i, c, _, start, end) {
               return 0;
             }
             // indicatorComponentsStyles: [

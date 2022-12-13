@@ -43,7 +43,7 @@ class SkateIndicator extends SubIndicator {
 return [];
 
     },
-    max: (i, c, c2) {
+    max: (i, c, c2, start, end) {
       var ls = [0.0];
       c2.map((e) => e.map((e) => e!.value ?? 0.0)).forEach((element) {
         ls.addAll(element);
@@ -52,7 +52,7 @@ return [];
 
 
     },
-    min: (i, c, c2) {
+    min: (i, c, c2, start, end) {
       var ls = <double>[];
       c2.map((e) => e.map((e) => e!.value!).where((element) => element != null)).forEach((element) {
         ls.addAll(element);
