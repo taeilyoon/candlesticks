@@ -74,8 +74,8 @@ class CandleStickWidget extends LeafRenderObjectWidget {
       candlestickRenderObject._low = low;
       candlestickRenderObject._bullColor = bullColor;
       candlestickRenderObject._bearColor = bearColor;
-      candlestickRenderObject.markNeedsPaint();
     }
+    candlestickRenderObject.markNeedsPaint();
     super.updateRenderObject(context, renderObject);
   }
 }
