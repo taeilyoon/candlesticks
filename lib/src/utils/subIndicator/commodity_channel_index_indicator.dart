@@ -27,14 +27,14 @@ class CommodityChannelIndexIndicator extends SubIndicator {
               ColorWithCalculatorValue()
                 ..color = color
                 ..value = ((c1 - c2) / c3) * 66.666666666666666666666,
-              ColorWithCalculatorValue()
-                ..color = color
-                ..value = 100
-                ..chartStyle = SubIndicatorChartType.dashLine,
-              ColorWithCalculatorValue()
-                ..color = color
-                ..value = -100
-                ..chartStyle = SubIndicatorChartType.dashLine,
+              // ColorWithCalculatorValue()
+              //   ..color = color
+              //   ..value = 100
+              //   ..chartStyle = SubIndicatorChartType.dashLine,
+              // ColorWithCalculatorValue()
+              //   ..color = color
+              //   ..value = -100
+              //   ..chartStyle = SubIndicatorChartType.dashLine,
               ColorWithCalculatorValue()
                 ..color = color
                 ..value = 0

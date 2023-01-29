@@ -63,9 +63,11 @@ class _MyAppState extends State<MyApp> {
   CandlePosition? nowPosition;
 
   List<Indicator> indicators = [
-
-    InfurenceIndicator (
-        label: "Influence", shortPeriod: 9, midPeriod: 26, ),
+    InfurenceIndicator(
+      label: "Influence",
+      shortPeriod: 9,
+      midPeriod: 26,
+    ),
   ];
   List<SubIndicator> subIndicators = [
     // VolumeIndicatorIndicator(color: Colors.black),
@@ -238,70 +240,30 @@ class _MyAppState extends State<MyApp> {
               },
               drawing: [
                 [
-                  // ChartDrawing(x: [
-                  //   candles[6].endDate,
-                  // ], y: [
-                  //   candles[6].high
-                  // ], borderColor: [
-                  //   Colors.red
-                  // ], fillColor: [
-                  //   Colors.blueAccent.withOpacity(0.5)
-                  // ], type: DrawingType.line, width: 10.0),
-                  // ChartDrawing(
-                  //     x: [candles[20].endDate, candles[10].endDate],
-                  //     y: [candles[20].high, candles[10].low],
-                  //     borderColor: [Colors.red],
-                  //     fillColor: [Colors.blueAccent],
-                  //     type: DrawingType.fibonacciRetracement,
-                  //     width: 1.0),
-                  // ChartDrawing(
-                  //     x: [
-                  //       candles[22].endDate,
-                  //     ],
-                  //     y: [
-                  //       candles[22].high
-                  //     ],
-                  //     borderColor: [
-                  //       Colors.red
-                  //     ],
-                  //     fillColor: [
-                  //       Colors.blueAccent
-                  //     ],
-                  //     type: DrawingType.divideLine,
-                  //     width: 3.0,
-                  //     name: "2분할"),
-                  // ChartDrawing(
-                  //     x: [
-                  //       candles[29].endDate,
-                  //     ],
-                  //     y: [
-                  //       candles[29].high
-                  //     ],
-                  //     borderColor: [
-                  //       Colors.red
-                  //     ],
-                  //     fillColor: [
-                  //       Colors.blueAccent
-                  //     ],
-                  //     type: DrawingType.divideLine,
-                  //     width: 3.0,
-                  //     name: "3분할"),
-                  // ChartDrawing(
-                  //     x: [
-                  //       candles[20].endDate,
-                  //     ],
-                  //     y: [
-                  //       candles[20].high
-                  //     ],
-                  //     borderColor: [
-                  //       Colors.red
-                  //     ],
-                  //     fillColor: [
-                  //       Colors.blueAccent
-                  //     ],
-                  //     type: DrawingType.divideLine,
-                  //     width: 3.0,
-                  //     name: "1분할"),
+                  LineDrawing(
+                      startX: candles[50].startDate,
+                      endX: candles[0].endDate,
+                      startY: candles[50].low,
+                      endY: candles[0].low,
+                      width: 5,
+                      color: Colors.black,
+                      style: LineStyle.dotted,
+                      range: LineRange.endOpen),
+
+
+                  LineDrawing(
+                      startX: candles[30].startDate,
+                      endX: candles[20].endDate,
+                      startY: candles[30].low,
+                      endY: candles[20].low,
+                      width: 3,
+                      color: Colors.black,
+                      style: LineStyle.dashed,
+                      range: LineRange.close),
+
+                  MarkerDrawing(X: candles[32].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 10, name: "name", shape:  MarkerType.square),
+                  MarkerDrawing(X: candles[50].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 4, name: "name", shape:  MarkerType.diamond),
+                  MarkerDrawing(X: candles[34].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 10, name: "name", shape:  MarkerType.circle)
                 ],
                 [],
                 []
@@ -388,9 +350,8 @@ class _MyAppState extends State<MyApp> {
                     this.indicators.addAll(n);
                   });
                 });
-              }, onSubIndicatorSettingPressed: (int index) {
-
-            },
+              },
+              onSubIndicatorSettingPressed: (int index) {},
             );
           },
         ),

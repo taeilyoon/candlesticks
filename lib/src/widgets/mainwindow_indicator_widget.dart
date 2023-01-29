@@ -4,6 +4,7 @@ import 'package:candlesticks/src/models/drawing.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class MainWindowIndicatorWidget extends LeafRenderObjectWidget {
   final List<IndicatorComponentData> indicatorDatas;
@@ -205,10 +206,10 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
             var paint = Paint()
               ..style = PaintingStyle.fill
-              ..color = !(offset1.dy >= offset2.dy &&
-                      newOffset1.dy >= newOffset2.dy)
-                  ? element.bullColor
-                  : element.bearColor;
+              ..color =
+                  !(offset1.dy >= offset2.dy && newOffset1.dy >= newOffset2.dy)
+                      ? element.bullColor
+                      : element.bearColor;
 
             context.canvas.drawPath(path, paint);
             var path2 = Path();
@@ -244,8 +245,126 @@ class MainWindowIndicatorRenderObject extends RenderBox {
     for (ChartDrawing draw in drawing) {
       var targetCandles = draw.x
           .map((e) => candles.indexWhere((element) => element.isContain(e)))
-          .toList()
-        ..sort();
+          .toList();
+
+      if (draw is LineDrawing) {
+        var startY = offset.dy + (_high - draw.y.first);
+        var endY = offset.dy + (_high - draw.y.last);
+        var diff = targetCandles.first - targetCandles.last;
+        if (diff == 0) {
+          continue;
+        }
+        var a = (endY - startY) / (diff * _candleWidth * 2);
+        var b = startY - a * (targetCandles.first);
+        var xlast = size.width +
+            offset.dx -
+            (targetCandles.last - _index + 1 + 0.5) * _candleWidth;
+        var xfirst = size.width +
+            offset.dx -
+            (targetCandles.first - _index + 0.5) * _candleWidth;
+
+        var ylast = offset.dy + (_high - draw.y.last) / range;
+        var yfirst = offset.dy + (_high - draw.y.first) / range;
+
+        var dx = xlast - xfirst;
+        var dy = ylast - yfirst;
+
+        var alpha = dy / dx;
+        var beta = yfirst - alpha * xfirst;
+
+        var line = draw as LineDrawing;
+        late Offset open;
+        late Offset close;
+        switch (line.range) {
+          case LineRange.open:
+            open = Offset(
+              offset.dx,
+              (alpha * offset.dx + beta),
+            );
+
+            close = Offset(
+              offset.dx + size.width,
+              (alpha * (offset.dx + size.width) + beta),
+            );
+            break;
+          case LineRange.close:
+            open = Offset(
+              xfirst,
+              yfirst,
+            );
+            close = Offset(
+              xlast,
+              ylast,
+            );
+            // TODO: Handle this case.
+            break;
+          case LineRange.startOpen:
+            open = Offset(
+              offset.dx,
+              (alpha * offset.dx + beta),
+            );
+            close = Offset(
+              xlast,
+              ylast,
+            );
+            // TODO: Handle this case.
+            break;
+          case LineRange.endOpen:
+            open = Offset(
+              xfirst,
+              yfirst,
+            );
+            close = Offset(
+              offset.dx + size.width,
+              (alpha * (offset.dx + size.width) + beta),
+            );
+            break;
+        }
+        switch (line.style){
+
+          case LineStyle.solid:
+            context.canvas.drawLine(open, close,  Paint()
+                            ..color = draw.borderColor.firstOrNull ?? Colors.black
+                            ..strokeWidth = draw.width ?? 3.0
+                            ..style = PaintingStyle.stroke);
+            break;
+          case LineStyle.dotted:
+            context.canvas.drawDashLine(open, close,  Paint()
+              ..color = draw.borderColor.firstOrNull ?? Colors.black
+              ..strokeWidth =  line.width ?? 3.0
+              ..style = PaintingStyle.stroke, width: draw.width , space: draw.width);
+            break;
+          case LineStyle.dashed:
+            context.canvas.drawDashLine(open, close,  Paint()
+              ..color = draw.borderColor.firstOrNull ?? Colors.black
+              ..strokeWidth = line.width ?? 3.0
+              ..style = PaintingStyle.stroke,width: 30, space: 0);
+            break;
+        }
+        continue;
+      }
+
+      if(draw is MarkerDrawing){
+        var x = size.width + offset.dx - (targetCandles.first - _index + 0.5) * _candleWidth;
+        var y = offset.dy + (_high - draw.y.first) / range;
+        var paint = Paint()
+          ..color = draw.borderColor.firstOrNull ?? Colors.black
+          ..strokeWidth = draw.width ?? 3.0
+          ..style = PaintingStyle.stroke;
+        switch(draw.shape){
+          case MarkerType.circle:
+            context.canvas.drawCircle(Offset(x, y), draw.size/2, paint);
+            break;
+          case MarkerType.square:
+            context.canvas.drawRect(Rect.fromCenter(center: Offset(x, y), width: draw.size, height: draw.size), paint);
+            break;
+          case MarkerType.diamond:
+            context.canvas.drawPath(Path()..addPolygon([Offset(x, y - draw.size), Offset(x + draw.size, y), Offset(x, y + draw.size), Offset(x - draw.size, y)], true), paint);
+            break;
+        }
+        continue;
+      }
+
       if (draw.type == DrawingType.line) {
         var yVal = offset.dy + (_high - draw.y.first) / range;
         context.canvas.drawLine(
@@ -257,15 +376,14 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..style = PaintingStyle.stroke);
       }
       if (draw.type == DrawingType.xline) {
+
         var startY = offset.dy + (_high - draw.y.first);
         var endY = offset.dy + (_high - draw.y.last);
-        var x1 = draw.x.first;
-        var x2 = draw.x.last;
-        var diff = targetCandles.last - targetCandles.first;
+        var diff = targetCandles.first - targetCandles.last ;
         if (diff == 0) {
           continue;
         }
-        var a = (endY - startY) / (diff * _candleWidth);
+        var a = (endY - startY) / (diff * _candleWidth*2);
         var b = startY - a * (targetCandles.first);
         var xlast = size.width +
             offset.dx -
@@ -286,11 +404,11 @@ class MainWindowIndicatorRenderObject extends RenderBox {
         context.canvas.drawLine(
             Offset(
               offset.dx,
-              alpha * offset.dx + beta,
+              (alpha * offset.dx + beta),
             ),
             Offset(
               offset.dx + size.width,
-              alpha * (offset.dx + size.width) + beta,
+              (alpha * (offset.dx + size.width) + beta),
             ),
             Paint()
               ..color = draw.fillColor.firstOrNull ?? Colors.black
@@ -575,5 +693,37 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
     context.canvas.save();
     context.canvas.restore();
+  }
+}
+
+extension CustomLine on Canvas {
+  drawDashLine(
+    Offset offset1,
+    Offset offset2,
+    Paint paint, {
+    double? width,
+    double? space,
+  }) {
+    var distance = offset1.distanceTo(offset2);
+    var dashWidth = width ?? 20.0;
+    var dashSpace = space ?? 20.0;
+    var dashCount = (distance / (dashWidth + dashSpace)).floor();
+    for (var i = 0; i < dashCount; i++) {
+      var startX = offset1.dx + ((offset2.dx - offset1.dx) / dashCount) * i;
+      var startY = offset1.dy + ((offset2.dy - offset1.dy) / dashCount) * i;
+      var endX =
+          startX + (offset2.dx - offset1.dx) * (dashWidth/ distance);
+      var endY =
+          startY + (offset2.dy - offset1.dy) * (dashWidth / distance);
+
+      drawLine(Offset(startX, startY), Offset(endX, endY), paint);
+    }
+  }
+}
+extension OffsetDis on Offset {
+  distanceTo(Offset other) {
+    var dx = other.dx - this.dx;
+    var dy = other.dy - this.dy;
+    return math.sqrt(dx * dx + dy * dy);
   }
 }

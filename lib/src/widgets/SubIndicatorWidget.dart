@@ -251,6 +251,340 @@ class LineChartRenderObject extends RenderBox {
               ..style = PaintingStyle.stroke);
     }
 
+    for (var draw in drawing) {
+      var targetCandles = draw.x
+          .map((e) => candles.indexWhere((element) => element.isContain(e)))
+          .toList();
+
+      if (draw.type == DrawingType.line) {
+        var yVal = offset.dy + (high - draw.y.first) / range;
+        context.canvas.drawLine(
+            Offset(offset.dx, yVal),
+            Offset(offset.dx + size.width, yVal),
+            Paint()
+              ..color = draw.fillColor.firstOrNull ?? Colors.black
+              ..strokeWidth = draw.width ?? 1.0
+              ..style = PaintingStyle.stroke);
+      }
+      if (draw.type == DrawingType.xline) {
+
+
+
+
+        var startY = offset.dy + (high - draw.y.first);
+        var endY = offset.dy + (high - draw.y.last);
+        var diff = targetCandles.first - targetCandles.last ;
+        if (diff == 0) {
+          continue;
+        }
+        var a = (endY - startY) / (diff * barWidth*2);
+        var b = startY - a * (targetCandles.first);
+        var xlast = size.width +
+            offset.dx -
+            (targetCandles.last - index + 1 + 0.5) * barWidth;
+        var xfirst = size.width +
+            offset.dx -
+            (targetCandles.first - index + 1 + 0.5) * barWidth;
+
+        var ylast = offset.dy + (high - draw.y.last) / range;
+        var yfirst = offset.dy + (high - draw.y.first) / range;
+
+        var dx = xlast - xfirst;
+        var dy = ylast - yfirst;
+
+        var alpha = dy / dx;
+        var beta = yfirst - alpha * xfirst;
+
+        context.canvas.drawLine(
+            Offset(
+              offset.dx,
+              (alpha * offset.dx + beta),
+            ),
+            Offset(
+              offset.dx + size.width,
+              (alpha * (offset.dx + size.width) + beta),
+            ),
+            Paint()
+              ..color = draw.fillColor.firstOrNull ?? Colors.black
+              ..strokeWidth = draw.width ?? 1.0
+              ..style = PaintingStyle.stroke);
+        // context.canvas.drawLine(
+        //     Offset(
+        //       xfirst,
+        //       yfirst,
+        //     ),
+        //     Offset(
+        //       xlast,
+        //       ylast,
+        //     ),
+        //     Paint()
+        //       ..color = draw.fillColor.firstOrNull ?? Colors.black
+        //       ..strokeWidth = draw.value ?? 1.0
+        //       ..style = PaintingStyle.stroke);
+        // context.canvas.drawLine(
+        //     Offset(
+        //         size.width +
+        //             offset.dx -
+        //             (targetCandles.first - index + 0.5) * barWidth,
+        //         startY / range),
+        //     Offset(size.width + offset.dx - (0.5) * barWidth,
+        //         (b + a * index) / range),
+        //     Paint()
+        //       ..color = Colors.black
+        //       ..strokeWidth = draw.value ?? 1.0
+        //       ..style = PaintingStyle.stroke);
+        // context.canvas.drawLine(
+        //     Offset(
+        //         size.width +
+        //             offset.dx -
+        //             (targetCandles.first - index + 0.5) * barWidth,
+        //         startY / range),
+        //     Offset(
+        //         offset.dx - (targetCandles.first - index + 0.5) * barWidth,
+        //         a * size.width + b),
+        //     Paint()
+        //       ..color = Colors.black
+        //       ..strokeWidth = draw.value ?? 1.0
+        //       ..style = PaintingStyle.stroke);
+      }
+
+      if (draw.type == DrawingType.divideLine) {
+        const int dashWidth = 10;
+        const int dashSpace = 2;
+
+        double startX = 0;
+        var yVal = offset.dy + (high - draw.y.first) / range;
+        Paint()
+          ..color = draw.fillColor.firstOrNull ?? Colors.black
+          ..strokeWidth = draw.width ?? 1.0
+          ..style = PaintingStyle.stroke;
+
+        var textPainter = TextPainter(
+            text: TextSpan(
+              text: draw.name,
+              style: TextStyle(
+                color: draw.textColor ?? Colors.black,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: "Noto Sans",
+                letterSpacing: 0,
+              ),
+            ))
+          ..textDirection = TextDirection.ltr
+          ..textAlign = TextAlign.center
+          ..layout();
+        if (index < 1) {
+          while (startX <
+              (size.width -
+                  (-2.5 - index) * barWidth -
+                  textPainter.width / 3)) {
+            // Draw a small line.
+            context.canvas.drawLine(
+                Offset(startX, yVal),
+                Offset(startX + dashWidth, yVal),
+                Paint()
+                  ..color = draw.textColor ?? Colors.black
+                  ..strokeWidth = draw.width ?? 3.0
+                  ..style = PaintingStyle.stroke);
+            // Update the starting X
+            startX += dashWidth + dashSpace;
+          }
+        } else {
+          while (startX < size.width) {
+            // Draw a small line.
+            context.canvas.drawLine(
+                Offset(startX, yVal),
+                Offset(startX + dashWidth, yVal),
+                Paint()
+                  ..color = draw.borderColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = draw.width ?? 3.0
+                  ..style = PaintingStyle.stroke);
+
+            // Update the starting X
+            startX += dashWidth + dashSpace;
+          }
+        }
+
+        if (index < 1) {
+          var background = Paint()
+            ..style = PaintingStyle.fill
+            ..color = Colors.black
+            ..strokeWidth = 1.0
+            ..style = PaintingStyle.stroke
+            ..isAntiAlias = true;
+
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                      center: Offset(
+                          (size.width -
+                              (-2.5 - index) * barWidth +
+                              textPainter.width / 2),
+                          yVal),
+                      width: textPainter.width + 30,
+                      height: textPainter.height + 10)
+                  // Rect.fromLTWH(
+                  //     (size.width -
+                  //         (10 - index) * barWidth +
+                  //         textPainter.width * 2),
+                  //     yVal - textPainter.height / 2 - 5,
+                  //     textPainter.width + 30,
+                  //     textPainter.height + 10)
+                  ,
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color = Colors.white
+                ..strokeWidth = 1.0);
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                      center: Offset(
+                          (size.width -
+                              (-2.5 - index) * barWidth +
+                              textPainter.width / 2),
+                          yVal),
+                      width: textPainter.width + 30,
+                      height: textPainter.height + 10)
+                  // Rect.fromLTWH(
+                  //     (size.width -
+                  //         (10 - index) * barWidth +
+                  //         textPainter.width * 2),
+                  //     yVal - textPainter.height / 2 - 5,
+                  //     textPainter.width + 30,
+                  //     textPainter.height + 10)
+                  ,
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color =
+                    draw.textColor ?? draw.fillColor.firstOrNull ?? Colors.black
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = draw.width ?? 1.0);
+          // context.canvas.drawRRect(
+          //     RRect.fromRectAndRadius(
+          //         Rect.fromLTWH(
+          //             (size.width -
+          //                 (10 - index) * barWidth +
+          //                 textPainter.width * 2),
+          //             yVal - textPainter.height / 2 - 5,
+          //             textPainter.width + 30,
+          //             textPainter.height + 10),
+          //         Radius.circular(15.0)),
+          //     background);
+
+          textPainter.paint(
+            context.canvas,
+            Offset((size.width - (-2.5 - index) * barWidth),
+                yVal - textPainter.height / 2),
+          );
+        }
+      }
+
+      if (draw.type == DrawingType.circle) {
+        var startX = size.width +
+            offset.dx -
+            (targetCandles.first - index + 0.5) * barWidth;
+        var endY = offset.dy + (high - draw.y.first) / range;
+
+        context.canvas.drawCircle(
+            Offset(startX, endY),
+            draw.width!,
+            Paint()
+              ..color = draw.borderColor.firstOrNull ?? Colors.transparent
+              ..strokeWidth = 1.0
+              ..style = PaintingStyle.stroke);
+
+        context.canvas.drawCircle(
+            Offset(startX, endY),
+            draw.width!,
+            Paint()
+              ..color = draw.fillColor.firstOrNull ?? Colors.transparent
+              ..strokeWidth = 0.0
+              ..style = PaintingStyle.fill);
+      }
+
+      if (draw.type == DrawingType.fibonacciRetracement) {
+        var startY = offset.dy + (high - draw.y.first) / range;
+        var endY = offset.dy + (high - draw.y.last) / range;
+        var xlast = size.width +
+            offset.dx -
+            (targetCandles.last - index + 1 + 0.5) * barWidth;
+        var xfirst = size.width +
+            offset.dx -
+            (targetCandles.first - index + 1 + 0.5) * barWidth;
+
+        var diffY = endY - startY;
+
+        //baseline
+        context.canvas.drawLine(
+            Offset(xfirst, startY),
+            Offset(xlast, startY),
+            Paint()
+              ..color = draw.borderColor.firstOrNull ?? Colors.transparent
+              ..strokeWidth = 1.0
+              ..style = PaintingStyle.stroke);
+        // fill 0 - 0.236
+        context.canvas.drawRect(
+            Rect.fromPoints(
+                Offset(xfirst, startY), Offset(xlast, startY + diffY * 0.236)),
+            Paint()..color = Colors.red.withOpacity(0.3));
+        //line1
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.236),
+            Offset(xlast, startY + diffY * 0.236),
+            Paint()..color = Colors.black);
+
+        // fill 0.236 - 0.382
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.236),
+                Offset(xlast, startY + diffY * 0.382)),
+            Paint()..color = Colors.orange.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.382),
+            Offset(xlast, startY + diffY * 0.382),
+            Paint()..color = Colors.black);
+
+        // fill 0.382 - 0.5
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.382),
+                Offset(xlast, startY + diffY * 0.5)),
+            Paint()..color = Colors.yellow.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(Offset(xfirst, startY + diffY * 0.5),
+            Offset(xlast, startY + diffY * 0.5), Paint()..color = Colors.black);
+
+        // fill 0.5 - 0.786
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.5),
+                Offset(xlast, startY + diffY * 0.786)),
+            Paint()..color = Colors.green.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(
+            Offset(xfirst, startY + diffY * 0.786),
+            Offset(xlast, startY + diffY * 0.786),
+            Paint()..color = Colors.black);
+
+        // fill 0.786 - 1
+
+        context.canvas.drawRect(
+            Rect.fromPoints(Offset(xfirst, startY + diffY * 0.786),
+                Offset(xlast, startY + diffY * 1)),
+            Paint()..color = Colors.blue.withOpacity(0.3));
+
+        //line2
+        context.canvas.drawLine(Offset(xfirst, startY + diffY),
+            Offset(xlast, startY + diffY), Paint()..color = Colors.black);
+      }
+    }
+
     context.canvas.save();
     context.canvas.restore();
   }

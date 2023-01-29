@@ -137,6 +137,7 @@ class _MobileChartState extends State<MobileChart> {
         if (manualScaleHigh != null) {
           candlesHighPrice = manualScaleHigh!;
           candlesLowPrice = manualScaleLow!;
+
         } else if (widget.chartAdjust == ChartAdjust.visibleRange) {
           candlesHighPrice = widget.mainWindowDataContainer.highs
               .getRange(candlesStartIndex, candlesEndIndex + 1)
@@ -144,6 +145,10 @@ class _MobileChartState extends State<MobileChart> {
           candlesLowPrice = widget.mainWindowDataContainer.lows
               .getRange(candlesStartIndex, candlesEndIndex + 1)
               .reduce(min);
+          candlesLowPrice = min(candlesLowPrice, widget.drawing.first
+              .where((e) => e.type == DrawingType.divideLine)
+              .reduce((value, element) => value.y.first < element.y.first ? value : element).y.first) *8/10 ;
+
         } else if (widget.chartAdjust == ChartAdjust.fullRange) {
           candlesHighPrice = widget.mainWindowDataContainer.highs.reduce(max);
           candlesLowPrice = widget.mainWindowDataContainer.lows.reduce(min);
@@ -577,7 +582,7 @@ class _MobileChartState extends State<MobileChart> {
                     widget.index, widget.candles,widget.subWindowDataContainer.data[i].values, widget.index.isNegative ? 0: widget.index ,  (widget.index.isNegative? 0: widget.index) + inRangeCandles.length),
                 high: widget.subIndicator[i].max!(
                     widget.index, widget.candles, widget.subWindowDataContainer.data[i].values, widget.index.isNegative? 0: widget.index,  (widget.index.isNegative? 0: widget.index) + inRangeCandles.length),
-                drawing: widget.drawing.first,
+                drawing: widget.drawing[i],
                 indicator: widget.subIndicator[i],
               ),
             ),

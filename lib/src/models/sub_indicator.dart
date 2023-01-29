@@ -30,4 +30,8 @@ class SubIndicator {
       this.label,
       this.max,
       this.min});
+
+  defalutDrawing() {
+    return <ChartDrawing>[];
+  }
 }
