@@ -145,9 +145,9 @@ class _MobileChartState extends State<MobileChart> {
           candlesLowPrice = widget.mainWindowDataContainer.lows
               .getRange(candlesStartIndex, candlesEndIndex + 1)
               .reduce(min);
-          candlesLowPrice = min(candlesLowPrice, widget.drawing.first
-              .where((e) => e.type == DrawingType.divideLine)
-              .reduce((value, element) => value.y.first < element.y.first ? value : element).y.first) *8/10 ;
+          // candlesLowPrice = min(candlesLowPrice, widget.drawing.first
+          //     .where((e) => e.type == DrawingType.divideLine)
+          //     .reduce((value, element) => value.y.first < element.y.first ? value : element).y.first) *8/10 ;
 
         } else if (widget.chartAdjust == ChartAdjust.fullRange) {
           candlesHighPrice = widget.mainWindowDataContainer.highs.reduce(max);

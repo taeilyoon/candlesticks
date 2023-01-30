@@ -223,10 +223,10 @@ class _MyAppState extends State<MyApp> {
             updateCandlesFromSnapshot(snapshot);
             return Candlesticks(
               chartAdjust: ChartAdjust.fullRange,
-              isDrawingMode: this.isDrawing,
-              subIndicator: this.subIndicators,
+              // isDrawingMode: this.isDrawing,
+              // subIndicator: this.subIndicators,
               key: Key(currentSymbol + currentInterval),
-              indicators: indicators,
+              // indicators: indicators,
               candles: candles,
               onLoadMoreCandles: loadMoreCandles,
               onRemoveIndicator: (String indicator) {
