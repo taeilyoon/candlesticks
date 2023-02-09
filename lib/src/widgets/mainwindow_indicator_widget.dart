@@ -320,49 +320,124 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             );
             break;
         }
-        switch (line.style){
-
+        switch (line.style) {
           case LineStyle.solid:
-            context.canvas.drawLine(open, close,  Paint()
-                            ..color = draw.borderColor.firstOrNull ?? Colors.black
-                            ..strokeWidth = draw.width ?? 3.0
-                            ..style = PaintingStyle.stroke);
+            context.canvas.drawLine(
+                open,
+                close,
+                Paint()
+                  ..color = draw.borderColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = draw.width ?? 3.0
+                  ..style = PaintingStyle.stroke);
             break;
           case LineStyle.dotted:
-            context.canvas.drawDashLine(open, close,  Paint()
-              ..color = draw.borderColor.firstOrNull ?? Colors.black
-              ..strokeWidth =  line.width ?? 3.0
-              ..style = PaintingStyle.stroke, width: draw.width , space: draw.width);
+            context.canvas.drawDashLine(
+                open,
+                close,
+                Paint()
+                  ..color = draw.borderColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = line.width ?? 3.0
+                  ..style = PaintingStyle.stroke,
+                width: draw.width,
+                space: draw.width);
             break;
           case LineStyle.dashed:
-            context.canvas.drawDashLine(open, close,  Paint()
-              ..color = draw.borderColor.firstOrNull ?? Colors.black
-              ..strokeWidth = line.width ?? 3.0
-              ..style = PaintingStyle.stroke,width: 30, space: 0);
+            context.canvas.drawDashLine(
+                open,
+                close,
+                Paint()
+                  ..color = draw.borderColor.firstOrNull ?? Colors.black
+                  ..strokeWidth = line.width ?? 3.0
+                  ..style = PaintingStyle.stroke,
+                width: 30,
+                space: 0);
             break;
         }
         continue;
       }
 
-      if(draw is MarkerDrawing){
-        var x = size.width + offset.dx - (targetCandles.first - _index + 0.5) * _candleWidth;
+      if (draw is MarkerDrawing) {
+        var x = size.width +
+            offset.dx -
+            (targetCandles.first - _index + 0.5) * _candleWidth;
         var y = offset.dy + (_high - draw.y.first) / range;
         var paint = Paint()
           ..color = draw.borderColor.firstOrNull ?? Colors.black
           ..strokeWidth = draw.width ?? 3.0
           ..style = PaintingStyle.stroke;
-        switch(draw.shape){
+        switch (draw.shape) {
           case MarkerType.circle:
-            context.canvas.drawCircle(Offset(x, y), draw.size/2, paint);
+            context.canvas.drawCircle(Offset(x, y), draw.size / 2, paint);
             break;
           case MarkerType.square:
-            context.canvas.drawRect(Rect.fromCenter(center: Offset(x, y), width: draw.size, height: draw.size), paint);
+            context.canvas.drawRect(
+                Rect.fromCenter(
+                    center: Offset(x, y), width: draw.size, height: draw.size),
+                paint);
             break;
           case MarkerType.diamond:
-            context.canvas.drawPath(Path()..addPolygon([Offset(x, y - draw.size), Offset(x + draw.size, y), Offset(x, y + draw.size), Offset(x - draw.size, y)], true), paint);
+            context.canvas.drawPath(
+                Path()
+                  ..addPolygon([
+                    Offset(x, y - draw.size),
+                    Offset(x + draw.size, y),
+                    Offset(x, y + draw.size),
+                    Offset(x - draw.size, y)
+                  ], true),
+                paint);
             break;
         }
         continue;
+      }
+
+      if (draw is TextDrawing) {
+        var x = size.width +
+            offset.dx -
+            (targetCandles.first - _index + 0.5) * _candleWidth;
+        var y = offset.dy + (_high - draw.y.first) / range;
+        var textPainter = TextPainter(
+            text: TextSpan(
+          text: draw.name,
+          style: TextStyle(
+            color: draw.textColor,
+            fontSize: draw.size,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Noto Sans",
+            letterSpacing: 0,
+          ),
+        ))
+          ..textDirection = TextDirection.ltr
+          ..textAlign = TextAlign.center
+          ..layout();
+
+        late Offset offset;
+        switch (draw.anchor) {
+          case Anchor.top:
+            offset = Offset(x - textPainter.width / 2, y - textPainter.height);
+            break;
+          case Anchor.bottom:
+            offset = Offset(x - textPainter.width / 2, y);
+            break;
+          case Anchor.center:
+            offset =
+                Offset(x - textPainter.width / 2, y - textPainter.height / 2);
+
+            break;
+          case Anchor.left:
+            offset =
+                Offset(x - textPainter.width, y - textPainter.height / 2);
+
+            break;
+          case Anchor.right:
+            offset =
+                Offset(x, y - textPainter.height / 2);
+            break;
+        }
+        // if()
+        // textPainter.paint(context.canvas, Offset(x, y));
+
+
+
       }
 
       if (draw.type == DrawingType.line) {
@@ -376,14 +451,13 @@ class MainWindowIndicatorRenderObject extends RenderBox {
               ..style = PaintingStyle.stroke);
       }
       if (draw.type == DrawingType.xline) {
-
         var startY = offset.dy + (_high - draw.y.first);
         var endY = offset.dy + (_high - draw.y.last);
-        var diff = targetCandles.first - targetCandles.last ;
+        var diff = targetCandles.first - targetCandles.last;
         if (diff == 0) {
           continue;
         }
-        var a = (endY - startY) / (diff * _candleWidth*2);
+        var a = (endY - startY) / (diff * _candleWidth * 2);
         var b = startY - a * (targetCandles.first);
         var xlast = size.width +
             offset.dx -
@@ -711,15 +785,14 @@ extension CustomLine on Canvas {
     for (var i = 0; i < dashCount; i++) {
       var startX = offset1.dx + ((offset2.dx - offset1.dx) / dashCount) * i;
       var startY = offset1.dy + ((offset2.dy - offset1.dy) / dashCount) * i;
-      var endX =
-          startX + (offset2.dx - offset1.dx) * (dashWidth/ distance);
-      var endY =
-          startY + (offset2.dy - offset1.dy) * (dashWidth / distance);
+      var endX = startX + (offset2.dx - offset1.dx) * (dashWidth / distance);
+      var endY = startY + (offset2.dy - offset1.dy) * (dashWidth / distance);
 
       drawLine(Offset(startX, startY), Offset(endX, endY), paint);
     }
   }
 }
+
 extension OffsetDis on Offset {
   distanceTo(Offset other) {
     var dx = other.dx - this.dx;
