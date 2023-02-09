@@ -142,7 +142,7 @@ class TextDrawing extends ChartDrawing {
             y: [Y],
             borderColor: [color],
             fillColor: [color],
-            type: DrawingType.circle,
+            type: DrawingType.none,
             width: size,
             name: text,
             textSize: 16.0,

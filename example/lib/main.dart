@@ -250,8 +250,6 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.black,
                       style: LineStyle.dotted,
                       range: LineRange.endOpen),
-
-
                   LineDrawing(
                       startX: candles[30].startDate,
                       endX: candles[20].endDate,
@@ -261,10 +259,42 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.black,
                       style: LineStyle.dashed,
                       range: LineRange.close),
+                  MarkerDrawing(
+                      X: candles[32].startDate,
+                      Y: candles[30].low,
+                      color: Colors.greenAccent,
+                      size: 10,
+                      name: "name",
+                      shape: MarkerType.square),
+                  MarkerDrawing(
+                      X: candles[50].startDate,
+                      Y: candles[30].low,
+                      color: Colors.greenAccent,
+                      size: 4,
+                      name: "name",
+                      shape: MarkerType.diamond),
+                  MarkerDrawing(
+                      X: candles[34].startDate,
+                      Y: candles[30].low,
+                      color: Colors.greenAccent,
+                      size: 10,
+                      name: "name",
+                      shape: MarkerType.circle),
+                  MarkerDrawing(
+                      X: candles[70].startDate ,
+                      Y: candles[30].low-2000,
+                      color: Colors.greenAccent,
+                      size: 10,
+                      name: "name",
+                      shape: MarkerType.circle),
+                  TextDrawing(text: "text", X: candles[70].startDate ,
+                    Y: candles[30].low-2000,anchor: Anchor.bottom),
+                  TextDrawing(text: "text", X: candles[25].startDate,
 
-                  MarkerDrawing(X: candles[32].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 10, name: "name", shape:  MarkerType.square),
-                  MarkerDrawing(X: candles[50].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 4, name: "name", shape:  MarkerType.diamond),
-                  MarkerDrawing(X: candles[34].startDate, Y: candles[30].low, color: Colors.greenAccent, size: 10, name: "name", shape:  MarkerType.circle)
+                      Y:(candles[50].low + candles[0].low)/2  -300,textType: TextDrawingType.bubble,),
+                  TextDrawing(text: "text", X: candles[25].startDate,
+
+                      Y:(candles[50].low + candles[0].low)/2  ,textType: TextDrawingType.bubbleArrow, anchor: Anchor.top)
                 ],
                 [],
                 []

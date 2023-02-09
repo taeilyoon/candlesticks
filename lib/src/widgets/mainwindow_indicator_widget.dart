@@ -410,34 +410,89 @@ class MainWindowIndicatorRenderObject extends RenderBox {
           ..textAlign = TextAlign.center
           ..layout();
 
-        late Offset offset;
+        var xPadding = draw.textType == TextDrawingType.normal ? 0.0 : 30;
+        var yPadding = draw.textType == TextDrawingType.normal ? 0.0 : 10;
+        var dirrectionBubble =
+            draw.textType == TextDrawingType.bubbleArrow ? 20 : 0;
+
+        late Offset toffset;
         switch (draw.anchor) {
           case Anchor.top:
-            offset = Offset(x - textPainter.width / 2, y - textPainter.height);
+            toffset = Offset(x - textPainter.width / 2,
+                y - yPadding - dirrectionBubble - textPainter.height);
             break;
           case Anchor.bottom:
-            offset = Offset(x - textPainter.width / 2, y);
+            toffset = Offset(
+                x - textPainter.width / 2, y + yPadding - dirrectionBubble);
             break;
           case Anchor.center:
-            offset =
+            toffset =
                 Offset(x - textPainter.width / 2, y - textPainter.height / 2);
 
             break;
           case Anchor.left:
-            offset =
-                Offset(x - textPainter.width, y - textPainter.height / 2);
+            toffset = Offset(
+                x - xPadding - dirrectionBubble - textPainter.width,
+                y - textPainter.height / 2);
 
             break;
           case Anchor.right:
-            offset =
-                Offset(x, y - textPainter.height / 2);
+            toffset = Offset(
+                x + xPadding + dirrectionBubble, y - textPainter.height / 2);
             break;
         }
-        // if()
-        // textPainter.paint(context.canvas, Offset(x, y));
+        if (draw.textType == TextDrawingType.bubble ||
+            draw.textType == TextDrawingType.bubbleArrow) {
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                    center: Offset(
+                      toffset.dx + xPadding / 2,
+                      toffset.dy + yPadding,
+                    ),
+                    width: textPainter.width + xPadding,
+                    height: textPainter.height + yPadding,
+                  ),
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color = Colors.red
+                ..strokeWidth = 1.0);
 
+          context.canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromCenter(
+                    center: Offset(
+                      toffset.dx + xPadding / 2,
+                      toffset.dy + yPadding,
+                    ),
+                    width: textPainter.width + xPadding,
+                    height: textPainter.height + yPadding,
+                  ),
+                  Radius.circular(15.0)),
+              Paint()
+                ..style = PaintingStyle.fill
+                ..color =
+                    draw.textColor ?? draw.fillColor.firstOrNull ?? Colors.black
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 1.0);
+        }
 
-
+        if (draw.textType == TextDrawingType.bubbleArrow) {
+          var path = Path();
+          path.moveTo(
+            toffset.dx+ xPadding / 2 -4 ,
+            toffset.dy ,
+          );
+          path.lineTo(
+            toffset.dx+ xPadding / 2 + 4  ,
+            toffset.dy ,
+          );
+          path.lineTo(x, y);
+          path.close();
+          context.canvas.drawPath(path, Paint()..color = Colors.red);
+        }
+        textPainter.paint(context.canvas, toffset);
       }
 
       if (draw.type == DrawingType.line) {
@@ -654,10 +709,9 @@ class MainWindowIndicatorRenderObject extends RenderBox {
           //     background);
 
           textPainter.paint(
-            context.canvas,
-            Offset((size.width - (-2.5 - _index) * _candleWidth),
-                yVal - textPainter.height / 2),
-          );
+              context.canvas,
+              Offset((size.width - (-2.5 - _index) * _candleWidth),
+                  yVal - textPainter.height / 2));
         }
       }
 
