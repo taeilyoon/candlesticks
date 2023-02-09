@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-
 enum DrawingType {
   none,
   circle,
@@ -37,13 +36,13 @@ class ChartDrawing {
       this.textColor = Colors.black});
 }
 
-
-enum LineStyle{
+enum LineStyle {
   solid,
   dotted,
   dashed,
 }
-enum LineRange{
+
+enum LineRange {
   open,
   close,
   startOpen,
@@ -70,25 +69,27 @@ class LineDrawing extends ChartDrawing {
       required this.color,
       required this.style,
       this.name = "line",
-        this. width =1.0,
-      required this.range}) : super(
-          x: [startX, endX],
-          y: [startY, endY],
-          borderColor: [color],
-          fillColor: [color],
-          type: DrawingType.line,
-          width: width,
-          name: name ,
-          textSize: 16.0,
-          textColor: Colors.black);
+      this.width = 1.0,
+      required this.range})
+      : super(
+            x: [startX, endX],
+            y: [startY, endY],
+            borderColor: [color],
+            fillColor: [color],
+            type: DrawingType.line,
+            width: width,
+            name: name,
+            textSize: 16.0,
+            textColor: Colors.black);
 }
 
-enum MarkerType{
+enum MarkerType {
   circle,
   diamond,
   square,
 }
-class MarkerDrawing extends ChartDrawing{
+
+class MarkerDrawing extends ChartDrawing {
   late final DateTime X;
   late final double Y;
   late final Color color;
@@ -98,20 +99,52 @@ class MarkerDrawing extends ChartDrawing{
 
   MarkerDrawing(
       {required this.X,
-        required this.Y,
-        required this.color,
-        required this.shape,
-        required this.size,
-        required this.name}) : super(
-      x: [X],
-      y: [Y],
-      borderColor: [color],
-      fillColor: [color],
-      type: DrawingType.circle,
-      width: size,
-      name: name,
-      textSize: 16.0,
-      textColor: Colors.black);
+      required this.Y,
+      required this.color,
+      required this.shape,
+      required this.size,
+      required this.name})
+      : super(
+            x: [X],
+            y: [Y],
+            borderColor: [color],
+            fillColor: [color],
+            type: DrawingType.circle,
+            width: size,
+            name: name,
+            textSize: 16.0,
+            textColor: Colors.black);
+}
 
+enum TextDrawingType { bubble, normal, bubbleArrow }
 
+enum Anchor { top, bottom, center, left, right }
+
+class TextDrawing extends ChartDrawing {
+  TextDrawingType textType;
+  Anchor anchor;
+  String text;
+  late final DateTime X;
+  late final double Y;
+  late final Color color;
+  late final double size;
+
+  TextDrawing({
+    this.textType = TextDrawingType.normal,
+    this.anchor = Anchor.center,
+    required this.text,
+    required this.X,
+    required this.Y,
+    this.color = Colors.black,
+    this.size = 16,
+  }) : super(
+            x: [X],
+            y: [Y],
+            borderColor: [color],
+            fillColor: [color],
+            type: DrawingType.circle,
+            width: size,
+            name: text,
+            textSize: 16.0,
+            textColor: Colors.black);
 }

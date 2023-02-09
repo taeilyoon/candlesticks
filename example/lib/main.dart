@@ -222,6 +222,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             updateCandlesFromSnapshot(snapshot);
             return Candlesticks(
+              candleWidth: 2.0,
               chartAdjust: ChartAdjust.fullRange,
               // isDrawingMode: this.isDrawing,
               // subIndicator: this.subIndicators,

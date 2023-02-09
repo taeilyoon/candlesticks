@@ -92,6 +92,7 @@ class Candlesticks extends StatefulWidget {
   final void Function(int index, List<Indicator> updated) indicatorUpdated;
 
   final Function(int index) onSubIndicatorSettingPressed;
+  final double candleWidth;
 
   const Candlesticks({
     Key? key,
@@ -112,6 +113,7 @@ class Candlesticks extends StatefulWidget {
     this.style,
     this.drawing = const [[], [], []],
     this.priceIndicatorOption = PriceIndicatorOption.shownRecent,
+    this.candleWidth = 6,
     required this.indicatorUpdated,
     required this.onSubIndicatorSettingPressed,
   })  : assert(candles.length == 0 || candles.length > 1,
@@ -141,6 +143,7 @@ class _CandlesticksState extends State<Candlesticks> {
 
   @override
   void initState() {
+    this.candleWidth = widget.candleWidth;
     super.initState();
     if (widget.candles.length == 0) {
       return;
