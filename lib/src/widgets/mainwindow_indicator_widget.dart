@@ -417,47 +417,47 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
         late Offset toffset;
         switch (draw.anchor) {
-          case Anchor.top:
+          case TextAnchor.top:
             toffset = Offset(x - textPainter.width / 2,
                 y - yPadding - dirrectionBubble - textPainter.height);
             break;
-          case Anchor.bottom:
+          case TextAnchor.bottom:
             toffset = Offset(
                 x - textPainter.width / 2, y + yPadding - dirrectionBubble);
             break;
-          case Anchor.center:
+          case TextAnchor.center:
             toffset =
                 Offset(x - textPainter.width / 2, y - textPainter.height / 2);
 
             break;
-          case Anchor.left:
+          case TextAnchor.left:
             toffset = Offset(
                 x - xPadding - dirrectionBubble - textPainter.width,
                 y - textPainter.height / 2);
 
             break;
-          case Anchor.right:
+          case TextAnchor.right:
             toffset = Offset(
                 x + xPadding + dirrectionBubble, y - textPainter.height / 2);
             break;
         }
         if (draw.textType == TextDrawingType.bubble ||
             draw.textType == TextDrawingType.bubbleArrow) {
-          context.canvas.drawRRect(
-              RRect.fromRectAndRadius(
-                  Rect.fromCenter(
-                    center: Offset(
-                      toffset.dx + xPadding / 2,
-                      toffset.dy + yPadding,
-                    ),
-                    width: textPainter.width + xPadding,
-                    height: textPainter.height + yPadding,
-                  ),
-                  Radius.circular(15.0)),
-              Paint()
-                ..style = PaintingStyle.fill
-                ..color = Colors.red
-                ..strokeWidth = 1.0);
+          // context.canvas.drawRRect(
+          //     RRect.fromRectAndRadius(
+          //         Rect.fromCenter(
+          //           center: Offset(
+          //             toffset.dx + xPadding / 2,
+          //             toffset.dy + yPadding,
+          //           ),
+          //           width: textPainter.width + xPadding,
+          //           height: textPainter.height + yPadding,
+          //         ),
+          //         Radius.circular(15.0)),
+          //     Paint()
+          //       ..style = PaintingStyle.fill
+          //       ..color = Colors.red
+          //       ..strokeWidth = 1.0);
 
           context.canvas.drawRRect(
               RRect.fromRectAndRadius(

@@ -288,13 +288,13 @@ class _MyAppState extends State<MyApp> {
                       name: "name",
                       shape: MarkerType.circle),
                   TextDrawing(text: "text", X: candles[70].startDate ,
-                    Y: candles[30].low-2000,anchor: Anchor.bottom),
+                    Y: candles[30].low-2000,anchor: TextAnchor.bottom),
                   TextDrawing(text: "text", X: candles[25].startDate,
 
                       Y:(candles[50].low + candles[0].low)/2  -300,textType: TextDrawingType.bubble,),
                   TextDrawing(text: "text", X: candles[25].startDate,
 
-                      Y:(candles[50].low + candles[0].low)/2  ,textType: TextDrawingType.bubbleArrow, anchor: Anchor.top)
+                      Y:(candles[50].low + candles[0].low)/2  ,textType: TextDrawingType.bubbleArrow, anchor: TextAnchor.top)
                 ],
                 [],
                 []

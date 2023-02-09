@@ -118,11 +118,11 @@ class MarkerDrawing extends ChartDrawing {
 
 enum TextDrawingType { bubble, normal, bubbleArrow }
 
-enum Anchor { top, bottom, center, left, right }
+enum TextAnchor { top, bottom, center, left, right }
 
 class TextDrawing extends ChartDrawing {
   TextDrawingType textType;
-  Anchor anchor;
+  TextAnchor anchor;
   String text;
   late final DateTime X;
   late final double Y;
@@ -131,7 +131,7 @@ class TextDrawing extends ChartDrawing {
 
   TextDrawing({
     this.textType = TextDrawingType.normal,
-    this.anchor = Anchor.center,
+    this.anchor = TextAnchor.center,
     required this.text,
     required this.X,
     required this.Y,
