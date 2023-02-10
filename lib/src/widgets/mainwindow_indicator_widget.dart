@@ -423,7 +423,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
             break;
           case TextAnchor.bottom:
             toffset = Offset(
-                x - textPainter.width / 2, y + yPadding - dirrectionBubble);
+                x - textPainter.width / 2, y + yPadding + dirrectionBubble);
             break;
           case TextAnchor.center:
             toffset =
@@ -464,10 +464,10 @@ class MainWindowIndicatorRenderObject extends RenderBox {
                   Rect.fromCenter(
                     center: Offset(
                       toffset.dx + xPadding / 2,
-                      toffset.dy + yPadding,
+                      toffset.dy + (draw.anchor == TextAnchor.bottom ? -yPadding:yPadding) + textPainter.height,
                     ),
                     width: textPainter.width + xPadding,
-                    height: textPainter.height + yPadding,
+                    height: textPainter.height +yPadding ,
                   ),
                   Radius.circular(15.0)),
               Paint()
@@ -490,7 +490,7 @@ class MainWindowIndicatorRenderObject extends RenderBox {
           );
           path.lineTo(x, y);
           path.close();
-          context.canvas.drawPath(path, Paint()..color = Colors.red);
+          context.canvas.drawPath(path, Paint()..color = draw.color);
         }
         textPainter.paint(context.canvas, toffset);
       }

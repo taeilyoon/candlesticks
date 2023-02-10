@@ -173,6 +173,9 @@ class _MobileChartState extends State<MobileChart> {
           longPressY = min(longPressY!, maxHeight);
         }
 
+        candlesHighPrice *=1.2;
+        candlesLowPrice *=0.8;
+
         return TweenAnimationBuilder(
           tween: Tween(begin: candlesHighPrice, end: candlesHighPrice),
           duration: Duration(milliseconds: manualScaleHigh == null ? 300 : 0),

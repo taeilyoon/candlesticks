@@ -281,20 +281,35 @@ class _MyAppState extends State<MyApp> {
                       name: "name",
                       shape: MarkerType.circle),
                   MarkerDrawing(
-                      X: candles[70].startDate ,
-                      Y: candles[30].low-2000,
+                      X: candles[70].startDate,
+                      Y: candles[30].low - 2000,
                       color: Colors.greenAccent,
                       size: 10,
                       name: "name",
                       shape: MarkerType.circle),
-                  TextDrawing(text: "text", X: candles[70].startDate ,
-                    Y: candles[30].low-2000,anchor: TextAnchor.bottom),
-                  TextDrawing(text: "text", X: candles[25].startDate,
-
-                      Y:(candles[50].low + candles[0].low)/2  -300,textType: TextDrawingType.bubble,),
-                  TextDrawing(text: "text", X: candles[25].startDate,
-
-                      Y:(candles[50].low + candles[0].low)/2  ,textType: TextDrawingType.bubbleArrow, anchor: TextAnchor.top)
+                  TextDrawing(
+                      text: "text",
+                      X: candles[70].startDate,
+                      Y: candles[30].low - 2000,
+                      anchor: TextAnchor.bottom),
+                  // TextDrawing(
+                  //   text: "text",
+                  //   X: candles[25].startDate,
+                  //   Y: (candles[50].low + candles[0].low) / 2 - 300,
+                  //   textType: TextDrawingType.bubble,
+                  // ),
+                  TextDrawing(
+                      text: "text",
+                      X: candles[25].startDate,
+                      Y: (candles[50].low + candles[0].low) / 2,
+                      textType: TextDrawingType.bubbleArrow,
+                      anchor: TextAnchor.bottom),
+                  // TextDrawing(
+                  //     text: "tㅆt",
+                  //     X: candles[25].startDate,
+                  //     Y: (candles[50].low + candles[0].low) / 2,
+                  //     textType: TextDrawingType.normal,
+                  //     anchor: TextAnchor.bottom)
                 ],
                 [],
                 []
