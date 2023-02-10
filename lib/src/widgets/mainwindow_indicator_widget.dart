@@ -480,13 +480,30 @@ class MainWindowIndicatorRenderObject extends RenderBox {
 
         if (draw.textType == TextDrawingType.bubbleArrow) {
           var path = Path();
-          path.moveTo(
+          path.moveTo(x, y);
+          path.lineTo(
             toffset.dx+ xPadding / 2 -4 ,
-            toffset.dy ,
+            toffset.dy- (textPainter.height -yPadding)*2   ,
+          );
+          path.lineTo(
+            toffset.dx+ xPadding / 2 -2 ,
+            toffset.dy- (textPainter.height -yPadding)*2   ,
+          );
+          path.lineTo(
+            toffset.dx+ xPadding / 2 -2 ,
+            toffset.dy- (textPainter.height -yPadding)/2   ,
+          );
+          path.lineTo(
+            toffset.dx+ xPadding / 2 +2 ,
+            toffset.dy- (textPainter.height -yPadding)/2   ,
+          );
+          path.lineTo(
+            toffset.dx+ xPadding / 2 +2 ,
+            toffset.dy- (textPainter.height -yPadding)*2   ,
           );
           path.lineTo(
             toffset.dx+ xPadding / 2 + 4  ,
-            toffset.dy ,
+            toffset.dy - (textPainter.height -yPadding)*2 ,
           );
           path.lineTo(x, y);
           path.close();
